@@ -31,5 +31,14 @@ class Collection extends Model
         ''
     ];
 
+    /**
+     * 获取收藏列表
+     * @param $user_id
+     * @return mixed
+     */
+    public function collectionList($user_id){
+        return $this->select('id','goods_id')->where(['user_id'=>$user_id])->get();
+    }
+
 
 }

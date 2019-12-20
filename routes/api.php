@@ -50,13 +50,19 @@ $api->version('v1', function ($api) {
 
             //购物车列表
             $api->post('/cart/list','CartController@CartList');
-
             //购物添加
             $api->post('/cart/add','CartController@CartAdd');
             //购物车修改
             $api->post('/cart/edit','CartController@CartEdit');
             //购物车删除
             $api->post('/cart/del','CartController@CartDel');
+
+            //收藏列表
+            $api->post('/collection/list','CollectionController@CollectionList');
+            //收藏添加
+            $api->post('/collection/add','CollectionController@CollectionAdd');
+            //收藏删除
+            $api->post('/collection/del','CollectionController@CollectionDel');
 
 
 //            $api->post('/cart/list','CartController@CartList');

@@ -39,7 +39,6 @@ class CartController extends Controller
         $access_entity = AccessEntity::getInstance();
         $user_id = $access_entity->user_id;
 
-
         $cart_list = $this->cart->getCart($user_id);
 
         foreach($cart_list as $k=>$v){
