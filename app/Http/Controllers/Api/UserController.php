@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Libraries\Lib_const_status;
 use App\Model\Config;
+use App\Model\Friend;
 use App\Services\AccessEntity;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -23,10 +24,12 @@ class UserController extends Controller
     private $cash;
     private $order;
     private $income;
-    public function __construct(User $user,Config $config)
+    private $friend;
+    public function __construct(User $user,Config $config,Friend $friend)
     {
         $this->user = $user;
         $this->config = $config;
+        $this->friend = $friend;
     }
 
     /**
@@ -45,7 +48,8 @@ class UserController extends Controller
         $fromErr = $this->validatorFrom([
             'code'=>'required',
         ],[
-            'code.required'=>'code 参数不存在',
+            'code.required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
+            'id.unique'=>Lib_const_status::USER_NOT_EXISTENT,
         ]);
 
         if($fromErr){//输出表单验证错误信息
@@ -56,10 +60,12 @@ class UserController extends Controller
         $config = $this->config->getConfig();
         $appid = $config['appid'];
         $secret = $config['secret'];
-        if($param['code'] == '123'){
-            $openid['openid'] = 'OPENID';
+
+        if(in_array($param['code'],[123,1234,12345,123456,1234567,234,345,456])){
+
+            $openid['openid'] = 'OPENID'.$param['code'];
             $param = [
-                "openid"=>" OPENID",
+                "openid"=>" OPENID".$param['code'],
                 "nickname"=>'NICKNAME',
                 "sex"=>"1",
                 "province"=>"PROVINCE",
@@ -67,15 +73,18 @@ class UserController extends Controller
                 "country"=>"COUNTRY",
                 "headimgurl"=>"http://thirdwx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46",
                 "unionid"=>"o6_bmasdasdsad6_2sgVt7hMZOPfL",
-                'access_token'=>'access_token',
-                'expires_in'=>'1576651355',
+                'access_token'=>'access_token'.$param['code'],
+                'expires_in'=>'1577997068',
             ];
         }else{
             $openid = getOpenid($appid,$secret,$param['code']);
             Log::channel('wechat')->info(json_encode($openid));
         }
+
         if (isset($openid['openid'])) {
+
             $user = $this->user->info($openid['openid']);
+
             if ($user) {
 
                 $data = [
@@ -86,9 +95,15 @@ class UserController extends Controller
                 $response_json->status = Lib_const_status::SUCCESS;
                 $response_json->data = $data;
                 return $this->response($response_json);
-            } else {
+            }else{
+
                 $param['openid'] = $openid['openid'];
                 $result = $this->user->insert($param);
+                $id = $request->input('id',0);
+                $user_info =  $this->user->find($id);
+                if($user_info){
+                    $this->friend->FriendRelationship($result->id,$id);
+                }
                 if (!empty($result)) {
                     $response_json->status = Lib_const_status::SUCCESS;
                     $response_json->data->id = $result->id;

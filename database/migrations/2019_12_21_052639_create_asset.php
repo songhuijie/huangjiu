@@ -1,11 +1,11 @@
 <?php
 
-use \Jialeo\LaravelSchemaExtend\Schema;
+use Jialeo\LaravelSchemaExtend\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use \Illuminate\Support\Facades\DB;
 
-class CreateCollection extends Migration
+class CreateAsset extends Migration
 {
     /**
      * Run the migrations.
@@ -14,13 +14,14 @@ class CreateCollection extends Migration
      */
     public function up()
     {
-        Schema::create('collection', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('user_id')->comment('用户ID');
-            $table->integer('goods_id')->comment('收藏商品ID');
+        Schema::create('asset', function (Blueprint $table) {
+            $table->bigIncrements('user_id');
+            $table->decimal('royalty_balance')->comment('商品提成的总金额');
+            $table->decimal('agent_balance')->comment('代理赚取的总金额');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
-            $table->comment = '商品收藏';
+            $table->comment = '用户资金';
+
         });
     }
 
@@ -31,6 +32,6 @@ class CreateCollection extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('collection');
+        Schema::dropIfExists('asset');
     }
 }

@@ -53,6 +53,7 @@ class Controller extends BaseController
     public function response($response_object){
 
         return response()->json($response_object);
+
     }
 
 
