@@ -7,6 +7,7 @@
  */
 namespace App\Http\Controllers\Api;
 
+use App\Events\RoyaltyEvent;
 use App\Http\Controllers\Controller;
 use App\Libraries\Lib_config;
 use App\Libraries\Lib_const_status;
@@ -188,7 +189,7 @@ class OrderController extends Controller{
         $order = $this->order->find($all['order_id']);
         if($order){
 
-            $result = RoyaltyService::HandleRoyalty($user_id,$order->order_royalty_price,$order->is_arrive,$order->agent_id);
+            event(new RoyaltyEvent($user_id,$order->order_royalty_price,$order->is_arrive,$order->agent_id));
 
             $this->order->updateStatus($all['order_id'],$user_id,Lib_config::ORDER_STATUS_FOUR);
             $response_json->status = Lib_const_status::SUCCESS;

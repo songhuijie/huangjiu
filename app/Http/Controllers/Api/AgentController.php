@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Libraries\Lib_const_status;
 use App\Model\Agent;
 use App\Model\Config;
+use App\Model\Friend;
+use App\Model\User;
 use App\Services\AccessEntity;
 use App\Services\MapServices;
 use Illuminate\Http\Request;
@@ -14,10 +16,14 @@ class AgentController extends Controller
 {
     private $agent;
     private $config;
-    public function __construct(Agent $agent,Config $config)
+    private $friend;
+    private $user;
+    public function __construct(Agent $agent,Config $config,Friend $friend,User  $user)
     {
         $this->agent = $agent;
         $this->config = $config;
+        $this->friend = $friend;
+        $this->user = $user;
     }
 
     /**
@@ -119,5 +125,29 @@ class AgentController extends Controller
         return $this->response($response_json);
     }
 
+
+    /**
+     * 获取下级用户
+     */
+    public function SubordinateUser(){
+
+        $access_entity = AccessEntity::getInstance();
+        $user_id = $access_entity->user_id;
+        $select = ['user_nickname','user_img','sex'];
+        $lower = $this->friend->LowerLevel($user_id);
+        foreach($lower as $k=>$v){
+            $lower[$k]->user_info = $this->user->select($select)->find($v->user_id);
+            $lower[$k]->count = $this->friend->LowerCount($v->user_id);
+        }
+        $lower_lower = $this->friend->LowerLowerLevel($user_id);
+        foreach($lower_lower as $k=>$v){
+            $lower_lower[$k]->user_info = $this->user->select($select)->find($v->user_id);
+            $lower_lower[$k]->count = $this->friend->LowerCount($v->user_id);
+        }
+        $response_json = $this->initResponse();
+        $response_json->status = Lib_const_status::SUCCESS;
+        $response_json->data = ['first'=>$lower,'second'=>$lower_lower];
+        return $this->response($response_json);
+    }
 
 }

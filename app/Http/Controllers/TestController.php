@@ -10,8 +10,10 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Model\About;
 use App\Model\Agent;
+use App\Model\Asset;
 use App\Model\Collection;
 use App\Model\Goods;
+use App\Model\IncomeDetails;
 use App\Services\MapServices;
 
 class TestController extends Controller{
@@ -24,6 +26,18 @@ class TestController extends Controller{
 //        $result = MapServices::get_lng_lat_tx($address,$key,$Secret_key);
 //        dd($result);
 
+
+        $asset  = new Asset();
+        $income  = new IncomeDetails();
+
+        $amount = $income->getAmount(1);
+        if($amount){
+            dd('有');
+        }else{
+            dd('没');
+        }
+//        $sum = $asset->sum('royalty_balance');
+        dd($amount,$amount == null);
         $collect = new Agent();
 
         $all =[

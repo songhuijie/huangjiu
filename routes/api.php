@@ -72,7 +72,8 @@ $api->version('v1', function ($api) {
             $api->post('/agent/set','AgentController@Setting');
             //获取代理信息
             $api->post('/agent/get','AgentController@getAgent');
-
+            //获取下级
+            $api->post('/user/lower','AgentController@SubordinateUser');
 
             //订单-下单
             $api->post('/order/order','OrderController@order');
@@ -83,6 +84,15 @@ $api->version('v1', function ($api) {
             $api->post('/order/confirm','OrderController@ConfirmReceipt');
             //订单列表
             $api->post('/order/list','OrderController@OrderList');
+
+
+            //收入明细
+            $api->post('/income/list','IncomeController@IncomeList');
+            //提现记录
+            $api->post('/withdraw/list','IncomeController@WithdrawList');
+
+
+
 
 
 

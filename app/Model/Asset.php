@@ -40,9 +40,27 @@ class Asset extends Model
     /**
      * 更新财产
      */
-    public function updateRoyaltyBalance($data){
+    public function updateRoyaltyBalance($data,$status=0){
         $royalty_balance = $data['royalty_balance'];
-        return $this->where(['user_id'=>$data['user_id']])->update(['royalty_balance'=>DB::raw("royalty_balance + $royalty_balance")]);
+        if($status == 1){
+            return $this->where(['user_id'=>$data['user_id']])->update(['agent_balance'=>DB::raw("agent_balance + $royalty_balance")]);
+        }else{
+            return $this->where(['user_id'=>$data['user_id']])->update(['royalty_balance'=>DB::raw("royalty_balance + $royalty_balance")]);
+        }
+    }
+
+    /**
+     * 获取余额
+     * @param $user_id
+     * @return int|string
+     */
+    public function getBalance($user_id){
+        $result = $this->where('user_id',$user_id)->first();
+        if($result){
+            return bcadd($result->royalty_balance,$result->agent_balance,2);
+        }else{
+            return 0;
+        }
     }
 
 }
