@@ -49,8 +49,8 @@ Route::any('member/status','admin\MemberController@status');
 //配置
 Route::any('config/index','admin\ConfigController@index');
 //文件上传
-Route::any('file/img','file\FileController@img');
-Route::any('layer/upload','file\FileController@LayerUpload');
+Route::any('file/img','File\FileController@img');
+Route::any('layer/upload','File\FileController@LayerUpload');
 //api路由组
 Route::group(['namespace' => 'Api', 'prefix' => 'api'], function(){
     // 控制器在 "App\Http\Controllers\Admin" 命名空间下
