@@ -24,8 +24,8 @@ class CreateEvaluate extends Migration
             $table->integer('order_id')->comment('评价的订单ID');
 //            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
 //            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
-            $table->integer('created_at')->comment('创建时间');
-            $table->integer('updated_at')->comment('更新时间');
+            $table->integer('created_at')->default(0)->comment('创建时间');
+            $table->integer('updated_at')->default(0)->comment('更新时间');
             $table->index('goods_id');
             $table->index('order_id');
             $table->comment = '商品评价表';

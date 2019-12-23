@@ -20,8 +20,8 @@ class CreateAsset extends Migration
             $table->decimal('agent_balance')->comment('代理赚取的总金额');
 //            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
 //            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
-            $table->integer('created_at')->comment('创建时间');
-            $table->integer('updated_at')->comment('更新时间');
+            $table->integer('created_at')->default(0)->comment('创建时间');
+            $table->integer('updated_at')->default(0)->comment('更新时间');
             $table->comment = '用户资金';
 
         });

@@ -40,8 +40,8 @@ class CreateOrder extends Migration
             $table->integer('is_comment')->default(2)->comment('1为已评论2为未评论');
 //            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
 //            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
-            $table->integer('created_at')->comment('创建时间');
-            $table->integer('updated_at')->comment('更新时间');
+            $table->integer('created_at')->default(0)->comment('创建时间');
+            $table->integer('updated_at')->default(0)->comment('更新时间');
             $table->index('order_status');
             $table->index('user_id');
             $table->comment = '订单表';

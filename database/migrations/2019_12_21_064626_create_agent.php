@@ -29,8 +29,8 @@ class CreateAgent extends Migration
             $table->string('status')->default(0)->comment('状态 0表示审核中  1表示审核通过');
 //            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
 //            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
-            $table->integer('created_at')->comment('创建时间');
-            $table->integer('updated_at')->comment('更新时间');
+            $table->integer('created_at')->default(0)->comment('创建时间');
+            $table->integer('updated_at')->default(0)->comment('更新时间');
             $table->comment = '代理商';
         });
     }
