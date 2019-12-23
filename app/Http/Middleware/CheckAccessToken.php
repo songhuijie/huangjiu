@@ -7,6 +7,7 @@ use App\Model\User;
 use App\Services\AccessEntity;
 use Closure;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 
 class CheckAccessToken
 {
@@ -19,6 +20,7 @@ class CheckAccessToken
      */
     public function handle($request, Closure $next)
     {
+
         $access_token = $request->header('access_token');
         $user = new User();
         $token_array = $user->getByAccessToken($access_token);
