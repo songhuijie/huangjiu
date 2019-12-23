@@ -21,7 +21,7 @@ class CheckAccessToken
     public function handle($request, Closure $next)
     {
 
-        $access_token = $request->header('access_token');
+        $access_token = $request->header('accessToken');
         $user = new User();
         $token_array = $user->getByAccessToken($access_token);
 
