@@ -22,7 +22,7 @@ class CheckAccessToken
         $user = new User();
         $token_array = $user->getByAccessToken($access_token);
 
-        if($token_array && $token_array->expires_in > time()){
+        if($token_array){
 
             $access_entity = AccessEntity::getInstance();
             $access_entity->user_id = $token_array->id;
