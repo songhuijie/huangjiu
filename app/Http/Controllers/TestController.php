@@ -14,6 +14,7 @@ use App\Model\Asset;
 use App\Model\Collection;
 use App\Model\Goods;
 use App\Model\IncomeDetails;
+use App\Model\User;
 use App\Services\MapServices;
 
 class TestController extends Controller{
@@ -26,6 +27,10 @@ class TestController extends Controller{
 //        $result = MapServices::get_lng_lat_tx($address,$key,$Secret_key);
 //        dd($result);
 
+        $user = new User();
+        $access_token = 'access_token1234567';
+        $token_array = $user->getByAccessToken($access_token);
+        dd($token_array);
 
         $a = "1,概况,home,index/default,0,statistics,0,1
 2,会员,set,member/index,0,member,0,1
