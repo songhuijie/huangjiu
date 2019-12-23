@@ -23,6 +23,7 @@ class CheckAccessToken
         $user = new User();
         $token_array = $user->getByAccessToken($access_token);
 
+        Log::info($access_token);
         Log::info(json_encode($token_array));
         if($token_array){
 
