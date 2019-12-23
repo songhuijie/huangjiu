@@ -21,10 +21,12 @@ class CheckAccessToken
     public function handle($request, Closure $next)
     {
 
+        $header = Request::header();
         $access_token = $request->header('access_token');
         $user = new User();
         $token_array = $user->getByAccessToken($access_token);
 
+        Log::info(json_encode($header));
         Log::info($access_token);
         Log::info(json_encode($token_array));
         if($token_array){
