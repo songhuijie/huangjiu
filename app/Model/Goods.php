@@ -13,7 +13,7 @@ class Goods extends Model
      * @var array
      */
     protected $table = 'goods';
-    public $timestamps = false;
+    public $timestamps = true;
     protected $dateFormat = 'U';//使用时间戳方式添加
     /**
      * 表明模型是否应该被打上时间戳
