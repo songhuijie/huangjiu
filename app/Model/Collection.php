@@ -31,13 +31,50 @@ class Collection extends Model
         ''
     ];
 
+
+
+    public function goods()
+    {
+        return $this->hasOne(Goods::class,'id','goods_id');
+    }
+
     /**
      * 获取收藏列表
      * @param $user_id
      * @return mixed
      */
-    public function collectionList($user_id){
-        return $this->select('id','goods_id')->where(['user_id'=>$user_id])->get();
+    public function collectionAll($user_id){
+        //with 数据不在同一级，弱关系
+        return $this->select('id','goods_id')->where(['user_id'=>$user_id])->with(['goods'=>function($query){
+                            $query->select('id','good_title','good_type','royalty_price','old_price','new_price','thumbs_num','stock','browse_num','sell_num','good_image');
+                }])->get();
+    }
+
+
+    /**
+     * 添加 收藏商品
+     * @param $user_id
+     * @param $goods_id
+     */
+    public function InsertCollect($data){
+        $id = $this->where(['user_id'=>$data['user_id'],'goods_id'=>$data['goods_id']])->value('id');
+        if(!$id){
+            return $this->insert($data);
+        }
+        return false;
+    }
+
+    /**
+     * 删除收藏
+     * @param $data
+     * @return bool
+     */
+    public function DelCollect($data){
+        $id = $this->where(['user_id'=>$data['user_id'],'goods_id'=>$data['goods_id']])->value('id');
+        if($id){
+            return $this->where(['user_id'=>$data['user_id'],'goods_id'=>$data['goods_id']])->delete();
+        }
+        return false;
     }
 
 

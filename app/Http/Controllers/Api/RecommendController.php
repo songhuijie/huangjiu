@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Libraries\Lib_const_status;
+use App\Model\About;
 use App\Model\Recommend;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -12,10 +13,12 @@ class RecommendController extends Controller
 {
     private $user;
     private $recommend;
-    public function __construct(User $user,Recommend $recommend)
+    private $about;
+    public function __construct(User $user,Recommend $recommend,About $about)
     {
         $this->user = $user;
         $this->recommend = $recommend;
+        $this->about = $about;
     }
 
     /**
@@ -56,6 +59,18 @@ class RecommendController extends Controller
             $response_json->data = $detail;
         }
         $response_json->status = Lib_const_status::RECOMMENDED_ARTICLES_NOT_EXISTENT;
+        return $this->response($response_json);
+    }
+
+    /**
+     * 返回关于信息
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function AboutInfo(){
+        $response_json = $this->initResponse();
+        $about = $this->about->first();
+        $response_json->status = Lib_const_status::SUCCESS;
+        $response_json->data = $about;
         return $this->response($response_json);
     }
 }

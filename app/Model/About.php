@@ -4,14 +4,15 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
-class WithdrawLog extends Model
+class About extends Model
 {
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $table = 'withdraw_log';
+    protected $table = 'about';
+    public $timestamps = false;
     protected $dateFormat = 'U';//使用时间戳方式添加
     /**
      * 表明模型是否应该被打上时间戳
@@ -30,13 +31,4 @@ class WithdrawLog extends Model
     protected $hidden = [
         ''
     ];
-
-
-    /**
-     * 获取提现记录  按时间排序返回
-     */
-    public function WithdrawList($user_id){
-        return $this->where('user_id',$user_id)->orderBy('withdraw_time','desc')->get();
-    }
-
 }

@@ -30,6 +30,9 @@ class User extends Model
     protected $hidden = [
         ''
     ];
+
+    protected $select = ['user_id'];
+
     // 添加新用户
     public function insert($param){
         $userdata['user_nickname'] = empty($param['nickname']) ? '' : $param['nickname'];

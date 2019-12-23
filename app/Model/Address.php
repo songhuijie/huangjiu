@@ -32,6 +32,17 @@ class Address extends Model
     protected $hidden = [
         ''
     ];
+    protected $select = ['province','city','area','address','lng','lat','name','phone'];
+
+    /**
+     * 根据用户和地址ID 获取地址
+     * @param $user_id
+     * @param $address_id
+     * @return mixed
+     */
+    public function getAddress($user_id,$address_id){
+        return $this->select($this->select)->where(['user_id'=>$user_id,'id'=>$address_id])->first();
+    }
 
     /**
      * 获取当前用户 所有地址

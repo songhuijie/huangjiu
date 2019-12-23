@@ -72,11 +72,7 @@ class CartController extends Controller
         $response_json = $this->initResponse();
 
 
-        $int = GoodsService::UpdateStock($all['sku_id'],Lib_config::GOODS_DEL,$all['cart_num']);
-        if($int == 0){
-            $response_json->status = Lib_const_status::GOODS_NOT_ENOUGH_STOCK;
-            return $this->response($response_json);
-        }
+
         $access_entity = AccessEntity::getInstance();
         $user_id = $access_entity->user_id;
         $good = $this->good->find($all['sku_id']);
@@ -125,16 +121,7 @@ class CartController extends Controller
 
         $cart = $this->cart->find($all['cart_id']);
         if($cart){
-            if($all['type'] == 1){
-                $type = Lib_config::GOODS_DEL;
-            }else{
-                $type = Lib_config::GOODS_ADD;
-            }
-            $int = GoodsService::UpdateStock($cart->sku_id,$type,$all['cart_num']);
-            if($int == 0){
-                $response_json->status = Lib_const_status::GOODS_NOT_ENOUGH_STOCK;
-                return $this->response($response_json);
-            }
+
 
             if($all['type'] == 2){
                 $all['cart_num'] = $cart->cart_num  - $all['cart_num'];

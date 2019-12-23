@@ -20,8 +20,10 @@ class CreateRecommend extends Migration
             $table->string('author')->comment('作者');
             $table->integer('view')->default(0)->comment('观看次数');
             $table->text('content')->comment('内容');
-            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
+//            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+//            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
+            $table->integer('created_at')->comment('创建时间');
+            $table->integer('updated_at')->comment('更新时间');
             $table->comment = '推荐表';
         });
     }

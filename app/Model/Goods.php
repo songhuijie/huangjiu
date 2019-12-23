@@ -61,7 +61,7 @@ class Goods extends Model
      * @return mixed
      */
     public function search($query,$page,$limit){
-        return $this->where(['goods_status'=>1])->where('good_title','like','%'.$query.'%')->skip(($page-1)*$limit)->take($limit)->get();
+        return $this->select('id','good_title','good_type','royalty_price','old_price','new_price','thumbs_num','stock','browse_num','sell_num','good_image')->where(['goods_status'=>1])->where('good_title','like','%'.$query.'%')->skip(($page-1)*$limit)->take($limit)->get();
     }
 
     /**

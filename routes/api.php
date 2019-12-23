@@ -47,6 +47,8 @@ $api->version('v1', function ($api) {
             $api->post('/recommend/list','RecommendController@RecommendList');
             //推荐文章详情
             $api->post('/recommend/detail','RecommendController@RecommendDetail');
+            //关于信息
+            $api->post('/about/info','RecommendController@AboutInfo');
 
             //购物车列表
             $api->post('/cart/list','CartController@CartList');
@@ -63,6 +65,36 @@ $api->version('v1', function ($api) {
             $api->post('/collection/add','CollectionController@CollectionAdd');
             //收藏删除
             $api->post('/collection/del','CollectionController@CollectionDel');
+
+            //代理申请
+            $api->post('/agent/apply','AgentController@Apply');
+            //设置代理信息
+            $api->post('/agent/set','AgentController@Setting');
+            //获取代理信息
+            $api->post('/agent/get','AgentController@getAgent');
+            //获取下级
+            $api->post('/user/lower','AgentController@SubordinateUser');
+
+            //订单-下单
+            $api->post('/order/order','OrderController@order');
+
+            //订单支付
+            $api->post('/order/pay','OrderController@pay');
+            //确认收货
+            $api->post('/order/confirm','OrderController@ConfirmReceipt');
+            //订单列表
+            $api->post('/order/list','OrderController@OrderList');
+
+
+            //收入明细
+            $api->post('/income/list','IncomeController@IncomeList');
+            //提现记录
+            $api->post('/withdraw/list','IncomeController@WithdrawList');
+
+
+
+
+
 
 
 //            $api->post('/cart/list','CartController@CartList');
