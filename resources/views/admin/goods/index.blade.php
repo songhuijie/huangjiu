@@ -211,7 +211,7 @@
                 layer.open({
                   title:"添加",
                   type: 2, 
-                  area: ['500px', '400px'],
+                  area: ['80%', '80%'],
                   content: '{{url("goods/detail")}}' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                 }); 
                 //layer.msg('添加');
@@ -225,8 +225,8 @@
                 
                   layer.open({
                       title:"编辑",
-                      type: 2, 
-                      area: ['500px', '400px'],
+                      type: 2,
+                      area: ['80%', '80%'],
                       content: '{{url("goods/detail")}}?type=edit&id='+data[0].id
 
                     }); 
@@ -276,8 +276,8 @@
             } else if(layEvent === 'edit'){
                layer.open({
                   title:"编辑",
-                  type: 2, 
-                  area: ['500px', '400px'],
+                  type: 2,
+                  area: ['80%', '80%'],
                   content: '{{url("goods/detail")}}?type=edit&id='+obj.data.id //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                  
                 }); 
