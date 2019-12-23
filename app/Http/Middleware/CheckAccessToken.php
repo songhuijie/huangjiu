@@ -6,6 +6,7 @@ use App\Libraries\Lib_const_status;
 use App\Model\User;
 use App\Services\AccessEntity;
 use Closure;
+use Illuminate\Support\Facades\Log;
 
 class CheckAccessToken
 {
@@ -22,6 +23,7 @@ class CheckAccessToken
         $user = new User();
         $token_array = $user->getByAccessToken($access_token);
 
+        Log::info(json_encode($token_array));
         if($token_array){
 
             $access_entity = AccessEntity::getInstance();
