@@ -31,6 +31,7 @@ class Recommend extends Model
     protected $hidden = [
         ''
     ];
+    protected $select = ['id','title','author','cover','view','created_at','updated_at'];
 
 
     /**
@@ -38,7 +39,7 @@ class Recommend extends Model
      * @return mixed
      */
     public function getAll(){
-        return $this->select('id','title','author','view','created_at','updated_at')->get();
+        return $this->select($this->select)->get();
     }
 
 
