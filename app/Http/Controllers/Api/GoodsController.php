@@ -33,19 +33,23 @@ class GoodsController extends Controller
 
     /**
      * 获取商品列表 首页
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function GoodsList()
+    public function GoodsList(Request $request)
     {
+
+        $goods_type = $request->input('goods_type',1);
 
         $response_json = $this->initResponse();
 
-        $goods_type = $this->good_type->getAll();
+        $goods_types = $this->good_type->getAll();
 
-        foreach($goods_type as $k=>$v){
-            $goods_type[$k]['data'] =  $this->good->getAllByGoodType($v->id);
-        }
+        $goods_list =$this->good->getAllByGoodType($goods_type);
+
         $response_json->status = Lib_const_status::SUCCESS;
-        $response_json->data = $goods_type;
+        $response_json->data->goods_type = $goods_types;
+        $response_json->data->godos_list = $goods_list;
 
         return $this->response($response_json);
 

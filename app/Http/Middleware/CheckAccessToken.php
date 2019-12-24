@@ -25,9 +25,7 @@ class CheckAccessToken
         $user = new User();
         $token_array = $user->getByAccessToken($access_token);
 
-        Log::info($access_token);
-        Log::info(json_encode($token_array));
-        if($token_array){
+        if($token_array && $token_array->expires_in > time()){
 
             $access_entity = AccessEntity::getInstance();
             $access_entity->user_id = $token_array->id;
