@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Libraries\Lib_const_status;
+use App\Model\Agent;
+use App\Model\Asset;
 use App\Model\Config;
 use App\Model\Friend;
 use App\Services\AccessEntity;
@@ -25,15 +27,21 @@ class UserController extends Controller
     private $order;
     private $income;
     private $friend;
-    public function __construct(User $user,Config $config,Friend $friend)
+    private $asset;
+    private $agent;
+    public function __construct(User $user,Config $config,Friend $friend,Asset $asset,Agent $agent)
     {
         $this->user = $user;
         $this->config = $config;
         $this->friend = $friend;
+        $this->asset = $asset;
+        $this->agent = $agent;
     }
 
     /**
      * 用户登录
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function login(Request $request){
         $param = $request->all();
@@ -105,6 +113,7 @@ class UserController extends Controller
                     $this->friend->FriendRelationship($result->id,$id);
                 }
                 if (!empty($result)) {
+                    $this->asset->insert(['user_id'=>$result->id]);
                     $response_json->status = Lib_const_status::SUCCESS;
                     $response_json->data->id = $result->id;
                     $response_json->data->access_token = $result->access_token;
@@ -130,6 +139,11 @@ class UserController extends Controller
         $access_entity = AccessEntity::getInstance();
         $user_id = $access_entity->user_id;
         $user_info = $this->user->getUserinfo($user_id);
+        $asset = $this->asset->find($user_id);
+        $agent = $this->agent->getByUserID($user_id);
+        $user_info->balance = bcadd($asset->royalty_balance,$asset->agent_balance,2);
+        $user_info->is_agent = $agent?1:0;
+
         $response_json = $this->initResponse();
         $response_json->code = Lib_const_status::CORRECT;
         $response_json->status = Lib_const_status::SUCCESS;
@@ -137,6 +151,7 @@ class UserController extends Controller
         return $this->response($response_json);
 
     }
+
     // 图片上传
     public function upload(Request $request){
         $file = $request->file('file');

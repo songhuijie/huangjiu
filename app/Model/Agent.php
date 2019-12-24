@@ -77,10 +77,24 @@ class Agent extends Model
         }
     }
 
+    /**
+     * 根据代理ID 和user_id 获取代理信息
+     * @param $agent_id
+     * @param $user_id
+     * @return mixed
+     */
     public function getAgentById($agent_id,$user_id){
         return $this->where(['user_id'=>$user_id,'id'=>$agent_id])->first();
     }
 
+    /**
+     * 根据用户ID 返回代理信息
+     * @param $user_id
+     * @return mixed
+     */
+    public function getByUserID($user_id){
+        return $this->where(['user_id'=>$user_id])->first();
+    }
 
 
 }

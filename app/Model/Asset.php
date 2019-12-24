@@ -33,7 +33,7 @@ class Asset extends Model
     protected $hidden = [
         ''
     ];
-
+    protected $primaryKey = 'user_id';
     protected $select = ['id','user_name','iphone','city','address','lng','lat','start_time','end_time','distribution_scope'];
 
 

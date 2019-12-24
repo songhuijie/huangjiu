@@ -32,6 +32,7 @@ class User extends Model
     ];
 
     protected $select = ['user_id'];
+    protected $select_info = ['id','user_nickname','user_img','sex','country','city','expires_in','user_openid'];
 
     // 添加新用户
     public function insert($param){
@@ -54,8 +55,8 @@ class User extends Model
         return $this->where('user_openid',$openid)->first();
     }
     // 通过id查询当前用户信息
-    public function getUserinfo($id){
-        return $this->find($id);
+    public function getUserInfo($id){
+        return $this->select($this->select_info)->find($id);
     }
 
     /**
