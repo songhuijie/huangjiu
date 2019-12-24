@@ -167,7 +167,6 @@
               ,{field: 'browse_num', title: '浏览量', width:100,align:'center'}
               ,{field: 'sell_num', title: '销量', width:100,align:'center'}
               ,{ title: '商品图片', width:100,align:'center', toolbar: '#good_image'}
-              ,{field: 'detail', title: '详情', width:100,align:'center'}
               ,{field:'freight',title: '运费', width:100,align:'center',templet:function(d){
                     if(d.freight==0){
                         return '<a>包邮</a>';
