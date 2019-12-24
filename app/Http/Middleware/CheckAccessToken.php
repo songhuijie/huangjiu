@@ -6,6 +6,8 @@ use App\Libraries\Lib_const_status;
 use App\Model\User;
 use App\Services\AccessEntity;
 use Closure;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 
 class CheckAccessToken
 {
@@ -18,11 +20,14 @@ class CheckAccessToken
      */
     public function handle($request, Closure $next)
     {
-        $access_token = $request->header('access_token');
+
+        $access_token = $request->header('accessToken');
         $user = new User();
         $token_array = $user->getByAccessToken($access_token);
 
-        if($token_array && $token_array->expires_in > time()){
+        Log::info($access_token);
+        Log::info(json_encode($token_array));
+        if($token_array){
 
             $access_entity = AccessEntity::getInstance();
             $access_entity->user_id = $token_array->id;
