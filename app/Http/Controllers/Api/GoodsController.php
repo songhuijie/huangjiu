@@ -49,7 +49,7 @@ class GoodsController extends Controller
 
         $response_json->status = Lib_const_status::SUCCESS;
         $response_json->data->goods_type = $goods_types;
-        $response_json->data->godos_list = $goods_list;
+        $response_json->data->goods_list = $goods_list;
 
         return $this->response($response_json);
 
