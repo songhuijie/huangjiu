@@ -43,7 +43,10 @@ class Recommend extends Model
     }
 
 
-
+    public function getCoverAttribute($value)
+    {
+        return env('URL').$value;
+    }
 
 //    public function goods(){
 //        return $this->hasMany(Goods::class, 'good_type', 'id');
