@@ -157,6 +157,7 @@
               ,{field: 'id', title: 'ID', width:80, sort: true }
               // ,{title: '类型', width:100,align:'center',toolbar: '#typeDemo'}
               ,{field: 'good_title', title: '标题', width:100,align:'center'}
+              ,{field: 'good_dsc', title: '副标题', width:100,align:'center'}
               ,{field: 'goods_name', title: '商品分类', width:100,align:'center'}
               ,{field: 'royalty_price', title: '提成价格', width:100,align:'center'}
               ,{field: 'old_price', title: '原价格', width:100,align:'center'}

@@ -17,6 +17,7 @@ class CreateGoods extends Migration
         Schema::create('goods', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('good_title')->comment('标题');
+            $table->string('good_dsc')->comment('副标题');
             $table->string('good_type')->comment('商品分类');
             $table->float('royalty_price')->comment('提成价格');
             $table->string('old_price')->comment('原价格');

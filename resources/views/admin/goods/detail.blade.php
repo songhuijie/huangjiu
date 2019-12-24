@@ -40,6 +40,12 @@
                      <input type="text" name="good_title" required  lay-verify="required" value="@if(!empty($label)){{$label->good_title}} @endif" placeholder="请输入标题" autocomplete="off" class="layui-input">
                  </div>
              </div>
+             <div class="layui-form-item">
+                 <label class="layui-form-label">副标题</label>
+                 <div class="layui-input-block">
+                     <input type="text" name="good_dsc" required  lay-verify="required" value="@if(!empty($label)){{$label->good_dsc}} @endif" placeholder="请输入副标题" autocomplete="off" class="layui-input">
+                 </div>
+             </div>
 
              <div class="layui-form-item">
                 <label class="layui-form-label">商品类型</label>
