@@ -91,6 +91,11 @@
                             {{#  } }}
                         @endverbatim
                     </script>
+                    <script type="text/html" id="cover_image">
+                        @verbatim
+                        <img src="../{{d.cover}}">
+                        @endverbatim
+                    </script>
 
 
                     
@@ -152,6 +157,7 @@
               // ,{title: '类型', width:100,align:'center',toolbar: '#typeDemo'}
               ,{field: 'title', title: '文件标题', width:200,align:'center'}
               ,{field: 'author', title: '作者', width:100,align:'center'}
+              ,{ title: '商品图片', width:100,align:'center', toolbar: '#cover_image'}
               ,{field: 'view', title: '观看数', width:100,align:'center'}
               ,{field: 'created_at', title: '创建时间', width:200,align:'center'}
               ,{field: 'updated_at', title: '更新时间', width:200,align:'center'}

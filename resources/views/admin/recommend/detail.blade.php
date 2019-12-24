@@ -49,7 +49,14 @@
                  </div>
              </div>
 
-
+             <div class="layui-form-item">
+                 <label class="layui-form-label">封面图</label>
+                 <button type="button" class="layui-btn" id="test1">
+                     <i class="layui-icon">&#xe67c;</i>上传图片
+                 </button>
+                 <img @if(!empty($label)) src="../{{$label->cover}}" @else src="" @endif name="cover" id="img1" width="20%">
+                 <input type="text" name="cover" id="cover" hidden value="@if(!empty($label)){{$label->cover}} @endif" >
+             </div>
 
              <div class="layui-form-item layui-form-text">
                  <label class="layui-form-label">详情:</label>
@@ -119,6 +126,25 @@
         form.verify({
             content:function () {
                 layedit.sync(editIndex);
+            }
+        });
+
+        //单图上传
+        upload.render({
+            elem: '#test1'
+            ,method: 'post'
+            ,multiple: false //是否允许多文件上传。设置 true即可开启。不支持ie8/9
+            ,url: '{{URL("file/img")}}' //上传接口
+            ,done: function(index, upload){
+                //获取当前触发上传的元素，一般用于 elem 绑定 class 的情况，注意：此乃 layui 2.1.0 新增
+                if(index.code!=0){
+                    layer.msg("上传错误",{icon:5});
+                }else{
+                    layer.msg("上传成功",{icon:6});
+                    img="../"+index.data;
+                    $("#img1").attr("src",img);
+                    $('#cover').val(index.data)
+                }
             }
         });
     //监听提交

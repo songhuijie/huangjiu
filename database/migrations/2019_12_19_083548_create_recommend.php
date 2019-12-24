@@ -18,6 +18,7 @@ class CreateRecommend extends Migration
             $table->bigIncrements('id');
             $table->string('title')->comment('标题');
             $table->string('author')->comment('作者');
+            $table->string('cover')->comment('封面图');
             $table->integer('view')->default(0)->comment('观看次数');
             $table->text('content')->comment('内容');
 //            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));

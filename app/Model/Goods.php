@@ -33,13 +33,15 @@ class Goods extends Model
         ''
     ];
 
+    protected  $select = ['id','good_title','good_dsc','old_price','new_price','thumbs_num','stock','browse_num','sell_num','good_image'];
+
     /**
      * 根据商品类型查询条件
      * @param $good_type
      * @return mixed
      */
     public function getAllByGoodType($good_type){
-        return $this->select('id','good_title','good_dsc','old_price','new_price','thumbs_num','stock','browse_num','sell_num','good_image')->where(['good_type'=>$good_type,'goods_status'=>1])->get()->toArray();
+        return $this->select($this->select)->where(['good_type'=>$good_type,'goods_status'=>1])->get()->toArray();
     }
 
     public function getGoodImageAttribute($value)
