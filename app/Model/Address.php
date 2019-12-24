@@ -102,4 +102,29 @@ class Address extends Model
         return $this->where(['id'=>$address_id,'user_id'=>$user_id])->update(['defaults'=>1]);
     }
 
+    /**
+     * 根据条件搜索
+     * @param $param
+     * @return mixed
+     */
+    public function getWhere($param){
+        $limit = empty($param['limit'])?10:$param['limit'];
+        $page = empty($param['page'])?1:$param['page'];
+        $keyword = empty($param['keyword'])?null:$param['keyword'];
+        $user_id = empty($param['user_id'])?null:$param['user_id'];
+        if($page>0){
+            $page = ($page-1)*$limit;
+        }
+        $query = $this;
+        if($keyword){
+            $query = $query->where('address','like',"%{$keyword}%");
+        }
+        if($user_id){
+            $query = $query->where('user_id',$user_id);
+        }
+        $data['data'] = $query->orderBy('id', 'asc')->offset(($page-1)*$limit)->limit($limit)->get();
+        $data['count'] = $query->orderBy('id', 'asc')->count();
+        return $data;
+    }
+
 }

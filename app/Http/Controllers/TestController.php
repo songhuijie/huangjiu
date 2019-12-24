@@ -26,6 +26,12 @@ class TestController extends Controller{
 //        $result = MapServices::get_lng_lat_tx($address,$key,$Secret_key);
 //        dd($result);
 
+        $good = new Goods();
+        $goods_id = 1;
+        $type = 2;
+        $num = 1;
+        $result = $good->updateStock($goods_id,$type,$num);
+        dd($result);
 
         $a = "1,概况,home,index/default,0,statistics,0,1
 2,会员,set,member/index,0,member,0,1

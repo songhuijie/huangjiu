@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Order extends Model
 {
@@ -61,5 +62,31 @@ class Order extends Model
      */
     public function getOrder($user_id,$status){
         return $this->where(['order_status'=>$status,'user_id'=>$user_id])->get();
+    }
+
+    /**
+     * 根据条件获取 --数据
+     * @param $param
+     * @return mixed
+     */
+    public function getWhere($param){
+
+        empty($param['limit'])?$limit = 10:$limit= $param['limit'];
+        empty($param['page'])?$page = 1:$page= $param['page'];
+        empty($param['keyword'])?$keyword = null:$keyword= $param['keyword'];
+        $order_status = isset($param['order_status'])?$param['order_status']:null;
+        if($page>0){
+            $page = ($page-1)*$limit;
+        }
+        $query = $this;
+        if($keyword){
+            $query = $query->where('order_name','like',"%{$keyword}%");
+        }
+        if($order_status != null){
+            $query = $query->where('order_status',$order_status);
+        }
+        $data['data'] = $query->orderBy('id', 'asc')->offset(($page-1)*$limit)->limit($limit)->get();
+        $data['count'] = $query->orderBy('id', 'asc')->count();
+        return $data;
     }
 }

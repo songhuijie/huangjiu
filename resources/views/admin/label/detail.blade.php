@@ -82,6 +82,26 @@
                              <input type="text" name="sort" required  lay-verify="required" value="@if(!empty($label)){{$label->sort}} @endif" placeholder="请输入活动标签" autocomplete="off" class="layui-input">
                          </div>
                      </div>
+
+
+
+                         <div class="layui-form-item">
+                             <label class="layui-form-label">轮播图json格式</label>
+                             <button type="button" class="layui-btn" id="test2">
+                                 <i class="layui-icon">&#xe67c;</i>上传图片
+                             </button>
+                             <div id="img2">
+                                 @if(!empty($label))
+                                     @foreach($label->rotation as $key)
+                                         <input type="text" value="{{$key}}" hidden name="rotation[]">
+                                         <img  src="../{{$key}}"  src=""  width="20%">
+                                     @endforeach
+                                 @else
+                                 <!-- <input type="text" value="" hidden name="img[]"> -->
+                                     <img   src=""  >
+                                 @endif
+                             </div>
+                         </div>
                       {{--<div class="layui-form-item">--}}
                         {{--<label class="layui-form-label">状态</label>--}}
                         {{--<div class="layui-input-block">--}}
@@ -138,7 +158,23 @@
         ,element = layui.element //元素操作
         ,slider = layui.slider //滑块
         var form = layui.form;
-
+//执行实例 多图上传
+        upload.render({
+            elem: '#test2'
+            ,method: 'post'
+            ,multiple: true //是否允许多文件上传。设置 true即可开启。不支持ie8/9
+            ,url: '{{URL("file/img")}}' //上传接口
+            ,done: function(index, upload){
+                //获取当前触发上传的元素，一般用于 elem 绑定 class 的情况，注意：此乃 layui 2.1.0 新增
+                if(index.code!=0){
+                    layer.msg("上传错误",{icon:5});
+                }else{
+                    layer.msg("上传成功",{icon:6});
+                    img="../"+index.data;
+                    $("#img2").append('<img src="'+img+'" name="img[]" width="20%"><input type="text" value="'+index.data+'" hidden name="rotation[]">')
+                }
+            }
+        });
     //监听提交
     form.on('submit(formDemo)', function(data){
         

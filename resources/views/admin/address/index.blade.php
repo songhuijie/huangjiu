@@ -52,7 +52,12 @@
                                   <option value="3">评论标签</option>
                                 </select>  
                             </div>    -->
-
+                            <div class="layui-inline">
+                                <label class="layui-form-label w-auto">用户ID</label>
+                                <div class="layui-input-inline mr0">
+                                    <input name="user_id" class="layui-input" type="text" placeholder="输入用户ID"/>
+                                </div>
+                            </div>
                             <div class="layui-inline">
                                 <button class="layui-btn icon-btn" lay-filter="formSubSearchRole" lay-submit>
                                     <i class="layui-icon">&#xe615;</i>搜索
@@ -136,7 +141,7 @@
         var insTb = table.render({
             elem: '#demo'
             ,height: 800
-            ,url: '{{URL("member/index")}}?type=select' //数据接口
+            ,url: '{{URL("address/index")}}?type=select' //数据接口
             ,title: '会员表'
             ,page: true //开启分页
             ,toolbar: true //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
@@ -145,18 +150,22 @@
             ,cols: [[ //表头
               {type: 'checkbox', fixed: 'left'}
               ,{field: 'id', title: 'ID', width:80, sort: true }
-              ,{field:'user_nickname',title: '微信昵称', width:100,align:'center'}
-              ,{ title: '微信头像', width:100,align:'center', toolbar: '#headimg'}
-              ,{field:'sex',title: '性别', width:100,align:'center',templet:function(d){
-                if(d.sex==1){
-                    return '<a>男</a>';
+              ,{field:'user_id',title: '用户ID', width:100,align:'center'}
+              ,{field:'province',title: '省份', width:100,align:'center'}
+              ,{field:'city',title: '市', width:100,align:'center'}
+              ,{field:'area',title: '区', width:100,align:'center'}
+              ,{field:'address',title: '地址', width:100,align:'center'}
+              ,{field:'lng',title: '经度', width:100,align:'center'}
+              ,{field:'lat',title: '纬度', width:100,align:'center'}
+              ,{field:'name',title: '名字', width:100,align:'center'}
+              ,{field:'phone',title: '手机', width:100,align:'center'}
+              ,{field:'defaults',title: '默认地址', width:100,align:'center',templet:function(d){
+                if(d.defaults==1){
+                    return '<a>默认地址</a>';
                 }else{
-                    return '<a>女</a>';
+                    return '<a>地址</a>';
                 }
               }}
-              ,{field:'country',title: '国家', width:100,align:'center'}
-              ,{field:'city',title: '城市', width:100,align:'center'}
-              ,{field:'user_openid',title: 'openID', width:100,align:'center'}
               ,{field: 'created_at', title: '加入时间', width:180,align:'center',
                 templet: function (d) {
                   return layui.util.toDateString(d.time * 1000, "yyyy-MM-dd HH:mm:ss")
@@ -219,7 +228,7 @@
             type:"post",
             datatype:"json",
             data:{'id':id,'type':'del'},
-            url:"{{url('member/status')}}",
+            url:"{{url('address/status')}}",
             success:function(res){
                 console.log(res);
                 if(res.code==1){
@@ -249,7 +258,7 @@
             data:{'id':id,'type':'edit'},
             type:'post',
             datatype:"json",
-            url:"{{url('member/index')}}",
+            url:"{{url('address/index')}}",
             success:function(res){
                 if(res.code==1){
                     layer.msg(res.msg,{icon:6});

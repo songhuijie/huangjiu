@@ -18,6 +18,7 @@ class CreateGoodstype extends Migration
             $table->bigIncrements('id');
             $table->string('type_name')->comment('分类名称');
             $table->integer('sort')->comment('权重');
+            $table->text('rotation')->comment('轮播图json格式');
             $table->integer('pathid')->default(0)->comment('所属上一级id');
             $table->index('pathid');
             $table->comment = '商品分类';

@@ -37,11 +37,18 @@ Route::any('goods/index','admin\GoodsController@index');
 Route::any('goods/status','admin\GoodsController@status');
 Route::any('goods/detail','admin\GoodsController@detail');
 
+//订单
+Route::any('order/order','admin\OrderController@index');
+Route::any('order/status','admin\OrderController@status');
+Route::any('order/detail','admin\OrderController@detail');
+
 //推荐
 Route::any('recommend/index','admin\RecommendController@index');
 Route::any('recommend/status','admin\RecommendController@status');
 Route::any('recommend/detail','admin\RecommendController@detail');
 
+//地址
+Route::any('address/index','admin\AddressController@index');
 
 //用户
 Route::any('member/index','admin\MemberController@index');

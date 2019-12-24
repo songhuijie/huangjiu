@@ -28,4 +28,7 @@ class Lib_config{
     const ORDER_STATUS_SIX =6;//'6取消
 
 
+    const PAGE = 1;
+    const LIMIT = 5;
+
 }

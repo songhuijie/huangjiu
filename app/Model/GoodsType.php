@@ -44,4 +44,9 @@ class GoodsType extends Model
     {
         return $this->belongsTo(Goods::class);
     }
+
+    public function getRotationAttribute($value)
+    {
+        return json_decode($value);
+    }
 }

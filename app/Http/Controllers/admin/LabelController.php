@@ -45,6 +45,7 @@ class LabelController extends Controller
 
 			if($data['type']='edit'){
 				unset($data['type']);
+
 				$label=DB::table("goodstype")->where("id","=",$data['id'])->first();
 				if($label->status==1){
 					$data['status']=0;
@@ -88,6 +89,7 @@ class LabelController extends Controller
 					$update_data=[
 					    'type_name' =>$data['type_name'],
 					    'sort' =>$data['sort'],
+                        'rotation' => json_encode($data['rotation'])
                     ];
                     $id=$data['id'];
 					$reust=DB::table("goodstype")->where("id","=",$id)->update($update_data);
@@ -98,12 +100,16 @@ class LabelController extends Controller
 					}
 
 				}
+
 				$label=DB::table("goodstype")->where("id","=",$data['id'])->first();
+                $label->rotation = json_decode($label->rotation);
 				return view("admin/label/detail",compact("label"));exit();
 			}
 			if($data['type']=='add'){
 
 				unset($data['type']);
+				unset($data['file']);
+                $data['rotation'] = json_encode($data['rotation']);
 				$reust=DB::table("goodstype")->insert($data);
 				if($reust){
 					return array("code"=>1,"msg"=>"添加成功","status"=>1);exit();
