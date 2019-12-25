@@ -81,7 +81,6 @@ class UserController extends Controller
 
             $expires_in = time()+86000;
             if ($user) {
-
                 $data = [
                     'id' =>$user->id,
                     'access_token' =>$openid['access_token'],
@@ -121,6 +120,7 @@ class UserController extends Controller
             }
 
         }else{
+            $response_json->status = Lib_const_status::ERROR_TOO_MUCH_REQUEST;
             return $this->response($response_json);
         }
     }
