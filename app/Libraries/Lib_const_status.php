@@ -63,7 +63,18 @@ class Lib_const_status{
 
     //下单失败
     const  ORDER_PLACE_FAIL  = 50000;
+    //订单不存在
     const  ORDER_NOT_EXISTENT  = 50001;
+    //订单待支付
+    const  ORDER_TO_BE_PAID  = 50002;
+    //订单待发货
+    const  ORDER_TO_BE_SHIPPED  = 50003;
+    //订单已确认收货
+    const  ORDER_RECEIVED_GOODS  = 50004;
+    //订单待配送
+    const  ORDER_TO_BE_DELIVERED  = 50005;
+    //订单已被取消或者其他原因
+    const  ORDER_HAS_BEEN_CANCELLED  = 50006;
 
 
 

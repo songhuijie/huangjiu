@@ -209,16 +209,27 @@ class OrderController extends Controller{
         if($order){
             switch ($order->order_status){
                 case 0:
+                    $response_json->status = Lib_const_status::ORDER_TO_BE_PAID;
                     break;
                 case 1:
+                    $response_json->status = Lib_const_status::ORDER_TO_BE_SHIPPED;
+                    break;
+                case 2:
+                    $response_json->status = Lib_const_status::ORDER_TO_BE_DELIVERED;
+                    break;
+                case 3:
+                    $response_json->status = Lib_const_status::SUCCESS;
+                    event(new RoyaltyEvent($user_id,$order->order_royalty_price,$order->is_arrive,$order->agent_id));
+                    $this->order->updateStatus($all['order_id'],$user_id,Lib_config::ORDER_STATUS_FOUR);
+                    break;
+                case 4:
+                    $response_json->status = Lib_const_status::ORDER_RECEIVED_GOODS;
+                    break;
+                default:
+                    $response_json->status = Lib_const_status::ORDER_HAS_BEEN_CANCELLED;
                     break;
             }
-//            '0待支付,1支付成功待发货,2已发货,3已完成,4维权,5退款,6取消',
             //代理分销  或 上级奖励
-            event(new RoyaltyEvent($user_id,$order->order_royalty_price,$order->is_arrive,$order->agent_id));
-
-            $this->order->updateStatus($all['order_id'],$user_id,Lib_config::ORDER_STATUS_FOUR);
-            $response_json->status = Lib_const_status::SUCCESS;
         }else{
             $response_json->status = Lib_const_status::ORDER_NOT_EXISTENT;
         }
