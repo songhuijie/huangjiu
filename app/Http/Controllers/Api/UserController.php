@@ -74,9 +74,7 @@ class UserController extends Controller
             $openid = getOpenid($appid,$secret,$param['code']);
         }
 
-        $response_json->status = Lib_const_status::SUCCESS;
-        $response_json->data = $openid;
-        return $this->response($response_json);
+
         if (isset($openid['openid'])) {
 
             $user = $this->user->info($openid['openid']);
