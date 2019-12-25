@@ -86,7 +86,6 @@ class CartController extends Controller
             $cart = $this->cart->CartInsert($all);
             if($cart){
                 $response_json->status = Lib_const_status::SUCCESS;
-
             }
             return $this->response($response_json);
         }

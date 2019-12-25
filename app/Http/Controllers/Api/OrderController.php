@@ -134,6 +134,8 @@ class OrderController extends Controller{
 
     /**
      * 购物结算
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function pay(Request $request){
 

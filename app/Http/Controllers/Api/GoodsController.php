@@ -94,6 +94,8 @@ class GoodsController extends Controller
 
     /**
      * 搜索商品
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function SearchGoods(Request $request){
 

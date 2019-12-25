@@ -50,7 +50,7 @@ class RecommendController extends Controller
     /**
      * 推荐详情
      * @param Request $request
-     * @return array|void
+     * @return \Illuminate\Http\JsonResponse
      */
     public function RecommendDetail(Request $request){
         $all = $request->all();
@@ -69,8 +69,9 @@ class RecommendController extends Controller
         if($detail){
             $response_json->status = Lib_const_status::SUCCESS;
             $response_json->data = $detail;
+        }else{
+            $response_json->status = Lib_const_status::RECOMMENDED_ARTICLES_NOT_EXISTENT;
         }
-        $response_json->status = Lib_const_status::RECOMMENDED_ARTICLES_NOT_EXISTENT;
         return $this->response($response_json);
     }
 
