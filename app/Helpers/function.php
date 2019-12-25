@@ -594,7 +594,7 @@ function getOpenid($appid,$secret,$code){
         $result_two_json = curlGet($url3);
         $result_two = json_decode($result_two_json,true);
         $own_data = [
-            'open_id'=>$result['openid'],
+            'openid'=>$result['openid'],
             'access_token'=>$result_two['access_token'],
         ];
         return $own_data;
