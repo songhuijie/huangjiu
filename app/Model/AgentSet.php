@@ -58,7 +58,21 @@ class AgentSet extends Model
         }
     }
 
+    /**
+     * 获取用户是否获取到代理
+     * @param $set_user_id
+     * @return mixed
+     */
+    public function getUserAgent($set_user_id){
+        return  $this->where(['agent_user_id'=>$set_user_id])->first();
+    }
 
+    /**
+     * 更新代理状态或者发货状态
+     */
+    public function updateAgent($set_user_id,$status){
+        return $this->where('agent_user_id',$set_user_id)->update(['is_delivery'=>0]);
+    }
 
 
 }

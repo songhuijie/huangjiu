@@ -174,9 +174,9 @@ class AgentController extends Controller
         $response_json = $this->initResponse();
         $agent = $this->agent->getByUserID($user_id);
         if($agent){
-            $count = $this->agent_set->getCount($user_id);
-            if($count > 1){
-                $response_json->status = Lib_const_status::USER_AGENT_ALREADY_UPPER;
+            $agent_user = $this->agent_set->getUserAgent($set_user_id);
+            if($agent_user){
+                $response_json->status = Lib_const_status::USER_AGENT_ALREADY;
             }else{
                 $agent_set_data = [
                     'agent_user_id'=>$user_id,
@@ -195,6 +195,7 @@ class AgentController extends Controller
 
     /**
      * 取消代理
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function cancelAgent(Request $request){
@@ -202,6 +203,7 @@ class AgentController extends Controller
         $all = $request->all();
         $fromErr = $this->validatorFrom([
             'user_id'=>'required|int',
+            'status'=>'int',
         ],[
             'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
             'int'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
@@ -213,10 +215,20 @@ class AgentController extends Controller
 
         $access_entity = AccessEntity::getInstance();
         $user_id = $access_entity->user_id;
-
         $response_json = $this->initResponse();
-        $response_json->status = Lib_const_status::SUCCESS;
-        $response_json->data = [];
+        $agent = $this->agent->getByUserID($user_id);
+        $status = $all['status']?$all['status']:0;
+        if($agent){
+            $agent_user = $this->agent_set->getUserAgent($set_user_id);
+            if($agent_user){
+                $this->agent_set->updateAgent($set_user_id,$status);
+                $response_json->status = Lib_const_status::USER_AGENT_ALREADY;
+            }
+
+        }else{
+            $response_json->status = Lib_const_status::USER_NOT_AGENT;
+        }
+
         return $this->response($response_json);
     }
 
@@ -255,5 +267,7 @@ class AgentController extends Controller
         $response_json->status = Lib_const_status::SUCCESS;
         return $this->response($response_json);
     }
+
+
 
 }

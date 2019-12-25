@@ -74,6 +74,8 @@ $api->version('v1', function ($api) {
             $api->post('/agent/set','AgentController@Setting');
             //设置代理用户
             $api->post('/agent/setagent','AgentController@setAgent');
+            //取消代理用户
+            $api->post('/agent/cancelagent','AgentController@cancelAgent');
             //获取代理信息
             $api->post('/agent/get','AgentController@getAgent');
             //获取下级
