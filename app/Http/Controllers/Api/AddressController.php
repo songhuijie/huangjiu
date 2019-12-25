@@ -37,7 +37,14 @@ class AddressController extends Controller
         $access_entity = AccessEntity::getInstance();
 
         $user_id = $access_entity->user_id;
-        $address = $this->address->getALl($user_id);
+        $address_id = $request->input('address_id');
+        if($address_id){
+            $user_address = $this->address->getAddress($user_id,$address_id);
+            $address[] = $user_address;
+        }else{
+            $address = $this->address->getALl($user_id);
+        }
+
         $response_json = $this->initResponse();
         $response_json->code = Lib_const_status::CORRECT;
         $response_json->status = Lib_const_status::SUCCESS;

@@ -171,7 +171,6 @@ class OrderController extends Controller{
             foreach($goods_detail as $k=>$v){
                 GoodsService::updateSellNum($v->goods_id,$v->goods_num);
             }
-
             $response_json->status = Lib_const_status::SUCCESS;
         }else{
             $response_json->status = Lib_const_status::ORDER_NOT_EXISTENT;
@@ -205,8 +204,17 @@ class OrderController extends Controller{
         $user_id = $access_entity->user_id;
         $response_json = $this->initResponse();
         $order = $this->order->find($all['order_id']);
-        if($order){
 
+
+        if($order){
+            switch ($order->order_status){
+                case 0:
+                    break;
+                case 1:
+                    break;
+            }
+//            '0待支付,1支付成功待发货,2已发货,3已完成,4维权,5退款,6取消',
+            //代理分销  或 上级奖励
             event(new RoyaltyEvent($user_id,$order->order_royalty_price,$order->is_arrive,$order->agent_id));
 
             $this->order->updateStatus($all['order_id'],$user_id,Lib_config::ORDER_STATUS_FOUR);

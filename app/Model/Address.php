@@ -32,7 +32,7 @@ class Address extends Model
     protected $hidden = [
         ''
     ];
-    protected $select = ['province','city','area','address','lng','lat','name','phone'];
+    protected $select = ['id','user_id','province','city','area','address','lng','lat','name','phone'];
 
     /**
      * 根据用户和地址ID 获取地址

@@ -19,10 +19,14 @@ class RoyaltyEvent
     public $order_royalty_price;
     public $is_arrive;
     public $agent_id;
+
     /**
      * Create a new event instance.
-     *
-     * @return void
+     * RoyaltyEvent constructor.
+     * @param $user_id
+     * @param $order_royalty_price
+     * @param $is_arrive
+     * @param $agent_id
      */
     public function __construct($user_id,$order_royalty_price,$is_arrive,$agent_id)
     {
