@@ -68,23 +68,8 @@ class UserController extends Controller
         $config = $this->config->getConfig();
         $appid = $config['appid'];
         $secret = $config['secret'];
-
-        if(in_array($param['code'],[123,1234,12345,123456,1234567,234,345,456])){
-
-            $openid['openid'] = 'OPENID'.$param['code'];
-            $param = [
-                "openid"=>" OPENID".$param['code'],
-                "nickname"=>'NICKNAME',
-                "sex"=>"1",
-                "province"=>"PROVINCE",
-                "city"=>"CITY",
-                "country"=>"COUNTRY",
-                "headimgurl"=>"http://thirdwx.qlogo.cn/mmopen/g3MonUZtNHkdmzicIlibx6iaFqAc56vxLSUfpb6n5WKSYVY0ChQKkiaJSgQ1dZuTOgvLLrhJbERQQ4eMsv84eavHiaiceqxibJxCfHe/46",
-                "unionid"=>"o6_bmasdasdsad6_2sgVt7hMZOPfL",
-                'access_token'=>'access_token'.$param['code'],
-                'expires_in'=>'1577997068',
-            ];
-        }else{
+        $openid=['openid'=>1];
+        if($param['code']){
             $openid = getOpenid($appid,$secret,$param['code']);
             Log::channel('wechat')->info(json_encode($openid));
         }

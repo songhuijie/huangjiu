@@ -148,6 +148,20 @@ class OrderController extends Controller{
 
     }
 
+    // 返回支付信息给小程序端
+    public function wxPay($money,$openid,$ordernumber){
+        $config = $this->config->getConfig();
+        $user_id     = rand(1,10);
+        // $ordernumber = "wxapp".date('YmdHis') . str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT).$user_id;
+        $appid       = $config['appid'];
+        $mch_id      = $config['mch_id'];
+        $mch_secret  = $config['mch_secret'];
+        $notify_url  = url('api/v1/setwebnotify');//回调地址
+        $body        = "小程序下单";
+        $attach      = "用户下单";
+        return initiatingPayment($money,$ordernumber,$openid,$appid,$mch_id,$mch_secret,$notify_url,$body,$attach);
+    }
+
     /**
      * 购物结算
      * @param Request $request

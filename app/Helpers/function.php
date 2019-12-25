@@ -254,6 +254,23 @@ function curlGet($url){
     return $tmpInfo;    //返回json对象
 }
 
+function curlInfoPost($url){
+    $postUrl = $url;
+    $curlPost = '';
+    $ch = curl_init();//初始化curl
+    curl_setopt($ch, CURLOPT_URL,$postUrl);//抓取指定网页
+    curl_setopt($ch, CURLOPT_HEADER, 0);//设置header
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//要求结果为字符串且输出到屏幕上
+    curl_setopt($ch, CURLOPT_POST, 1);//post提交方式
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $curlPost);
+    $data = curl_exec($ch);//运行curl
+    curl_close($ch);
+
+    $j=json_decode($data);
+    return $j;
+}
+
+
 /**
  * @param $url
  * @param $xml
@@ -572,6 +589,11 @@ function getOpenid($appid,$secret,$code){
     $data = curlGet($url);
     if($data){
         $result = json_decode($data,true);
+
+        \Illuminate\Support\Facades\Log::info($data);
+        $url2="https://api.weixin.qq.com/sns/userinfo?access_token=$result->access_token&openid=$result->openid&lang=zh_CN";
+        $result2 = curlInfoPost($url2);
+        \Illuminate\Support\Facades\Log::info(json_encode($result2));
         return $result;
     }
     die();

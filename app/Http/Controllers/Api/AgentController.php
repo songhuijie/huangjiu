@@ -51,6 +51,11 @@ class AgentController extends Controller
 
             return $this->response($fromErr);
         }
+        $access_entity = AccessEntity::getInstance();
+        $user_id = $access_entity->user_id;
+
+
+
         $detailed_address = $all['city'].$all['address'];
         $map_data = MapServices::get_lng_lat_tx($detailed_address);
         $response_json = $this->initResponse();
@@ -58,8 +63,7 @@ class AgentController extends Controller
             $response_json->status = Lib_const_status::MAP_ADDRESS_DISCREPANCY;
             return $this->response($response_json);
         }
-        $access_entity = AccessEntity::getInstance();
-        $user_id = $access_entity->user_id;
+
         $all['user_id']=$user_id;
         $all['lng']=$map_data['lng'];
         $all['lat']=$map_data['lat'];
@@ -289,7 +293,6 @@ class AgentController extends Controller
         $response_json->status = Lib_const_status::SUCCESS;
         return $this->response($response_json);
     }
-
 
 
 }
