@@ -71,27 +71,33 @@ class UserController extends Controller
         $openid=['openid'=>1];
         if($param['code']){
             $openid = getOpenid($appid,$secret,$param['code']);
-            Log::channel('wechat')->info(json_encode($openid));
         }
 
         if (isset($openid['openid'])) {
 
             $user = $this->user->info($openid['openid']);
 
+            $expires_in = time()+86000;
             if ($user) {
 
                 $data = [
                     'id' =>$user->id,
-                    'access_token' =>$user->access_token,
-
+                    'access_token' =>$openid['access_token'],
                 ];
+                $this->user->where('id',$data['id'])->update(['access_token'=>$data['access_token'],'expires_in'=>$expires_in]);
                 $response_json->status = Lib_const_status::SUCCESS;
                 $response_json->data = $data;
                 return $this->response($response_json);
             }else{
 
-                $param['openid'] = $openid['openid'];
-                $result = $this->user->insert($param);
+                $data = [
+                    'user_openid'=> $openid['openid'],
+                    'user_nickname'=> isset($param['user_nickname'])?$param['user_nickname']:'',
+                    'user_img'=> isset($param['user_img'])?$param['user_img']:'',
+                    'access_token'=> $openid['access_token'],
+                    'expires_in'=> $expires_in,
+                ];
+                $result = $this->user->insert($data);
                 $id = $request->input('id',0);
                 $user_info =  $this->user->find($id);
                 if($user_info){
