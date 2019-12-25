@@ -99,6 +99,17 @@ class Goods extends Model
         }
         return $int;
     }
+
+    /**
+     * 更新商品销量
+     * @param $goods_id
+     * @param $num
+     * @return mixed
+     */
+    public function updateSell($goods_id,$num){
+        return  $this->where(['id'=>$goods_id])->update(['sell_num'=>DB::raw("sell_num + $num")]);
+    }
+
     public function getCart(){
         return $this->belongsTo(Cart::class,'id','sku_id');
     }

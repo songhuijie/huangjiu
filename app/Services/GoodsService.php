@@ -25,4 +25,15 @@ class GoodsService{
         return $goods->updateStock($goods_id,$type,$num);
 
     }
+
+    /**
+     * 更新商品销量
+     * @param $goods_id
+     * @param $num
+     * @return mixed
+     */
+    public static function updateSellNum($goods_id,$num){
+        $goods = new Goods();
+        return $goods->updateSell($goods_id,$num);
+    }
 }

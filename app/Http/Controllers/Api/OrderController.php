@@ -43,7 +43,6 @@ class OrderController extends Controller{
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-
     public function order(Request $request){
         $all = $request->all();
         $fromErr = $this->validatorFrom([
@@ -109,6 +108,7 @@ class OrderController extends Controller{
                     'good_title'=>$pay_goods->good_title,
                     'good_dsc'=>$pay_goods->good_dsc,
                     'good_type'=>$pay_goods->good_type,
+                    'goods_num'=>$v,
                     'royalty_price'=>$pay_goods->royalty_price,
                     'old_price'=>$pay_goods->old_price,
                     'new_price'=>$pay_goods->new_price,
@@ -166,8 +166,12 @@ class OrderController extends Controller{
         $response_json = $this->initResponse();
         $order = $this->order->find($all['order_id']);
         if($order){
-
             $this->order->updateStatus($all['order_id'],$user_id,Lib_config::ORDER_STATUS_ONE);
+            $goods_detail = $order->goods_detail;
+            foreach($goods_detail as $k=>$v){
+                GoodsService::updateSellNum($v->goods_id,$v->goods_num);
+            }
+
             $response_json->status = Lib_const_status::SUCCESS;
         }else{
             $response_json->status = Lib_const_status::ORDER_NOT_EXISTENT;
