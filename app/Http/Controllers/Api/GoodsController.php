@@ -82,7 +82,6 @@ class GoodsController extends Controller
         }
         $response_json = $this->initResponse();
 
-        $
         $detail = $this->good->find($all['goods_id']);
         if($detail){
             $response_json->status = Lib_const_status::SUCCESS;
