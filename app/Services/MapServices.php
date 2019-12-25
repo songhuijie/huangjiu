@@ -68,7 +68,7 @@ class MapServices{
             $to_address ='';
             foreach($agents as $k=>$v){
                 $data[] = [
-                    'scope'=>(int) bcmul($v->distribution_scope,10000),
+                    'scope'=>(int) bcmul($v->distribution_scope,1000),
                     'agent_id'=>$v->id
                 ];
                 if($k == count($agents)-1){
@@ -95,6 +95,7 @@ class MapServices{
             {
 
                 $res= json_decode($result,true);
+                dump($res);
                 if(isset($res['result'])){
                     $elements = $res['result']['elements'];
                     foreach($elements as $k=>$v){

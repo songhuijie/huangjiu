@@ -43,6 +43,16 @@ class Order extends Model
     }
 
 
+    public function getGoodsDetailAttribute($value)
+    {
+        return json_decode($value);
+    }
+
+    public function getAddressDetailAttribute($value)
+    {
+        return json_decode($value);
+    }
+
     /**
      * 更新订单状态
      * @param $order_id

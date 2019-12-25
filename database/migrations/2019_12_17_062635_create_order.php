@@ -17,12 +17,6 @@ class CreateOrder extends Migration
         Schema::create('order', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('user_id')->comment('下单用户ID');
-            $table->integer('goods_id')->default(0)->comment('商品ID');
-            $table->integer('goods_type')->comment('类型ID');
-            $table->string('order_image')->comment('订单缩略图第一个商品图片');
-            $table->string('order_name')->comment('商品名称');
-            $table->integer('order_num')->comment('订单数量');
-            $table->string('order_price')->comment('商品金额');
             $table->string('order_royalty_price')->comment('订单提成价格');
             $table->string('order_total_price')->comment('合计金额');
             $table->text('goods_detail')->comment('商品详情（多商品）');

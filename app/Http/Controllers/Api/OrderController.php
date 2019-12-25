@@ -86,9 +86,12 @@ class OrderController extends Controller{
                 }
             }
 
-            $order_ids = [];
+            $goods_detail = [];
+            $total_royalty_price =0;
+            $order_total_price =0;
+            $order_id = date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
             foreach($goods as $k=>$v){
-                $order_id = date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
+
 
                 $pay_goods = $this->goods->getGoodsBySkuId($k);
                 if(!$goods){
@@ -100,27 +103,36 @@ class OrderController extends Controller{
                     $response_json->status = Lib_const_status::GOODS_NOT_ENOUGH_STOCK;
                     return $this->response($response_json);
                 }
-                $order_data = [
-                    'user_id'=>$user_id,
-                    'order_delivery'=>0,//4  0快递配送 1自提,2配送到家,3配送到店,4送货上门'
-                    'address_detail'=>json_encode($address),
+
+                $good_detail = [
                     'goods_id'=>$pay_goods->id,
-                    'goods_type'=>$pay_goods->good_type,
-                    'order_image'=>$pay_goods->good_image,
-                    'order_name'=>$pay_goods->good_title,
-                    'order_num'=>$v,
-                    'order_price'=>$pay_goods->new_price,
-                    'order_royalty_price'=>$pay_goods->royalty_price,
-                    'order_total_price'=>bcmul($v,$pay_goods->new_price,2),
-                    'is_arrive'=>$is_arrive,
-                    'arrive_time'=>$arrive_time,
-                    'agent_id'=>$agent_id,
-                    'user_name'=>$address->name,
-                    'user_phone'=>$address->phone,
-                    'order_number'=>$order_id,
+                    'good_title'=>$pay_goods->good_title,
+                    'good_dsc'=>$pay_goods->good_dsc,
+                    'good_type'=>$pay_goods->good_type,
+                    'royalty_price'=>$pay_goods->royalty_price,
+                    'old_price'=>$pay_goods->old_price,
+                    'new_price'=>$pay_goods->new_price,
+                    'good_image'=>$pay_goods->good_image,
                 ];
-                $order_ids[] = $this->order->insertOrder($order_data);
+                $total_royalty_price += $pay_goods->royalty_price * $v;
+                $order_total_price += $pay_goods->new_price * $v;
+                $goods_detail[] = $good_detail;
             }
+            $order_data = [
+                'user_id'=>$user_id,
+                'order_delivery'=>0,//4  0快递配送 1自提,2配送到家,3配送到店,4送货上门'
+                'address_detail'=>json_encode($address),
+                'goods_detail'=>json_encode($goods_detail),
+                'order_royalty_price'=>$total_royalty_price,
+                'order_total_price'=>$order_total_price,
+                'is_arrive'=>$is_arrive,
+                'arrive_time'=>$arrive_time,
+                'agent_id'=>$agent_id,
+                'user_name'=>$address->name,
+                'user_phone'=>$address->phone,
+                'order_number'=>$order_id,
+            ];
+            $order_ids[] = $this->order->insertOrder($order_data);
 
             $response_json->status = Lib_const_status::SUCCESS;
             $response_json->data = $order_ids;
