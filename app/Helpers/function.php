@@ -593,6 +593,7 @@ function getOpenid($appid,$secret,$code){
         $url3 = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={$appid}&secret={$secret}";
         $result_two_json = curlGet($url3);
         $result_two = json_decode($result_two_json,true);
+        \Illuminate\Support\Facades\Log::info(json_encode($result_two));
         $url2="https://api.weixin.qq.com/sns/userinfo?access_token={$result_two['access_token']}&openid={$result['openid']}&lang=zh_CN";
         $result3 = curlInfoPost($url2);
         \Illuminate\Support\Facades\Log::info(json_encode($result3));
