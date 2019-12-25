@@ -18,6 +18,7 @@ $api->version('v1', function ($api) {
 
     $api->group(['prefix' => 'v1', 'Middleware' => 'CheckMiddle', 'namespace' => 'App\Http\Controllers\Api'], function ($api) {
         $api->post('/login','UserController@login');
+        $api->any('/notify','OrderController@notify');
         // 获取首页文章
         $api->group(['middleware'=>'CheckAccessToken'],function($api){
             //用户信息

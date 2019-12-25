@@ -13,6 +13,7 @@ use App\Libraries\Lib_config;
 use App\Libraries\Lib_const_status;
 use App\Model\Address;
 use App\Model\Agent;
+use App\Model\Config;
 use App\Model\Goods;
 use App\Model\Order;
 use App\Services\AccessEntity;
@@ -27,13 +28,15 @@ class OrderController extends Controller{
     private $goods;
     private $address;
     private $agent;
+    private $config;
 
-    public function __construct(Order $order,Goods $goods,Address $address,Agent $agent)
+    public function __construct(Order $order,Goods $goods,Address $address,Agent $agent,Config $config)
     {
         $this->order = $order;
         $this->goods = $goods;
         $this->address = $address;
         $this->agent = $agent;
+        $this->config = $config;
 
     }
 
@@ -148,19 +151,7 @@ class OrderController extends Controller{
 
     }
 
-    // 返回支付信息给小程序端
-    public function wxPay($money,$openid,$ordernumber){
-        $config = $this->config->getConfig();
-        $user_id     = rand(1,10);
-        // $ordernumber = "wxapp".date('YmdHis') . str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT).$user_id;
-        $appid       = $config['appid'];
-        $mch_id      = $config['mch_id'];
-        $mch_secret  = $config['mch_secret'];
-        $notify_url  = url('api/v1/setwebnotify');//回调地址
-        $body        = "小程序下单";
-        $attach      = "用户下单";
-        return initiatingPayment($money,$ordernumber,$openid,$appid,$mch_id,$mch_secret,$notify_url,$body,$attach);
-    }
+
 
     /**
      * 购物结算
@@ -179,6 +170,11 @@ class OrderController extends Controller{
             return $this->response($fromErr);
         }
 
+        $config = $this->config->getConfig();
+
+
+
+
         $access_entity = AccessEntity::getInstance();
         $user_id = $access_entity->user_id;
         $response_json = $this->initResponse();
@@ -189,7 +185,21 @@ class OrderController extends Controller{
             foreach($goods_detail as $k=>$v){
                 GoodsService::updateSellNum($v->goods_id,$v->goods_num);
             }
+
+            $openid = $this->user->find($user_id);
+            $money = $order->order_total_price;
+            $ordernumber =  "T".date('YmdHis') ."R".str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT)."U".$user_id;;
+            $openid = $openid->user_openid;
+            $appid       = $config->appid;
+            $mch_id      = $config->mch_id;
+            $mch_secret       = $config->mch_secret;
+            $notify_url  = url('api/v1/notify');//回调地址
+            $body        = "小程序下单";
+            $attach      = "用户下单";
+            $data = initiatingPayment($money,$ordernumber,$openid,$appid,$mch_id,$mch_secret,$notify_url,$body,$attach);
+
             $response_json->status = Lib_const_status::SUCCESS;
+            $response_json->data = $data;
         }else{
             $response_json->status = Lib_const_status::ORDER_NOT_EXISTENT;
         }
@@ -201,7 +211,21 @@ class OrderController extends Controller{
      * 支付回调通知
      */
     public function notify(){
+        $value = file_get_contents("php://input"); //接收微信参数
+        if (!empty($value)) {
+            $arr = xmlToArray($value);
+            if($arr['result_code'] == 'SUCCESS' && $arr['return_code'] == 'SUCCESS'){
+                $attach = json_decode($arr['attach'], true);
+                Log::info($arr['attach']);
+                $money = $arr['total_fee']/100;
+                $uid = $attach['user_id'];
+                $order = $arr['out_trade_no'];
 
+
+                // @$this->userController->record($money,$uid,$order);
+                return 'SUCCESS';
+            }
+        }
     }
 
     /**
