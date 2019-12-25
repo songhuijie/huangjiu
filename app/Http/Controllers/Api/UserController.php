@@ -56,7 +56,7 @@ class UserController extends Controller
         $fromErr = $this->validatorFrom([
             'code'=>'required',
         ],[
-            'code.required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
+            'code.required'=>Lib_const_status::ERROR_TOO_MUCH_REQUEST,
             'id.unique'=>Lib_const_status::USER_NOT_EXISTENT,
         ]);
 
