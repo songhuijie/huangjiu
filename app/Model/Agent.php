@@ -33,7 +33,7 @@ class Agent extends Model
         ''
     ];
 
-    protected $select = ['id','user_name','iphone','city','address','lng','lat','start_time','end_time','distribution_scope'];
+    protected $select = ['id','user_name','iphone','city','address','lng','lat','start_time','end_time','distribution_scope','user_img'];
 
     /**
      * 添加用户代理
@@ -105,5 +105,9 @@ class Agent extends Model
         return $this->where(['user_id'=>$user_id])->first();
     }
 
+
+    public function userImg(){
+        return $this->belongsTo(User::class,'user_id','id');
+    }
 
 }

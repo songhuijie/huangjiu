@@ -243,9 +243,12 @@ class AgentController extends Controller
 
         $agent_id = MapServices::distance($lng,$lat);
 
+
         $response_json = $this->initResponse();
         if($agent_id){
             $agents = $this->agent->getAgent($agent_id);
+            $agents->user_Img = $agents->userImg->user_img;
+            unset($agents->userImg);
             $response_json->status = Lib_const_status::SUCCESS;
             $response_json->data = $agents;
         }

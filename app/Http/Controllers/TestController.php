@@ -26,8 +26,15 @@ class TestController extends Controller{
 //        $Secret_key = 'LGS1AUdf7Q7qB9fTBVF7Ofv1DiebARAr';
 //        $result = MapServices::get_lng_lat_tx($address,$key,$Secret_key);
 //        dd($result);
-        $lng = 104.06291;
-        $lat = 30.67485;
+        $agent = new Agent();
+        $agents = $agent->getAgent(1);
+        $agents->user_Img = $agents->userImg->user_img;
+        unset($agents->userImg);
+        $response_json = new \StdClass();
+        $response_json->data = $agents;
+        return $this->response($response_json);
+        $lng = 104.0366439819336;
+        $lat = 30.670055389404297;
         $agent_id = MapServices::distance($lng,$lat);
         dd($agent_id);
         $good = new Goods();

@@ -25,10 +25,17 @@ class MapServices{
         $map_key = $config['map_key'];
         $Secret_key = $config['map_secret_key'];
 
-        $init_url = self::INIT_URL;
-        $param = "/ws/geocoder/v1/?address=$address&key=$map_key";
+
+        $param_data = [
+            'address'=>$address,
+            'key'=>$map_key,
+        ];
+        $new_param  = self::autograph($param_data);
+        $param = "/ws/geocoder/v1/?".$new_param;
         $sig = md5($param.$Secret_key);
-        $url = $init_url.$param .'&sig='.$sig;
+        $url = self::INIT_URL.$param .'&sig='.$sig;
+        $result = self::curl_get($url);
+
         $result = self::curl_get($url);
         if($result)
         {
