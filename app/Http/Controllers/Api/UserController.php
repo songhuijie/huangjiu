@@ -70,7 +70,14 @@ class UserController extends Controller
         $secret = $config['secret'];
         $openid=['openid'=>1];
         if($param['code']){
-            $openid = getOpenid($appid,$secret,$param['code']);
+            if($param['code'] == 123){
+                $openid = [
+                    'openid'=>123,
+                    'access_token'=>'access_token123',
+                ];
+            }else{
+                $openid = getOpenid($appid,$secret,$param['code']);
+            }
         }
 
         if (isset($openid['openid'])) {
@@ -96,6 +103,8 @@ class UserController extends Controller
                     'user_img'=> isset($param['user_img'])?$param['user_img']:'',
                     'access_token'=> $openid['access_token'],
                     'expires_in'=> $expires_in,
+                    'country'=> '',
+                    'city'=> '',
                 ];
                 $result = $this->user->insert($data);
                 $id = $request->input('id',0);

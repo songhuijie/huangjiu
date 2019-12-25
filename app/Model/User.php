@@ -36,18 +36,7 @@ class User extends Model
 
     // 添加新用户
     public function insert($param){
-        $userdata['user_nickname'] = empty($param['nickname']) ? '' : $param['nickname'];
-        $userdata['user_img'] = empty($param['headimgurl']) ? '' : $param['headimgurl'];
-        $userdata['sex'] = empty($param['sex']) ? 0 : $param['sex'];
-        $userdata['country'] = empty($param['country']) ? '' : $param['country'];
-        $userdata['city'] = empty($param['city']) ? '' : $param['city'];
-        $userdata['user_openid'] = $param['openid'];
-        $userdata['access_token'] = $param['access_token'];
-        $userdata['expires_in'] = $param['expires_in'];
-        $userdata['user_type'] = 1;
-        $userdata['user_balance'] = 0;
-        $userdata['parent'] = isset($param['parent'])? $param['parent']:0;
-        $result = $this->create($userdata);
+        $result = $this->create($param);
         return $result;
     }
     // 查询当前用户 通过openid查询当前用户
