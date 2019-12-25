@@ -28,8 +28,7 @@ class TestController extends Controller{
 //        dd($result);
         $lng = 104.05293;
         $lat = 30.69015;
-        $result = MapServices::distance($lng,$lat);
-dd($result);
+        $agent_id = MapServices::distance($lng,$lat);
         $good = new Goods();
         $goods_id = 1;
         $type = 2;

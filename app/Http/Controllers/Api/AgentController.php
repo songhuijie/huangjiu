@@ -220,4 +220,37 @@ class AgentController extends Controller
         return $this->response($response_json);
     }
 
+    /**
+     * 根据精度位置获取代理
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function AgentAccuracy(Request $request){
+
+        $all = $request->all();
+        $fromErr = $this->validatorFrom([
+            'lat'=>'required',
+            'lng'=>'required',
+        ],[
+            'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
+        ]);
+        if($fromErr){//输出表单验证错误信息
+            return $this->response($fromErr);
+        }
+
+        $lat = $all['lat'];
+        $lng = $all['lng'];
+
+        $agent_id = MapServices::distance($lng,$lat);
+
+        $response_json = $this->initResponse();
+        if($agent_id){
+            $agents = $this->agent->getAgent($agent_id);
+            $response_json->status = Lib_const_status::SUCCESS;
+            $response_json->data = $agents;
+        }
+        $response_json->status = Lib_const_status::SUCCESS;
+        return $this->response($response_json);
+    }
+
 }

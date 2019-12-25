@@ -53,7 +53,7 @@ class MapServices{
      * 匹配距离
      * @param $lng
      * @param $lat
-     * @return array
+     * @return bool
      */
     public static function distance($lng,$lat){
 
@@ -67,13 +67,17 @@ class MapServices{
             $data = [];
             $to_address ='';
             foreach($agents as $k=>$v){
-                $data[] = $v->id;
+                $data[] = [
+                    'scope'=>(int) bcmul($v->distribution_scope,10000),
+                    'agent_id'=>$v->id
+                ];
                 if($k == count($agents)-1){
                     $to_address .= $v->lat.','.$v->lng;
                 }else{
                     $to_address .= $v->lat.','.$v->lng.';';
                 }
             }
+
 
             $param_data = [
                 'mode'=>'driving',
@@ -89,20 +93,20 @@ class MapServices{
 
             if($result)
             {
-                $data = array();
-                $res= json_decode($result,true);
-                if ($res['status'] == 0) {
-                    $results = $res['result'];
-                    $data['lng'] = $results['location']['lng'];
-                    $data['lat'] = $results['location']['lat'];
-                    return $data;
-                }else{
-                    return [];
-                }
 
+                $res= json_decode($result,true);
+                if(isset($res['result'])){
+                    $elements = $res['result']['elements'];
+                    foreach($elements as $k=>$v){
+                        if($v['distance'] <= $data[$k]['scope']){
+                            return $data[$k]['agent_id'];
+                        }
+                    }
+                }
+                return false;
             }
             else{
-                return [];
+                return false;
             }
         }
 
