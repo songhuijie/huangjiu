@@ -183,7 +183,7 @@ class OrderController extends Controller{
         $response_json = $this->initResponse();
         $order = $this->order->find($all['order_id']);
         if($order){
-            $this->order->updateStatus($all['order_id'],$user_id,Lib_config::ORDER_STATUS_ONE);
+//            $this->order->updateStatus($all['order_id'],$user_id,Lib_config::ORDER_STATUS_ONE);
             $goods_detail = $order->goods_detail;
             foreach($goods_detail as $k=>$v){
                 GoodsService::updateSellNum($v->goods_id,$v->goods_num);
