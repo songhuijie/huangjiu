@@ -62,7 +62,7 @@ class UserController extends Controller
         $appid = $config['appid'];
         $secret = $config['secret'];
 
-        if($param['code']){
+//        if($param['code']){
 //            if($param['code'] == 123){
 //                $openid = [
 //                    'openid'=>123,
@@ -71,8 +71,8 @@ class UserController extends Controller
 //            }else{
 //
 //            }
-            $openid = getOpenid($appid,$secret,$param['code']);
-        }
+//        }
+        $openid = getOpenid($appid,$secret,$param['code']);
 
 
         if (isset($openid['openid'])) {
