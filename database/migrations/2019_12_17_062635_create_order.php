@@ -25,6 +25,7 @@ class CreateOrder extends Migration
             $table->string('order_price')->comment('商品金额');
             $table->string('order_royalty_price')->comment('订单提成价格');
             $table->string('order_total_price')->comment('合计金额');
+            $table->text('goods_detail')->comment('商品详情（多商品）');
             $table->integer('order_paytype')->default(1)->comment('1微信支付,2');
             $table->integer('order_delivery')->default(0)->comment('0快递配送 1自提,2配送到家,3配送到店,4送货上门');
             $table->integer('order_status')->default(0)->comment('0待支付,1支付成功待发货,2已发货,3已完成,4维权,5退款,6取消');
