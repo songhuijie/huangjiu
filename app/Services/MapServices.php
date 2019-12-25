@@ -95,7 +95,6 @@ class MapServices{
             {
 
                 $res= json_decode($result,true);
-                dump($res);
                 if(isset($res['result'])){
                     $elements = $res['result']['elements'];
                     foreach($elements as $k=>$v){
