@@ -45,13 +45,11 @@ class UserController extends Controller
      */
     public function login(Request $request){
         $param = $request->all();
-        Log::info(json_encode($param));
-
         $response_json = $this->initResponse();
         $fromErr = $this->validatorFrom([
             'code'=>'required',
         ],[
-            'code.required'=>Lib_const_status::ERROR_TOO_MUCH_REQUEST,
+            'code.required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
             'id.unique'=>Lib_const_status::USER_NOT_EXISTENT,
         ]);
 
@@ -63,18 +61,22 @@ class UserController extends Controller
         $config = $this->config->getConfig();
         $appid = $config['appid'];
         $secret = $config['secret'];
-        $openid=['openid'=>1];
+
         if($param['code']){
-            if($param['code'] == 123){
-                $openid = [
-                    'openid'=>123,
-                    'access_token'=>'access_token123',
-                ];
-            }else{
-                $openid = getOpenid($appid,$secret,$param['code']);
-            }
+//            if($param['code'] == 123){
+//                $openid = [
+//                    'openid'=>123,
+//                    'access_token'=>'access_token123',
+//                ];
+//            }else{
+//
+//            }
+            $openid = getOpenid($appid,$secret,$param['code']);
         }
 
+        $response_json->status = Lib_const_status::SUCCESS;
+        $response_json->data = $openid;
+        return $this->response($response_json);
         if (isset($openid['openid'])) {
 
             $user = $this->user->info($openid['openid']);
