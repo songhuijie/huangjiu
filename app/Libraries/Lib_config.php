@@ -31,4 +31,8 @@ class Lib_config{
     const PAGE = 1;
     const LIMIT = 5;
 
+
+    const AGENT_STATUS_YES = 1;
+    const AGENT_STATUS_NO  = 0;
+
 }

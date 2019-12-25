@@ -32,6 +32,7 @@ class Collection extends Model
     ];
 
 
+    protected $select = ['goods_id'];
 
     public function goods()
     {
@@ -75,6 +76,15 @@ class Collection extends Model
             return $this->where(['user_id'=>$data['user_id'],'goods_id'=>$data['goods_id']])->delete();
         }
         return false;
+    }
+
+    /**
+     *  获取用户收藏
+     * @param $user_id
+     * @return mixed
+     */
+    public function getCollect($user_id){
+        return $this->select('goods_id')->where(['user_id'=>$user_id])->get()->toArray();
     }
 
 

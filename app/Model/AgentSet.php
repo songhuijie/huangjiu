@@ -13,7 +13,7 @@ class AgentSet extends Model
      * @var array
      */
     protected $table = 'agent_set';
-//    public $timestamps = false;
+    public $timestamps = false;
 //    protected $dateFormat = 'U';//使用时间戳方式添加
     /**
      * 表明模型是否应该被打上时间戳
@@ -64,14 +64,22 @@ class AgentSet extends Model
      * @return mixed
      */
     public function getUserAgent($set_user_id){
-        return  $this->where(['agent_user_id'=>$set_user_id])->first();
+        return  $this->where(['user_id'=>$set_user_id])->first();
     }
 
     /**
      * 更新代理状态或者发货状态
+     * @param $set_user_id
+     * @param $type
+     * @param $status
+     * @return mixed
      */
-    public function updateAgent($set_user_id,$status){
-        return $this->where('agent_user_id',$set_user_id)->update(['is_delivery'=>0]);
+    public function updateAgent($set_user_id,$type,$status){
+        if($type == 0){
+            return $this->where('user_id',$set_user_id)->update(['is_agent'=>$status]);
+        }else{
+            return $this->where('user_id',$set_user_id)->update(['is_delivery'=>$status]);
+        }
     }
 
 

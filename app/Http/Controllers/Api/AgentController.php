@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Libraries\Lib_config;
 use App\Libraries\Lib_const_status;
 use App\Model\Agent;
 use App\Model\AgentSet;
@@ -160,6 +161,7 @@ class AgentController extends Controller
         $all = $request->all();
         $fromErr = $this->validatorFrom([
             'user_id'=>'required|int',
+            'type'=>'int',
         ],[
             'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
             'int'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
@@ -173,15 +175,19 @@ class AgentController extends Controller
 
         $response_json = $this->initResponse();
         $agent = $this->agent->getByUserID($user_id);
+        $type = isset($all['type'])?$all['type']:0;
         if($agent){
             $agent_user = $this->agent_set->getUserAgent($set_user_id);
             if($agent_user){
-                $response_json->status = Lib_const_status::USER_AGENT_ALREADY;
+                $this->agent_set->updateAgent($set_user_id,$type,Lib_config::AGENT_STATUS_YES);
+                $response_json->status = Lib_const_status::SUCCESS;
             }else{
                 $agent_set_data = [
                     'agent_user_id'=>$user_id,
                     'user_id'=>$set_user_id,
                     'agent_id'=>$agent->id,
+                    'is_agent'=>$type==0?1:0,
+                    'is_delivery'=>$type==0?0:1,
                 ];
                 $int = $this->agent_set->insertAgent($agent_set_data);
                 $response_json->status = Lib_const_status::SUCCESS;
@@ -203,7 +209,7 @@ class AgentController extends Controller
         $all = $request->all();
         $fromErr = $this->validatorFrom([
             'user_id'=>'required|int',
-            'status'=>'int',
+            'type'=>'int',
         ],[
             'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
             'int'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
@@ -217,12 +223,14 @@ class AgentController extends Controller
         $user_id = $access_entity->user_id;
         $response_json = $this->initResponse();
         $agent = $this->agent->getByUserID($user_id);
-        $status = $all['status']?$all['status']:0;
+        $type = isset($all['type'])?$all['type']:0;
         if($agent){
             $agent_user = $this->agent_set->getUserAgent($set_user_id);
             if($agent_user){
-                $this->agent_set->updateAgent($set_user_id,$status);
-                $response_json->status = Lib_const_status::USER_AGENT_ALREADY;
+                $this->agent_set->updateAgent($set_user_id,$type,Lib_config::AGENT_STATUS_NO);
+                $response_json->status = Lib_const_status::SUCCESS;
+            }else{
+                $response_json->status = Lib_const_status::USER_NOT_AGENT;
             }
 
         }else{

@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Libraries\Lib_config;
 use App\Libraries\Lib_const_status;
 use App\Model\Address;
+use App\Model\Collection;
 use App\Model\Config;
 use App\Model\Goods;
 use App\Model\GoodsType;
+use App\Services\AccessEntity;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
@@ -23,12 +25,14 @@ class GoodsController extends Controller
     private $good;
     private $good_type;
     private $hos_search;
-    public function __construct(User $user,Goods $good,GoodsType $good_type,HotSearch $hos_search)
+    private $collect;
+    public function __construct(User $user,Goods $good,GoodsType $good_type,HotSearch $hos_search,Collection $collect)
     {
         $this->user = $user;
         $this->good = $good;
         $this->good_type = $good_type;
         $this->hos_search = $hos_search;
+        $this->collect = $collect;
     }
 
     /**
@@ -53,10 +57,19 @@ class GoodsController extends Controller
         $response_json = $this->initResponse();
 
         $goods_types = $this->good_type->getAll();
+        $access_entity = AccessEntity::getInstance();
+        $user_id = $access_entity->user_id;
+
+        $collect = $this->collect->getCollect($user_id);
+
+        $collects = array_column($collect,'goods_id');
 
 
         $goods_list =$this->good->getAllByGoodType($goods_type,$page,$limit);
 
+        foreach($goods_list as $k=>&$v){
+            $v['is_collect'] = in_array($v['id'],$collects)?1:0;
+        }
         $response_json->status = Lib_const_status::SUCCESS;
         $response_json->data->goods_type = $goods_types;
         $response_json->data->goods_list = $goods_list;
