@@ -618,12 +618,18 @@ function writeLogs($content,$path = 'logs/logs.log'){
  */
 /**
  * 小程序支付
- * @param Request $request
- * @param $amountmoney 金额
- * @param $ordernumber 商户订单号
+ * @param $amountmoney
+ * @param $ordernumber
+ * @param $openid
+ * @param $appid
+ * @param $mch_id
+ * @param $mer_secret
+ * @param $notify_url
+ * @param $body
+ * @param $attach
  * @return array
  */
-function initiatingPayment($amountmoney, $ordernumber,$openid,$appid,$mch_id,$mer_secret,$notify_url,$body,$attach)
+function initiatingPayment($amountmoney,$ordernumber,$openid,$appid,$mch_id,$mer_secret,$notify_url,$body,$attach)
 {
     $noncestr = createNonceStr(); //随机字符串
     $ordercode = $ordernumber;//商户订单号

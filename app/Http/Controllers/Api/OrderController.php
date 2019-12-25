@@ -95,7 +95,7 @@ class OrderController extends Controller{
             $goods_detail = [];
             $total_royalty_price =0;
             $order_total_price =0;
-            $order_id = date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
+            $order_id = date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8).$user_id;
             foreach($goods as $k=>$v){
 
 
@@ -188,7 +188,7 @@ class OrderController extends Controller{
 
             $openid = $this->user->find($user_id);
             $money = $order->order_total_price;
-            $ordernumber =  "T".date('YmdHis') ."R".str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT)."U".$user_id;;
+            $order_number =  $order->order_number;
             $openid = $openid->user_openid;
             $appid       = $config->appid;
             $mch_id      = $config->mch_id;
@@ -196,7 +196,7 @@ class OrderController extends Controller{
             $notify_url  = url('api/v1/notify');//回调地址
             $body        = "小程序下单";
             $attach      = "用户下单";
-            $data = initiatingPayment($money,$ordernumber,$openid,$appid,$mch_id,$mch_secret,$notify_url,$body,$attach);
+            $data = initiatingPayment($money,$order_number,$openid,$appid,$mch_id,$mch_secret,$notify_url,$body,$attach);
 
             $response_json->status = Lib_const_status::SUCCESS;
             $response_json->data = $data;
@@ -221,7 +221,8 @@ class OrderController extends Controller{
                 $uid = $attach['user_id'];
                 $order = $arr['out_trade_no'];
 
-
+                $this->order->updateStatusByOrderNumber($order,Lib_config::ORDER_STATUS_ONE);
+                Log::info('更新成功');
                 // @$this->userController->record($money,$uid,$order);
                 return 'SUCCESS';
             }

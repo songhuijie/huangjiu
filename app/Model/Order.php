@@ -65,6 +65,16 @@ class Order extends Model
     }
 
     /**
+     * 根据订单号更改订单状态
+     * @param $order_number
+     * @param $status
+     * @return mixed
+     */
+    public function updateStatusByOrderNumber($order_number,$status){
+        return $this->where(['order_number'=>$order_number])->update(['order_status'=>$status]);
+    }
+
+    /**
      * 根据状态获取订单
      * @param $user_id
      * @param $status
