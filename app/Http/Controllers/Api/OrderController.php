@@ -16,6 +16,7 @@ use App\Model\Agent;
 use App\Model\Config;
 use App\Model\Goods;
 use App\Model\Order;
+use App\Model\User;
 use App\Services\AccessEntity;
 use App\Services\GoodsService;
 use App\Services\RoyaltyService;
@@ -29,14 +30,16 @@ class OrderController extends Controller{
     private $address;
     private $agent;
     private $config;
+    private $user;
 
-    public function __construct(Order $order,Goods $goods,Address $address,Agent $agent,Config $config)
+    public function __construct(Order $order,Goods $goods,Address $address,Agent $agent,Config $config,User $user)
     {
         $this->order = $order;
         $this->goods = $goods;
         $this->address = $address;
         $this->agent = $agent;
         $this->config = $config;
+        $this->user = $user;
 
     }
 
