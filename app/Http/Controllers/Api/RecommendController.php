@@ -83,7 +83,7 @@ class RecommendController extends Controller
         $response_json = $this->initResponse();
         $about = $this->about->first();
         $response_json->status = Lib_const_status::SUCCESS;
-        $response_json->data = $about;
+        $response_json->data->content = $about->content;
         return $this->response($response_json);
     }
 }
