@@ -30,6 +30,10 @@ class Lib_const_status{
     const REGION_AGENT_ALREADY_APPLY = 10012;
     //用户代理不存在
     const USER_AGENT_NOT_EXISTENT = 10013;
+    //用户未成为代理商
+    const USER_NOT_AGENT = 10014;
+    //用户代理已达到上限
+    const USER_AGENT_ALREADY_UPPER = 10015;
 
     //推荐文章不存在
     const RECOMMENDED_ARTICLES_NOT_EXISTENT  = 19000;

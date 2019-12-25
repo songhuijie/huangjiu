@@ -38,10 +38,12 @@ class Goods extends Model
     /**
      * 根据商品类型查询条件
      * @param $good_type
+     * @param $page
+     * @param $limit
      * @return mixed
      */
-    public function getAllByGoodType($good_type){
-        return $this->select($this->select)->where(['good_type'=>$good_type,'goods_status'=>1])->get()->toArray();
+    public function getAllByGoodType($good_type,$page,$limit){
+        return $this->select($this->select)->where(['good_type'=>$good_type,'goods_status'=>1])->offset(($page-1)*$limit)->limit($limit)->get()->toArray();
     }
 
     public function getGoodImageAttribute($value)

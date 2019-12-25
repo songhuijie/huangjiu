@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Libraries\Lib_config;
 use App\Libraries\Lib_const_status;
 use App\Model\About;
 use App\Model\Recommend;
@@ -28,8 +29,19 @@ class RecommendController extends Controller
      */
     public function RecommendList(Request $request){
 
+        $all = $request->all();
+        $fromErr = $this->validatorFrom([
+            'page'=>'int',
+        ],[
+            'int'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
+        ]);
+        if($fromErr){//输出表单验证错误信息
+            return $this->response($fromErr);
+        }
+        $page = $all['page']?$all['page']:Lib_config::PAGE;
+        $limit = Lib_config::LIMIT;
         $response_json = $this->initResponse();
-        $res = $this->recommend->getAll();
+        $res = $this->recommend->getAll($page,$limit);
         $response_json->status = Lib_const_status::SUCCESS;
         $response_json->data = $res;
         return $this->response($response_json);

@@ -36,10 +36,12 @@ class Recommend extends Model
 
     /**
      * 获取 推荐列表
+     * @param $page
+     * @param $limit
      * @return mixed
      */
-    public function getAll(){
-        return $this->select($this->select)->get();
+    public function getAll($page,$limit){
+        return $this->select($this->select)->offset(($page-1)*$limit)->limit($limit)->get();
     }
 
 

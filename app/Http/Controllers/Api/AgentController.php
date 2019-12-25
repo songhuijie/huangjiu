@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Libraries\Lib_const_status;
 use App\Model\Agent;
+use App\Model\AgentSet;
 use App\Model\Config;
 use App\Model\Friend;
 use App\Model\User;
@@ -15,12 +16,14 @@ use App\Http\Controllers\Controller;
 class AgentController extends Controller
 {
     private $agent;
+    private $agent_set;
     private $config;
     private $friend;
     private $user;
-    public function __construct(Agent $agent,Config $config,Friend $friend,User  $user)
+    public function __construct(Agent $agent,AgentSet $agent_set,Config $config,Friend $friend,User  $user)
     {
         $this->agent = $agent;
+        $this->agent_set = $agent_set;
         $this->config = $config;
         $this->friend = $friend;
         $this->user = $user;
@@ -147,6 +150,76 @@ class AgentController extends Controller
         $response_json = $this->initResponse();
         $response_json->status = Lib_const_status::SUCCESS;
         $response_json->data = ['first'=>$lower,'second'=>$lower_lower];
+        return $this->response($response_json);
+    }
+
+    /**
+     * 设置代理
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function setAgent(Request $request){
+
+        $all = $request->all();
+        $fromErr = $this->validatorFrom([
+            'user_id'=>'required|int',
+        ],[
+            'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
+            'int'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
+        ]);
+        if($fromErr){//输出表单验证错误信息
+            return $this->response($fromErr);
+        }
+        $set_user_id = $all['user_id'];
+        $access_entity = AccessEntity::getInstance();
+        $user_id = $access_entity->user_id;
+
+        $response_json = $this->initResponse();
+        $agent = $this->agent->getByUserID($user_id);
+        if($agent){
+            $count = $this->agent_set->getCount($user_id);
+            if($count > 1){
+                $response_json->status = Lib_const_status::USER_AGENT_ALREADY_UPPER;
+            }else{
+                $agent_set_data = [
+                    'agent_user_id'=>$user_id,
+                    'user_id'=>$set_user_id,
+                    'agent_id'=>$agent->id,
+                ];
+                $int = $this->agent_set->insertAgent($agent_set_data);
+                $response_json->status = Lib_const_status::SUCCESS;
+            }
+
+        }else{
+            $response_json->status = Lib_const_status::USER_NOT_AGENT;
+        }
+        return $this->response($response_json);
+    }
+
+    /**
+     * 取消代理
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function cancelAgent(Request $request){
+
+        $all = $request->all();
+        $fromErr = $this->validatorFrom([
+            'user_id'=>'required|int',
+        ],[
+            'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
+            'int'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
+        ]);
+        if($fromErr){//输出表单验证错误信息
+            return $this->response($fromErr);
+        }
+        $set_user_id = $all['user_id'];
+
+        $access_entity = AccessEntity::getInstance();
+        $user_id = $access_entity->user_id;
+
+        $response_json = $this->initResponse();
+        $response_json->status = Lib_const_status::SUCCESS;
+        $response_json->data = [];
         return $this->response($response_json);
     }
 

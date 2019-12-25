@@ -38,14 +38,24 @@ class GoodsController extends Controller
      */
     public function GoodsList(Request $request)
     {
-
+        $all = $request->all();
+        $fromErr = $this->validatorFrom([
+            'page'=>'int',
+        ],[
+            'int'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
+        ]);
+        if($fromErr){//输出表单验证错误信息
+            return $this->response($fromErr);
+        }
         $goods_type = $request->input('goods_type',1);
-
+        $page = $all['page']?$all['page']:Lib_config::PAGE;
+        $limit = Lib_config::LIMIT;
         $response_json = $this->initResponse();
 
         $goods_types = $this->good_type->getAll();
 
-        $goods_list =$this->good->getAllByGoodType($goods_type);
+
+        $goods_list =$this->good->getAllByGoodType($goods_type,$page,$limit);
 
         $response_json->status = Lib_const_status::SUCCESS;
         $response_json->data->goods_type = $goods_types;
@@ -76,8 +86,9 @@ class GoodsController extends Controller
         if($detail){
             $response_json->status = Lib_const_status::SUCCESS;
             $response_json->data = $detail;
+        }else{
+            $response_json->status = Lib_const_status::GOODS_NOT_EXISTENT;
         }
-        $response_json->status = Lib_const_status::GOODS_NOT_EXISTENT;
         return $this->response($response_json);
     }
 
