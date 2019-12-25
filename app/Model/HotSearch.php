@@ -23,6 +23,7 @@ class HotSearch extends Model
     protected $fillable = [
 
     ];
+    protected $select = ['search_word'];
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -34,6 +35,7 @@ class HotSearch extends Model
 
     public function getHotWord(){
 
+        return $this->select($this->select)->where('search_times','>','10')->get();
     }
 
 }

@@ -41,6 +41,8 @@ $api->version('v1', function ($api) {
             $api->post('/goods/detail','GoodsController@GoodsDetail');
             //商品搜索
             $api->post('/goods/search','GoodsController@SearchGoods');
+            //搜索热词
+            $api->post('/goods/hoswords','GoodsController@HotSearch');
 
 
             //推荐列表

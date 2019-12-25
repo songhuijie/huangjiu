@@ -125,8 +125,10 @@ class GoodsController extends Controller
 
         $response_json = $this->initResponse();
 
-        $this->hos_search->getHotWord();
-
+        $words = $this->hos_search->getHotWord();
+        $response_json->status = Lib_const_status::SUCCESS;
+        $words = $words->toArray();
+        $response_json->data = array_column($words,'search_word');
         return $this->response($response_json);
 
     }

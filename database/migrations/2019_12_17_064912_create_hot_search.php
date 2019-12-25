@@ -15,7 +15,7 @@ class CreateHotSearch extends Migration
     {
         Schema::create('hot_search', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('search_word')->comment('搜索词');
+            $table->string('search_word')->comment('搜索词');
             $table->integer('search_times')->comment('搜索次数');
 
             $table->comment = '热门搜索词';
