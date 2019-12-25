@@ -142,7 +142,22 @@ class UserController extends Controller
         $asset = $this->asset->find($user_id);
         $agent = $this->agent->getByUserID($user_id);
         $user_info->balance = bcadd($asset->royalty_balance,$asset->agent_balance,2);
-        $user_info->is_agent = $agent?1:0;
+        if($agent){
+            switch ($agent->status){
+                case 0:
+                    $is_agent = 1;
+                    break;
+                case 1:
+                    $is_agent = 2;
+                    break;
+                default:
+                    $is_agent = 3;
+                    break;
+            }
+        }else{
+            $is_agent = 0;
+        }
+        $user_info->is_agent = $is_agent;//0表示没有代理  1表示有代理审核中 2表示代理审核通过 3表示代理未审核通过
 
         $response_json = $this->initResponse();
         $response_json->code = Lib_const_status::CORRECT;

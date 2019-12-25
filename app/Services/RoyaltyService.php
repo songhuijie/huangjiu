@@ -40,9 +40,10 @@ class RoyaltyService{
         $friend = $friend->GetFriend($user_id);
         if($friend){
             if($agent_id != 0){
+                //经销商发货
                 self::agentRoyalty($friend,$user_id,$order_royalty_price,$agent_id);
             }else{
-
+                //店铺发货
                 self::Royalty($friend,$user_id,$order_royalty_price);
             }
         }
