@@ -70,11 +70,8 @@ class AddressController extends Controller
 
             return $this->response($fromErr);
         }
-        $config = $this->config->getConfig();
-        $map_key = $config->map_key;
-        $map_secret_key = $config->map_secret_key;
         $detailed_address = $all['province'].$all['city'].$all['area'].$all['address'];
-        $map_data = MapServices::get_lng_lat_tx($detailed_address,$map_key,$map_secret_key);
+        $map_data = MapServices::get_lng_lat_tx($detailed_address);
         $response_json = $this->initResponse();
         if(empty($map_data)){
             $response_json->status = Lib_const_status::MAP_ADDRESS_DISCREPANCY;
@@ -116,11 +113,8 @@ class AddressController extends Controller
         if($fromErr){//输出表单验证错误信息
             return $this->response($fromErr);
         }
-        $config = $this->config->getConfig();
-        $map_key = $config->map_key;
-        $map_secret_key = $config->map_secret_key;
         $detailed_address = $all['province'].$all['city'].$all['area'].$all['address'];
-        $map_data = MapServices::get_lng_lat_tx($detailed_address,$map_key,$map_secret_key);
+        $map_data = MapServices::get_lng_lat_tx($detailed_address);
         $response_json = $this->initResponse();
         if(empty($map_data)){
             $response_json->status = Lib_const_status::MAP_ADDRESS_DISCREPANCY;

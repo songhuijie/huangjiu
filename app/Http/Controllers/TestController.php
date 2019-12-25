@@ -26,8 +26,10 @@ class TestController extends Controller{
 //        $Secret_key = 'LGS1AUdf7Q7qB9fTBVF7Ofv1DiebARAr';
 //        $result = MapServices::get_lng_lat_tx($address,$key,$Secret_key);
 //        dd($result);
-
-
+        $lng = 104.05293;
+        $lat = 30.69015;
+        $result = MapServices::distance($lng,$lat);
+dd($result);
         $good = new Goods();
         $goods_id = 1;
         $type = 2;

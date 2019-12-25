@@ -33,14 +33,14 @@ class Cart extends Model
         ''
     ];
 
-
+    protected $select = ['id','user_id','goods_id as goods_type','sku_id','cart_num','sku_name','sku_price'];
     /**
      * 获取购物车列表
      * @param $user_id
      * @return mixed
      */
     public function getCart($user_id){
-        return $this->where(['user_id'=>$user_id])->get();
+        return $this->select($this->select)->where(['user_id'=>$user_id])->get();
     }
 
     public function getCarts($user_id){

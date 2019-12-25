@@ -7,13 +7,25 @@
  */
 namespace App\Services;
 
+use App\Model\Agent;
+use App\Model\Config;
+
 class MapServices{
 
+    const INIT_URL = 'https://apis.map.qq.com';
 
-    public static function get_lng_lat_tx($address,$map_key,$Secret_key){
+    /**
+     * 根据地址匹配精度
+     * @param $address
+     * @return array
+     */
+    public static function get_lng_lat_tx($address){
 
+        $config = self::getMapKey();
+        $map_key = $config['map_key'];
+        $Secret_key = $config['map_secret_key'];
 
-        $init_url = 'https://apis.map.qq.com';
+        $init_url = self::INIT_URL;
         $param = "/ws/geocoder/v1/?address=$address&key=$map_key";
         $sig = md5($param.$Secret_key);
         $url = $init_url.$param .'&sig='.$sig;
@@ -35,6 +47,94 @@ class MapServices{
         else{
             return [];
         }
+    }
+
+    /**
+     * 匹配距离
+     * @param $lng
+     * @param $lat
+     * @return array
+     */
+    public static function distance($lng,$lat){
+
+        $config = self::getMapKey();
+        $map_key = $config['map_key'];
+        $Secret_key = $config['map_secret_key'];
+
+        $agent = new Agent();
+        $agents = $agent->all();
+        if($agents){
+            $data = [];
+            $to_address ='';
+            foreach($agents as $k=>$v){
+                $data[] = $v->id;
+                if($k == count($agents)-1){
+                    $to_address .= $v->lat.','.$v->lng;
+                }else{
+                    $to_address .= $v->lat.','.$v->lng.';';
+                }
+            }
+
+            $param_data = [
+                'mode'=>'driving',
+                'from'=>"$lat,$lng",
+                'to'=>$to_address,
+                'key'=>$map_key,
+            ];
+            $new_param  = self::autograph($param_data);
+            $param = "/ws/distance/v1/?".$new_param;
+            $sig = md5($param.$Secret_key);
+            $url = self::INIT_URL.$param .'&sig='.$sig;
+            $result = self::curl_get($url);
+
+            if($result)
+            {
+                $data = array();
+                $res= json_decode($result,true);
+                if ($res['status'] == 0) {
+                    $results = $res['result'];
+                    $data['lng'] = $results['location']['lng'];
+                    $data['lat'] = $results['location']['lat'];
+                    return $data;
+                }else{
+                    return [];
+                }
+
+            }
+            else{
+                return [];
+            }
+        }
+
+
+
+    }
+
+    public static function autograph($data)
+    {
+        $str = '';
+        $data = array_filter($data);
+        ksort($data);
+        foreach ($data as $key => $value) {
+            $str .= $key . '=' . $value . '&';
+        }
+        $new_str = substr($str,0,strlen($str)-1);
+        return $new_str;
+    }
+    /**
+     * 获取地图key
+     * @return array
+     */
+    public static function getMapKey(){
+        $config = new Config();
+        $config = $config->getConfig();
+        $map_key = $config->map_key;
+        $map_secret_key = $config->map_secret_key;
+        $data = [
+            'map_key'=>$map_key,
+            'map_secret_key'=>$map_secret_key,
+        ];
+        return $data;
     }
 
     public static function curl_get($url){
