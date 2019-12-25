@@ -26,7 +26,7 @@ class CreateAgent extends Migration
             $table->string('start_time')->default(0)->comment('营业起始时间');
             $table->string('end_time')->default(0)->comment('营业结束时间');
             $table->decimal('distribution_scope')->default(1.00)->comment('配送范围 默认为km');
-            $table->string('status')->default(0)->comment('状态 0表示审核中  1表示审核通过');
+            $table->string('status')->default(0)->comment('状态 0表示审核中  1表示审核通过 2审核不通过');
 //            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
 //            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
             $table->integer('created_at')->default(0)->comment('创建时间');

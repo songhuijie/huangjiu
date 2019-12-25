@@ -53,7 +53,13 @@ class Goods extends Model
 
     public function getRotationAttribute($value)
     {
-        return json_decode($value);
+        $data = json_decode($value);
+        if($data){
+            foreach($data as &$v){
+                $v = env('URL','').$v;
+            }
+        }
+        return $data;
     }
 
 
