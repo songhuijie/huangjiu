@@ -120,6 +120,7 @@ class UserController extends Controller
                     return $this->response($response_json);
                 } else {
                     $response_json->status = Lib_const_status::ERROR_REQUEST_PARAMETER;
+                    $response_json->data = '错误';
                     return $this->response($response_json);
                 }
             }
