@@ -57,19 +57,12 @@ class GoodsController extends Controller
         $response_json = $this->initResponse();
 
         $goods_types = $this->good_type->getAll();
-        $access_entity = AccessEntity::getInstance();
-        $user_id = $access_entity->user_id;
 
-        $collect = $this->collect->getCollect($user_id);
 
-        $collects = array_column($collect,'goods_id');
 
 
         $goods_list =$this->good->getAllByGoodType($goods_type,$page,$limit);
 
-        foreach($goods_list as $k=>&$v){
-            $v['is_collect'] = in_array($v['id'],$collects)?1:0;
-        }
         $response_json->status = Lib_const_status::SUCCESS;
         $response_json->data->goods_type = $goods_types;
         $response_json->data->goods_list = $goods_list;
@@ -96,6 +89,11 @@ class GoodsController extends Controller
         $response_json = $this->initResponse();
 
         $detail = $this->good->find($all['goods_id']);
+        $access_entity = AccessEntity::getInstance();
+        $user_id = $access_entity->user_id;
+        $collect = $this->collect->getCollect($user_id);
+        $collects = array_column($collect,'goods_id');
+        $detail->is_collect = in_array($detail->id,$collects)?1:0;
         if($detail){
             $response_json->status = Lib_const_status::SUCCESS;
             $response_json->data = $detail;
