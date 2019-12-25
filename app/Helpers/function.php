@@ -592,11 +592,12 @@ function getOpenid($appid,$secret,$code){
         $result = json_decode($data,true);
         \Illuminate\Support\Facades\Log::info($data);
         $url3 = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={$appid}&secret={$secret}";
-        $access_token = curlGet($url);
-        \Illuminate\Support\Facades\Log::info($access_token);
-        $url2="https://api.weixin.qq.com/sns/userinfo?access_token=$result->access_token&openid=$result->openid&lang=zh_CN";
-        $result2 = curlInfoPost($url2);
-        \Illuminate\Support\Facades\Log::info(json_encode($result2));
+        $access_token = curlGet($url3);
+        dd($access_token);
+//        \Illuminate\Support\Facades\Log::info($access_token);
+//        $url2="https://api.weixin.qq.com/sns/userinfo?access_token=$result->access_token&openid=$result->openid&lang=zh_CN";
+//        $result2 = curlInfoPost($url2);
+//        \Illuminate\Support\Facades\Log::info(json_encode($result2));
         return $result;
     }
     die();
