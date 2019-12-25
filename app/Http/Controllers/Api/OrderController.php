@@ -80,7 +80,11 @@ class OrderController extends Controller{
             if($agent_id != 0){
                 $agent = $this->agent->getAgentById($agent_id,$user_id);
                 if(!$agent){
-                    $response_json->status = Lib_const_status::USER_AGENT_NOT_EXISTENT;
+                    $response_json->status = Lib_const_status::USER_NOT_AGENT;
+                    return $this->response($response_json);
+                }
+                if($agent->status != 1){
+                    $response_json->status = Lib_const_status::USER_AGENT_AUDIT_IN_PROGRESS_OR_FAILED;
                     return $this->response($response_json);
                 }
             }

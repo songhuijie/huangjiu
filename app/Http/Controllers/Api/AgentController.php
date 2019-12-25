@@ -104,7 +104,7 @@ class AgentController extends Controller
         if($int){
             $response_json->status = Lib_const_status::SUCCESS;
         }else{
-            $response_json->status = Lib_const_status::USER_AGENT_NOT_EXISTENT;
+            $response_json->status = Lib_const_status::USER_NOT_AGENT;
         }
         return $this->response($response_json);
     }
@@ -135,6 +135,20 @@ class AgentController extends Controller
         $access_entity = AccessEntity::getInstance();
         $user_id = $access_entity->user_id;
         $select = ['user_nickname','user_img','sex'];
+
+
+
+        $response_json = $this->initResponse();
+        $agent = $this->agent->getByUserID($user_id);
+        if(!$agent){
+            $response_json->status = Lib_const_status::USER_NOT_AGENT;
+            return $this->response($response_json);
+        }
+        if($agent->status != 1){
+            $response_json->status = Lib_const_status::USER_AGENT_AUDIT_IN_PROGRESS_OR_FAILED;
+            return $this->response($response_json);
+        }
+
         $lower = $this->friend->LowerLevel($user_id);
         foreach($lower as $k=>$v){
             $lower[$k]->user_info = $this->user->select($select)->find($v->user_id);
@@ -145,7 +159,7 @@ class AgentController extends Controller
             $lower_lower[$k]->user_info = $this->user->select($select)->find($v->user_id);
             $lower_lower[$k]->count = $this->friend->LowerCount($v->user_id);
         }
-        $response_json = $this->initResponse();
+
         $response_json->status = Lib_const_status::SUCCESS;
         $response_json->data = ['first'=>$lower,'second'=>$lower_lower];
         return $this->response($response_json);

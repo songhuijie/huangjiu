@@ -50,7 +50,7 @@ $api->version('v1', function ($api) {
             //推荐文章详情
             $api->post('/recommend/detail','RecommendController@RecommendDetail');
             //关于信息
-            $api->post('/about/info','RecommendController@AboutInfo');
+            $api->post('/about/about','RecommendController@AboutInfo');
 
             //购物车列表
             $api->post('/cart/list','CartController@CartList');
