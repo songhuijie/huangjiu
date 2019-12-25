@@ -48,11 +48,6 @@ class UserController extends Controller
 
 
         $response_json = $this->initResponse();
-
-        if (empty($param['code'])) {
-            return $this->response($response_json);
-        }
-
         $fromErr = $this->validatorFrom([
             'code'=>'required',
         ],[
