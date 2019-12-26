@@ -161,14 +161,17 @@ class AgentController extends Controller
             $lower[$k]->user_info = $this->user->select($select)->find($v->user_id);
             $lower[$k]->count = $this->friend->LowerCount($v->user_id);
         }
-        $lower_lower = $this->friend->LowerLowerLevel($user_id);
+        $lower_lower = $this->friend->LowerLowerLevel($user_id,2);
         foreach($lower_lower as $k=>$v){
             $lower_lower[$k]->user_info = $this->user->select($select)->find($v->user_id);
-            $lower_lower[$k]->count = $this->friend->LowerCount($v->user_id);
+        }
+        $best_lower = $this->friend->LowerLowerLevel($user_id,3);
+        foreach($lower_lower as $k=>$v){
+            $best_lower[$k]->user_info = $this->user->select($select)->find($v->user_id);
         }
 
         $response_json->status = Lib_const_status::SUCCESS;
-        $response_json->data = ['first'=>$lower,'second'=>$lower_lower];
+        $response_json->data = ['first'=>$lower,'second'=>$lower_lower,'third'=>$best_lower];
         return $this->response($response_json);
     }
 
@@ -182,7 +185,7 @@ class AgentController extends Controller
         $all = $request->all();
         $fromErr = $this->validatorFrom([
             'user_id'=>'required|int',
-            'type'=>'int',
+            'type'=>'int|in:1,2,3',
         ],[
             'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
             'int'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
@@ -195,25 +198,25 @@ class AgentController extends Controller
         $user_id = $access_entity->user_id;
 
         $response_json = $this->initResponse();
-        $agent = $this->agent->getByUserID($user_id);
-        $type = isset($all['type'])?$all['type']:0;
+        $agent = $this->agent->getByUserID($user_id,1);
+        $type = isset($all['type'])?$all['type']:1;
         if($agent){
-            $agent_user = $this->agent_set->getUserAgent($set_user_id);
-            if($agent_user){
-                $this->agent_set->updateAgent($set_user_id,$type,Lib_config::AGENT_STATUS_YES);
-                $response_json->status = Lib_const_status::SUCCESS;
-            }else{
-                $agent_set_data = [
-                    'agent_user_id'=>$user_id,
-                    'user_id'=>$set_user_id,
-                    'agent_id'=>$agent->id,
-                    'is_agent'=>$type==0?1:0,
-                    'is_delivery'=>$type==0?0:1,
-                ];
-                $int = $this->agent_set->insertAgent($agent_set_data);
+            $friend = $this->friend->GetFriend($set_user_id);
+            if($friend){
+                if($type == 2){
+                    if($friend->parent_parent_id == 0 && $friend->best_id == 0){
+                        $response_json->status = Lib_const_status::USER_CAN_NOT_BECOME_SECOND;
+                        return $this->response($response_json);
+                    }
+                }else{
+                    if($friend->best_id != $user_id){
+                        $response_json->status = Lib_const_status::USER_CAN_NOT_BECOME_THIRD;
+                        return $this->response($response_json);
+                    }
+                }
+                $this->friend->updateAgent($set_user_id,$type,$type);
                 $response_json->status = Lib_const_status::SUCCESS;
             }
-
         }else{
             $response_json->status = Lib_const_status::USER_NOT_AGENT;
         }
@@ -229,8 +232,8 @@ class AgentController extends Controller
 
         $all = $request->all();
         $fromErr = $this->validatorFrom([
-            'user_id'=>'required|int',
-            'type'=>'int',
+            'friend_id'=>'required|int',
+            'type'=>'int|in:1,2',
         ],[
             'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
             'int'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
@@ -238,24 +241,30 @@ class AgentController extends Controller
         if($fromErr){//输出表单验证错误信息
             return $this->response($fromErr);
         }
-        $set_user_id = $all['user_id'];
+
+        $friend_id = $all['friend_id'];
 
         $access_entity = AccessEntity::getInstance();
         $user_id = $access_entity->user_id;
         $response_json = $this->initResponse();
-        $agent = $this->agent->getByUserID($user_id);
-        $type = isset($all['type'])?$all['type']:0;
-        if($agent){
-            $agent_user = $this->agent_set->getUserAgent($set_user_id);
-            if($agent_user){
-                $this->agent_set->updateAgent($set_user_id,$type,Lib_config::AGENT_STATUS_NO);
-                $response_json->status = Lib_const_status::SUCCESS;
+
+        $type = isset($all['type'])?$all['type']:1;
+        $friend = $this->friend->GetFriendByBestOrParent($friend_id);
+        if($friend){
+            if($type != 1){
+                if($friend->parent_parent_id == $user_id || $friend->best_id == $user_id){
+                    $this->friend->updateAgentByID($friend->id,$type,Lib_config::AGENT_STATUS_NO);
+                    $response_json->status = Lib_const_status::SUCCESS;
+                }else{
+                    $response_json->status = Lib_const_status::USER_CAN_NOT_BECOME;
+                }
             }else{
-                $response_json->status = Lib_const_status::USER_NOT_AGENT;
+                $this->friend->updateAgentByID($friend->id,$type,Lib_config::AGENT_STATUS_NO);
+                $response_json->status = Lib_const_status::SUCCESS;
             }
 
         }else{
-            $response_json->status = Lib_const_status::USER_NOT_AGENT;
+            $response_json->status = Lib_const_status::USER_CAN_NOT_BECOME;
         }
 
         return $this->response($response_json);

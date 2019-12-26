@@ -22,9 +22,15 @@ class Lib_const_status{
     //用户不存在
     const USER_NOT_EXISTENT = 10002;
     //用户地址不存在
-    const USER_ADDRESS_NON_EXISTENT = 10010;
+    const USER_ADDRESS_NON_EXISTENT = 10003;
     //用户余额不足
-    const USER_BALANCE_NOT_ENOUGH = 10011;
+    const USER_BALANCE_NOT_ENOUGH = 10004;
+    //不能设置用户为2级代理
+    const USER_CAN_NOT_BECOME_SECOND = 10005;
+    //不能设置用户为3级代理
+    const USER_CAN_NOT_BECOME_THIRD = 10006;
+    //当前代理不可取消
+    const USER_CAN_NOT_BECOME = 10007;
 
     //用户已申请过代理
     const USER_AGENT_ALREADY_APPLY = 10011;

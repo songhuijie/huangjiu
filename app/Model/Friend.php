@@ -34,11 +34,44 @@ class Friend extends Model
         ''
     ];
 
-    protected $select = ['user_id'];
+    protected $select = ['id as friend_id','user_id'];
 
 
     /**
+     * 更新代理状态或者发货状态
+     * @param $set_user_id
+     * @param $type
+     * @param $status
+     * @return mixed
+     */
+    public function updateAgent($set_user_id,$type,$status){
+        if($type == 1){
+            return $this->where('user_id',$set_user_id)->update(['is_delivery'=>$status]);
+        }else{
+            return $this->where('user_id',$set_user_id)->update(['status'=>$status]);
+        }
+    }
+
+    /**
+     * 更新代理状态或者发货状态
+     * @param $id
+     * @param $type
+     * @param $status
+     * @return mixed
+     */
+    public function updateAgentByID($id,$type,$status){
+        if($type == 1){
+            return $this->where('id',$id)->update(['is_delivery'=>$status]);
+        }else{
+            return $this->where('id',$id)->update(['status'=>$status]);
+        }
+    }
+
+    /**
      * 添加好友关系
+     * @param $user_id
+     * @param $parent_id
+     * @return mixed
      */
     public function FriendRelationship($user_id,$parent_id){
         $friend = $this->where(['user_id'=>$parent_id])->first();
@@ -59,6 +92,14 @@ class Friend extends Model
     }
 
     /**
+     * 获取好友关系
+     * @param $friend_id
+     * @return mixed
+     */
+    public function GetFriendByBestOrParent($friend_id){
+        return $this->where(['id'=>$friend_id])->first();
+    }
+    /**
      * 获取当前用户下级
      */
     public function LowerLevel($user_id){
@@ -74,9 +115,16 @@ class Friend extends Model
 
     /**
      * 获取当前用户下下级
+     * @param $user_id
+     * @param $status
+     * @return mixed
      */
-    public function LowerLowerLevel($user_id){
-        return $this->select($this->select)->where(['parent_parent_id'=>$user_id])->get();
+    public function LowerLowerLevel($user_id,$status){
+        if($status == 2){
+            return $this->select($this->select)->where(['parent_parent_id'=>$user_id])->get();
+        }else{
+            return $this->select($this->select)->where(['best_id'=>$user_id])->get();
+        }
     }
 
     /**

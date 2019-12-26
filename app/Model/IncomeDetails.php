@@ -58,4 +58,17 @@ class IncomeDetails extends Model
     }
 
 
+    /**
+     * 时间格式
+     * @param $value
+     * @return mixed
+     */
+    public function getIncomeTimeAttribute($value)
+    {
+
+        return date('Y-m-d H:i:s',$value);
+    }
+
+
+
 }

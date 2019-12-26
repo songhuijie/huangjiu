@@ -67,20 +67,7 @@ class AgentSet extends Model
         return  $this->where(['user_id'=>$set_user_id])->first();
     }
 
-    /**
-     * 更新代理状态或者发货状态
-     * @param $set_user_id
-     * @param $type
-     * @param $status
-     * @return mixed
-     */
-    public function updateAgent($set_user_id,$type,$status){
-        if($type == 0){
-            return $this->where('user_id',$set_user_id)->update(['is_agent'=>$status]);
-        }else{
-            return $this->where('user_id',$set_user_id)->update(['is_delivery'=>$status]);
-        }
-    }
+
 
 
 }

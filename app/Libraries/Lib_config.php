@@ -32,7 +32,9 @@ class Lib_config{
     const LIMIT = 5;
 
 
-    const AGENT_STATUS_YES = 1;
+    const AGENT_DELIVERY_STATUS_YES = 1;
+    const AGENT_SECOND_LEVEL = 2;
+    const AGENT_THIRD_LEVEL = 3;
     const AGENT_STATUS_NO  = 0;
 
 }

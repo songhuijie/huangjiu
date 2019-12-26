@@ -110,10 +110,14 @@ class Agent extends Model
     /**
      * 根据用户ID 返回代理信息
      * @param $user_id
+     * @param $status
      * @return mixed
      */
-    public function getByUserID($user_id){
-        return $this->where(['user_id'=>$user_id])->first();
+    public function getByUserID($user_id,$status=null){
+        if($status == null){
+            return $this->where(['user_id'=>$user_id])->first();
+        }
+        return $this->where(['user_id'=>$user_id,'status'=>1])->first();
     }
 
 
