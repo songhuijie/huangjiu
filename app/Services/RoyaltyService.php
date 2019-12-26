@@ -190,9 +190,10 @@ class RoyaltyService{
                 ];
                 $friend->updateContribution($user_id,$parent_contribute_amount);
                 break;
-            case 1:
+            case 2:
                 $pattern = self::PATTERN[self::PATTERN_SECOND];
                 if($best_id != 0){
+                    $parent_id = $parent_parent_id;
                     $parent_parent_id = $best_id;
                 }
                 $parent_contribute_amount = bcmul($order_royalty_price,$pattern[0],2);
@@ -201,10 +202,17 @@ class RoyaltyService{
                     ['user_id'=>$parent_id,'royalty_balance'=>$parent_contribute_amount],
                     ['user_id'=>$parent_parent_id,'royalty_balance'=>$parent_parent_contribute_amount],
                 ];
-                $friend->updateContribution($user_id,$parent_contribute_amount,$parent_parent_contribute_amount);
+                if($best_id != 0){
+                    $friend->updateContribution($user_id,0,$parent_contribute_amount,$parent_parent_contribute_amount);
+                }else{
+                    $friend->updateContribution($user_id,$parent_contribute_amount,$parent_parent_contribute_amount);
+                }
+
                 break;
-            case 2:
+            case 3:
                 $pattern = self::PATTERN[self::PATTERN_THIRD];
+
+
                 $parent_contribute_amount = bcmul($order_royalty_price,$pattern[0],2);
                 $parent_parent_contribute_amount = bcmul($order_royalty_price,$pattern[1],2);
                 $best_contribute_amount = bcmul($order_royalty_price,$pattern[2],2);
