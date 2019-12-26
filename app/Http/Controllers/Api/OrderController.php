@@ -98,7 +98,7 @@ class OrderController extends Controller{
             $goods_detail = [];
             $total_royalty_price =0;
             $order_total_price =0;
-            $order_id = date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8).$user_id;
+            $order_id =  "T".date('YmdHis') ."R".str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT)."U".$user_id;//订单号
             foreach($goods as $k=>$v){
 
 
