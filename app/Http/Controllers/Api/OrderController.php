@@ -203,6 +203,7 @@ class OrderController extends Controller{
             $attach      = "用户下单";
             $data = initiatingPayment($money,$order_number,$openid,$appid,$mch_id,$mch_secret,$notify_url,$body,$attach);
 
+            Log::info(json_encode($data));
             $response_json->status = Lib_const_status::SUCCESS;
             $response_json->data = $data;
         }else{
