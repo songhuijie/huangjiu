@@ -3,18 +3,25 @@
 namespace App\Http\Controllers\Api;
 
 use App\Libraries\Lib_const_status;
+use App\Model\Asset;
 use App\Model\Config;
 use App\Http\Controllers\Controller;
+use App\Model\User;
 use App\Model\WithdrawLog;
 use App\Services\AccessEntity;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class WithdrawController extends Controller
 {
+    private $user;
+    private $asset;
     private $config;
     private $withdraw;
-    public function __construct(WithdrawLog $withdraw,Config $config)
+    public function __construct(WithdrawLog $withdraw,Asset $asset,Config $config,User $user)
     {
+        $this->user = $user;
+        $this->asset = $asset;
         $this->withdraw = $withdraw;
         $this->config = $config;
     }
@@ -49,19 +56,29 @@ class WithdrawController extends Controller
 
             return $this->response($fromErr);
         }
-        $openid = 1;
-        $amount = $all['amount'];
-        $config = $this->config->getConfig();
-        $appid = $config->appid;
-        $mchid = $config->mch_id;
-        $mch_secret = $config->mch_secret;
-        $key_pem = $config->key_pem;
-        $cert_pem = $config->cert_pem;
-        $desc = '转账';
-        $partner_trade_no = '转账';
+        $response_json = $this->initResponse();
 
-        //企业给用户转账
-        transferAccounts($appid,$mchid,$openid,$desc,$partner_trade_no,$amount,$mch_secret,$key_pem,$cert_pem);
+        $access_entity = AccessEntity::getInstance();
+        $user_id = $access_entity->user_id;
+        $amount = $all['amount'];
+        $result = $this->asset->getBalance($user_id);
+        if($result){
+            $withdraw_time = time();
+            $withdraw_data = [
+                'user_id'=>$user_id,
+                'withdraw_type'=>1,
+                'amount'=>$amount,
+                'surplus_amount'=>'',
+                'withdraw_time'=>$withdraw_time,
+                'status'=>0,
+            ];
+            $this->withdraw->insert($withdraw_data);
+            $response_json->status = Lib_const_status::SUCCESS;
+        }else{
+            $response_json->status = Lib_const_status::USER_BALANCE_NOT_ENOUGH;
+        }
+
+        return $this->response($response_json);
     }
 
 

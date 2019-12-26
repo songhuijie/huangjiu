@@ -23,6 +23,8 @@ class Lib_const_status{
     const USER_NOT_EXISTENT = 10002;
     //用户地址不存在
     const USER_ADDRESS_NON_EXISTENT = 10010;
+    //用户余额不足
+    const USER_BALANCE_NOT_ENOUGH = 10011;
 
     //用户已申请过代理
     const USER_AGENT_ALREADY_APPLY = 10011;
@@ -75,6 +77,11 @@ class Lib_const_status{
     const  ORDER_TO_BE_DELIVERED  = 50005;
     //订单已被取消或者其他原因
     const  ORDER_HAS_BEEN_CANCELLED  = 50006;
+
+    //提现失败
+    const  WITHDRAW_FAIL   = 60000;
+    //商户余额不足 或其他原因
+    const  WITHDRAW_MERCHANT_BALANCE_NOT_ENOUGH   = 60001;
 
 
 

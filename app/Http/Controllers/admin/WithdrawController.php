@@ -39,11 +39,23 @@ class WithdrawController extends Controller
                 unset($data['type']);
 
                 $label=DB::table("withdraw_log")->where("id","=",$data['id'])->first();
-                if($label->status==1){
-                    $data['status']=0;
-                }else{
-                    $data['status']=1;
-                }
+
+                $user_id = 1;
+                $user = $this->user->find($user_id);
+                $openid = $user->user_openid;
+                $amount = 1;
+                $config = $this->config->getConfig();
+                $appid = $config->appid;
+                $mchid = $config->mch_id;
+                $mch_secret = $config->mch_secret;
+                $key_pem = $config->key_pem;
+                $cert_pem = $config->cert_pem;
+                $desc = '提现';
+                $partner_trade_no = 'Z'.date('YmdHis').rand();
+                //企业给用户转账
+                $result = transferAccounts($appid,$mchid,$openid,$desc,$partner_trade_no,$amount,$mch_secret,$key_pem,$cert_pem);
+                Log::info(json_encode($result));
+                $response_json = $this->initResponse();
 
                 $reust=DB::table("withdraw_log")->where("id","=",$data['id'])->update($data);
                 if($reust){
