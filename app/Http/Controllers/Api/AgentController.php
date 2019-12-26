@@ -351,7 +351,14 @@ class AgentController extends Controller
             }
 
         }else{
-            $response_json->status = Lib_const_status::USER_CAN_NOT_DELIVER;
+            $agent = $this->agent->getByUserID($user_id,1);
+            if($agent){
+                $order = $this->order->getWhereByStatus($agent->id,$all['status']);
+                $response_json->status = Lib_const_status::SUCCESS;
+                $response_json->data = $order;
+            }else{
+                $response_json->status = Lib_const_status::USER_NOT_AGENT;
+            }
         }
 
 
