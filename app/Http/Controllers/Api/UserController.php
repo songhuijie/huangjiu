@@ -85,6 +85,14 @@ class UserController extends Controller
                     'id' =>$user->id,
                     'access_token' =>$openid['access_token'],
                 ];
+                $id = $request->input('id',0);
+                $user_info =  $this->user->find($id);
+                if($user_info){
+                    $friend = $this->friend->getFriend($user->id);
+                    if(!$friend){
+                        $this->friend->FriendRelationship($user->id,$id);
+                    }
+                }
                 $this->user->where('id',$data['id'])->update(['access_token'=>$data['access_token'],'expires_in'=>$expires_in]);
                 $response_json->status = Lib_const_status::SUCCESS;
                 $response_json->data = $data;
@@ -140,7 +148,7 @@ class UserController extends Controller
         $user_info = $this->user->getUserinfo($user_id);
         $asset = $this->asset->find($user_id);
         $agent = $this->agent->getByUserID($user_id);
-        $user_info->balance = bcadd($asset->royalty_balance,$asset->agent_balance,2);
+        $user_info->balance = $asset->balance;
         if($agent){
             switch ($agent->status){
                 case 0:
