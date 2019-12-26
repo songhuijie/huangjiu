@@ -117,7 +117,7 @@ class Order extends Model
      * @return int
      */
     public function deleteOrder($user_id,$order_id){
-        $id = $this->where(['user_id'=>$user_id,'id'=>$order_id])->whereIn('status',[0,4,5,6])->value('id');
+        $id = $this->where(['user_id'=>$user_id,'id'=>$order_id])->whereIn('order_status',[0,4,5,6])->value('id');
         if($id){
             return $this->where(['user_id'=>$user_id,'id'=>$order_id])->delete();
         }else{
