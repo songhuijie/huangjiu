@@ -48,9 +48,7 @@ class IncomeController extends Controller{
     /**
      * 提现记录日志
      */
-
     public function WithdrawList(){
-
         $response_json = $this->initResponse();
         $access_entity = AccessEntity::getInstance();
         $user_id = $access_entity->user_id;
@@ -58,6 +56,30 @@ class IncomeController extends Controller{
         $response_json->status = Lib_const_status::SUCCESS;
         $response_json->data = $withdraw;
         return $this->response($response_json);
+    }
+
+
+    /**
+     * 申请提现
+     */
+    public function withdraw(Request $request){
+        $all = $request->all();
+        $fromErr = $this->validatorFrom([
+            'amount'=>'required',
+        ],[
+            'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
+        ]);
+        if($fromErr){//输出表单验证错误信息
+            return $this->response($fromErr);
+        }
+        $access_entity = AccessEntity::getInstance();
+        $user_id = $access_entity->user_id;
+
+        dd($user_id);
+        $response_json = $this->initResponse();
+        $response_json->status = Lib_const_status::SUCCESS;
+        return $this->response($response_json);
+
     }
 
 }

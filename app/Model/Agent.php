@@ -46,8 +46,10 @@ class Agent extends Model
          $id = $this->where(['user_id'=>$user_id])->value('id');
          if(!$id){
              return $this->insert($all);
+         }else{
+             $all['status'] = 0;
+             return $this->where(['user_id'=>$user_id])->update($all);
          }
-         return false;
 
     }
 

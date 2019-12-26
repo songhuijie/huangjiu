@@ -101,12 +101,8 @@ $api->version('v1', function ($api) {
             $api->post('/income/list','IncomeController@IncomeList');
             //提现记录
             $api->post('/withdraw/list','IncomeController@WithdrawList');
-
-
-
-
-
-
+            //申请提现
+            $api->post('/withdraw/withdraw','IncomeController@withdraw');
 
 //            $api->post('/cart/list','CartController@CartList');
 
