@@ -8,6 +8,7 @@ use App\Model\Agent;
 use App\Model\AgentSet;
 use App\Model\Config;
 use App\Model\Friend;
+use App\Model\Order;
 use App\Model\User;
 use App\Services\AccessEntity;
 use App\Services\MapServices;
@@ -21,13 +22,15 @@ class AgentController extends Controller
     private $config;
     private $friend;
     private $user;
-    public function __construct(Agent $agent,AgentSet $agent_set,Config $config,Friend $friend,User  $user)
+    private $order;
+    public function __construct(Agent $agent,AgentSet $agent_set,Config $config,Friend $friend,User  $user,Order $order)
     {
         $this->agent = $agent;
         $this->agent_set = $agent_set;
         $this->config = $config;
         $this->friend = $friend;
         $this->user = $user;
+        $this->order = $order;
     }
 
     /**
@@ -306,5 +309,54 @@ class AgentController extends Controller
         return $this->response($response_json);
     }
 
+    /**
+     * 获取代理订单列表
+     */
+    public function getAgentList(Request $request){
+
+        $all = $request->all();
+        $fromErr = $this->validatorFrom([
+            'status'=>'required|in:2,3,4',
+        ],[
+            'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
+            'in'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
+        ]);
+        if($fromErr){//输出表单验证错误信息
+            return $this->response($fromErr);
+        }
+
+        $access_entity = AccessEntity::getInstance();
+        $user_id = $access_entity->user_id;
+        $response_json = $this->initResponse();
+
+        $friend = $this->friend->GetFriend($user_id);
+
+        if($friend){
+            if($friend->is_delivery == 1){
+                $agent_user_id = ($friend->best_id == 0) ? ($friend->parent_parent_id==0)?$friend->parent_id:$friend->parent_parent_id:$friend->best_id;
+
+                $agent = $this->agent->getByUserID($agent_user_id,1);
+                if($agent){
+                    $order = $this->order->getWhereByStatus($agent->id,$all['status']);
+                    $response_json->status = Lib_const_status::SUCCESS;
+                    $response_json->data = $order;
+                }else{
+                    $response_json->status = Lib_const_status::USER_NOT_AGENT;
+                    $response_json->data = $agent_user_id;
+                    $response_json->data->friend = $friend;
+                }
+
+            }else{
+                $response_json->status = Lib_const_status::USER_CAN_NOT_DELIVER;
+            }
+
+        }else{
+            $response_json->status = Lib_const_status::USER_CAN_NOT_DELIVER;
+        }
+
+
+
+        return $this->response($response_json);
+    }
 
 }

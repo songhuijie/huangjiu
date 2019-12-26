@@ -83,6 +83,8 @@ $api->version('v1', function ($api) {
             $api->post('/user/lower','AgentController@SubordinateUser');
             //根据精度获取代理
             $api->post('/agent/accuracy','AgentController@AgentAccuracy');
+            //获取代理的订单
+            $api->post('/agent/orderlist','AgentController@getAgentList');
 
             //订单-下单
             $api->post('/order/order','OrderController@order');

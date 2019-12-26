@@ -110,6 +110,16 @@ class Order extends Model
         return $data;
     }
 
+
+    /**
+     * 代理用户获取订单
+     * @param $agent_id
+     * @param $status
+     * @return mixed
+     */
+    public function getWhereByStatus($agent_id,$status){
+        return $this->where(['agent_id'=>$agent_id,'order_status'=>$status])->get();
+    }
     /**
      * 删除订单
      * @param $user_id
