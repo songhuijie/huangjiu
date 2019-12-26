@@ -81,7 +81,7 @@ class Order extends Model
      * @return mixed
      */
     public function getOrder($user_id,$status){
-        return $this->where(['order_status'=>$status,'user_id'=>$user_id])->get();
+        return $this->where(['order_status'=>$status,'user_id'=>$user_id])->orderBy('created_at','desc')->get();
     }
 
     /**

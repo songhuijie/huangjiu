@@ -28,5 +28,7 @@ class VerifyCsrfToken extends Middleware
         '/layer/*',
         '/recommend/*',
         '/about/*',
+        '/agent/*',
+        '/withdraw/*',
     ];
 }

@@ -32,6 +32,16 @@ Route::any('label/index','admin\LabelController@index');
 Route::any('label/status','admin\LabelController@status');
 Route::any('label/detail','admin\LabelController@detail');
 
+//代理
+Route::any('agent/index','admin\AgentController@index');
+Route::any('agent/status','admin\AgentController@status');
+Route::any('agent/detail','admin\AgentController@detail');
+
+//提现记录
+Route::any('withdraw/index','admin\WithdrawController@index');
+Route::any('withdraw/status','admin\WithdrawController@status');
+Route::any('withdraw/detail','admin\WithdrawController@detail');
+
 //商品
 Route::any('goods/index','admin\GoodsController@index');
 Route::any('goods/status','admin\GoodsController@status');

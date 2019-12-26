@@ -39,4 +39,24 @@ class WithdrawLog extends Model
         return $this->where('user_id',$user_id)->orderBy('withdraw_time','desc')->get();
     }
 
+    /**
+     * 根据条件搜索
+     * @param $param
+     * @return mixed
+     */
+    public function getWhere($param){
+        $limit = empty($param['limit'])?10:$param['limit'];
+        $page = empty($param['page'])?1:$param['page'];
+        $user_id = empty($param['user_id'])?null:$param['user_id'];
+        if($page>0){
+            $page = ($page-1)*$limit;
+        }
+        $query = $this;
+        if($user_id){
+            $query = $query->where('user_id',$user_id);
+        }
+        $data['data'] = $query->orderBy('id', 'asc')->offset(($page-1)*$limit)->limit($limit)->get();
+        $data['count'] = $query->orderBy('id', 'asc')->offset(($page-1)*$limit)->limit($limit)->count();
+        return $data;
+    }
 }

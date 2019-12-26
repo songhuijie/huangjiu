@@ -29,6 +29,7 @@
     </style>
 </head>
 
+
 <body>
     <div id="wrapper" style="margin-top:20px;">
         <div id="page-wrapper">
@@ -42,63 +43,56 @@
                       <div class="layui-form-item">
                         <label class="layui-form-label">小程序密匙</label>
                         <div class="layui-input-block">
-                          <input type="text" name="app_secret" required  lay-verify="required" value="{{$config->app_secret}}" placeholder="请输入小程序密匙" autocomplete="off" class="layui-input">
-                        </div>
-                      </div>
-                        
-                      <div class="layui-form-item">
-                        <label class="layui-form-label">服务电话</label>
-                        <div class="layui-input-block">
-                          <input type="text" name="phone" required  lay-verify="required" value="{{$config->phone}}"  placeholder="请输入服务电话" autocomplete="off" class="layui-input">
+                          <input type="text" name="secret" required  lay-verify="required" value="{{$config->secret}}" placeholder="请输入小程序密匙" autocomplete="off" class="layui-input">
                         </div>
                       </div>
 
-                      <div class="layui-form-item">
-                        <label class="layui-form-label">网站名称</label>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">商户ID</label>
                         <div class="layui-input-block">
-                          <input type="text" name="web_name" required  lay-verify="required" value="{{$config->web_name}}" placeholder="请输入网站名称" autocomplete="off" class="layui-input">
+                            <input type="text" name="mch_id" required  lay-verify="required" value="{{$config->mch_id}}" placeholder="请输入商户ID" autocomplete="off" class="layui-input">
                         </div>
-                      </div>
-
-                        <!-- 头像 -->
-
-                      <div class="layui-form-item layui-form-text">
-                        <label class="layui-form-label">网站头像</label>
-                        <button type="button" class="layui-btn" id="test1">
-                          <i class="layui-icon">&#xe67c;</i>上传图片
-                        </button>
-                        <img src="{{$config->web_headimg}}" name="web_headimg" id="img">
-                      </div>
-
-                      <div class="layui-form-item layui-form-text">
-                        <label class="layui-form-label">版权信息</label>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">商户密匙</label>
                         <div class="layui-input-block">
-                          <textarea name="web_information" placeholder="请输入内容"  class="layui-textarea">{{$config->web_information}}</textarea>
+                            <input type="text" name="mch_secret" required  lay-verify="required" value="{{$config->mch_secret}}" placeholder="请输入商户密匙" autocomplete="off" class="layui-input">
                         </div>
-                      </div>
+                    </div>
 
-                    
-                      
-                      <div class="layui-form-item">
-                        <label class="layui-form-label">是否开启过申页</label>
-                        <div class="layui-input-block">
-                          <input type="radio" name="app_examine" value="0" title="否" @if($config->app_examine==0) checked  @endif>
-                          <input type="radio" name="app_examine" value="1" title="是" @if($config->app_examine==1) checked  @endif >
-                        </div>
-                      </div>
-                      <div class="layui-form-item layui-form-text">
-                        <label class="layui-form-label">过申富文本</label>
-                        <div class="layui-input-block">
-                          <textarea name="app_exam_text" placeholder="请输入内容"  class="layui-textarea">{{$config->app_exam_text}}</textarea>
-                        </div>
-                      </div>
 
-                      <div class="layui-form-item">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">腾讯地图API_KEY</label>
                         <div class="layui-input-block">
-                          <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
-                          <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            <input type="text" name="map_key" required  lay-verify="required" value="{{$config->map_key}}" placeholder="请输入腾讯地图API_KEY" autocomplete="off" class="layui-input">
                         </div>
-                      </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">腾讯地图API_SECRET_KEY</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="map_secret_key" required  lay-verify="required" value="{{$config->map_secret_key}}" placeholder="请输入腾讯地图API_SECRET_KEY" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">微信退款 cert_pem</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="cert_pem" required  lay-verify="required" value="{{$config->cert_pem}}" placeholder="请输入微信退款 cert_pem" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">微信退款 key_pem</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="key_pem" required  lay-verify="required" value="{{$config->key_pem}}" placeholder="请输入微信退款 key_pem" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                  <div class="layui-form-item">
+                    <div class="layui-input-block">
+                      <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                  </div>
                 </form>
         </div>
         
@@ -157,13 +151,13 @@ layui.use(['util','form','laydate', 'laypage', 'layer', 'table', 'carousel', 'up
     }
     
   }
-})
+});
 
   //监听提交
   form.on('submit(formDemo)', function(data){
     var date=data.field;
 
-    if(date.appid==""||date.app_secret==""||date.phone==""||date.web_name==""||date.web_information==""||date.app_exam_text==""||$("img").attr("src")==""){
+    if(date.appid==""||date.secret==""||date.mch_id==""||date.mch_secret==""||date.map_key==""||date.map_secret_key==""||date.cert_pem==""||date.key_pem==""){
         layer.msg("不能为空,请填写完整",{icon:5});return false;
     }
     date.web_headimg=$("img").attr("src");

@@ -20,6 +20,7 @@ class CreateWithdrawLog extends Migration
             $table->decimal('amount')->comment('提现金额');
             $table->decimal('surplus_amount')->comment('当前提现剩余金额');
             $table->integer('withdraw_time')->comment('提现时间');
+            $table->integer('status')->default(0)->comment('提现状态 0 申请提现中 1 提现成功 2 提现失败');
             $table->comment = '提现记录';
         });
     }
