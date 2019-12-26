@@ -40,12 +40,11 @@ class AgentController extends Controller
         $fromErr = $this->validatorFrom([
             'user_name'=>'required',
             'iphone'=>'required|mobile',
-            'city'=>'required|unique:agent',
+            'city'=>'required',
             'address'=>'required',
         ],[
             'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
             'phone.mobile'=>Lib_const_status::MOBILE_FORMAT_ERROR,
-            'city.unique'=>Lib_const_status::REGION_AGENT_ALREADY_APPLY,
         ]);
         if($fromErr){//输出表单验证错误信息
 
@@ -63,7 +62,11 @@ class AgentController extends Controller
             $response_json->status = Lib_const_status::MAP_ADDRESS_DISCREPANCY;
             return $this->response($response_json);
         }
-
+        $city_agent = $this->agent->getAgentByCity($all['city']);
+        if($city_agent){
+            $response_json->status = Lib_const_status::REGION_AGENT_ALREADY_APPLY;
+            return $this->response($response_json);
+        }
         $all['user_id']=$user_id;
         $all['lng']=$map_data['lng'];
         $all['lat']=$map_data['lat'];

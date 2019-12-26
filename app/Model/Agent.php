@@ -65,6 +65,15 @@ class Agent extends Model
     }
 
     /**
+     * 根据城市获取当前是否成功有代理
+     * @param $city
+     * @return mixed
+     */
+    public function getAgentByCity($city){
+
+        return $this->where(['city'=>$city,'status'=>1])->first();
+    }
+    /**
      * 获取代理
      * @param $city
      * @return \Illuminate\Database\Eloquent\Collection|static[]
