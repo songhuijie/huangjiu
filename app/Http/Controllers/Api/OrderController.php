@@ -141,6 +141,7 @@ class OrderController extends Controller{
                 'user_name'=>$address->name,
                 'user_phone'=>$address->phone,
                 'order_number'=>$order_id,
+                'created_at'=>time()
             ];
             $order_ids[] = $this->order->insertOrder($order_data);
 

@@ -43,10 +43,6 @@ class OrderController extends Controller{
                     $size=$data['limit'];
                 }
                 $order = $this->order->getWhere($data);
-                $goods_type = GoodTypeService::GoodsType();
-                foreach($order['data'] as $k=>&$v){
-                    $v->goods_id = $goods_type[$v->goods_id];
-                }
                 return array('code'=>0,'msg'=>'获取到数据','limit'=>$size,'page'=>$page,'count'=>$order['count'],'data'=>$order['data']);
             }
 

@@ -55,6 +55,9 @@ Route::any('member/index','admin\MemberController@index');
 Route::any('member/status','admin\MemberController@status');
 //配置
 Route::any('config/index','admin\ConfigController@index');
+
+//配置
+Route::any('about/about','admin\AboutController@index');
 //文件上传
 Route::any('file/img','File\FileController@img');
 Route::any('layer/upload','File\FileController@LayerUpload');

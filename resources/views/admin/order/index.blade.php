@@ -71,6 +71,7 @@
 
 
                 <script type="text/html" id="barDemo">
+                    <a class="layui-btn layui-btn-xs" lay-event="view">查看详情</a>
                     @verbatim
                     {{#  if(d.order_status <4){ }}
                     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
@@ -169,13 +170,9 @@
             ,limit : 5 //这里设置的是每页显示多少条
             ,cols: [[ //表头
                 {type: 'checkbox', fixed: 'left'}
-                ,{field: 'id', title: 'ID', width:80, sort: true }
+                ,{field: 'id', title: 'ID', width:80, sort: true}
                 ,{field:'user_id',title: '用户ID', width:100,align:'center'}
-                ,{field:'goods_id',title: '产品类型', width:100,align:'center'}
-                ,{ title: '产品图片', width:100,align:'center', toolbar: '#headimg'}
-                ,{field:'order_name',title: '产品名称', width:100,align:'center'}
-                ,{field:'order_num',title: '数量', width:100,align:'center'}
-                ,{field:'order_price',title: '单价', width:100,align:'center'}
+                // ,{field:'goods_detail',title: '商品详情', width:100,align:'center'}
                 ,{field:'order_total_price',title: '总价', width:100,align:'center'}
                 ,{field:'order_number',title: '订单号', width:100,align:'center'}
                 ,{field:'user_name',title: '购买用户', width:100,align:'center'}
@@ -331,6 +328,13 @@
                     area: ['80%', '80%'],
                     content: '{{url("order/detail")}}?type=edit&id='+obj.data.id //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
 
+                });
+            }else if(layEvent === 'view'){
+                layer.open({
+                    title:"查看",
+                    type: 2,
+                    area: ['80%', '80%'],
+                    content: '{{url("order/detail")}}?type=view&id='+obj.data.id //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                 });
             }
         });
