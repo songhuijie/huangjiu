@@ -97,6 +97,9 @@ class OrderController extends Controller{
                 }
                 $order_info =$this->order->find($data['id']);
                 return view("admin/order/detail",['type'=>$this->type,'order'=>$order_info]);
+            }elseif($data['type'] == 'view'){
+                $order_info =$this->order->find($data['id']);
+                return view("admin/order/view",['type'=>$this->type,'order'=>$order_info]);
             }
 
         }

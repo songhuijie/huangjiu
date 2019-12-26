@@ -308,4 +308,34 @@ class OrderController extends Controller{
         $response_json->data = $orders;
         return $this->response($response_json);
     }
+
+
+    /**
+     * 取消订单
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function OrderCancel(Request $request){
+        $all = $request->all();
+        $fromErr = $this->validatorFrom([
+            'order_id'=>'required',
+        ],[
+            'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
+        ]);
+        if($fromErr){//输出表单验证错误信息
+            return $this->response($fromErr);
+        }
+
+        $access_entity = AccessEntity::getInstance();
+        $user_id = $access_entity->user_id;
+        $response_json = $this->initResponse();
+        $int = $this->order->deleteOrder($user_id,$all['order_id']);
+        if($int){
+            $response_json->status = Lib_const_status::SUCCESS;
+        }else{
+            $response_json->status = Lib_const_status::ORDER_NOT_EXISTENT;
+        }
+        return $this->response($response_json);
+    }
+
 }

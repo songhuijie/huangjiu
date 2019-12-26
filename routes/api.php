@@ -93,6 +93,8 @@ $api->version('v1', function ($api) {
             $api->post('/order/confirm','OrderController@ConfirmReceipt');
             //订单列表
             $api->post('/order/list','OrderController@OrderList');
+            //取消订单
+            $api->post('/order/cancel','OrderController@OrderCancel');
 
 
             //收入明细

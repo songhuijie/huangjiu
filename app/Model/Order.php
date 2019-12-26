@@ -109,4 +109,16 @@ class Order extends Model
         $data['count'] = $query->orderBy('id', 'asc')->count();
         return $data;
     }
+
+    /**
+     * 删除订单
+     */
+    public function deleteOrder($user_id,$order_id){
+        $id = $this->where(['user_id'=>$user_id,'id'=>$order_id,'status'=>0])->value('id');
+        if($id){
+            return $this->where(['user_id'=>$user_id,'id'=>$order_id])->delete();
+        }else{
+            return 0;
+        }
+    }
 }

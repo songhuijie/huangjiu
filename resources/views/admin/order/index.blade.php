@@ -174,9 +174,9 @@
                 ,{field:'user_id',title: '用户ID', width:100,align:'center'}
                 // ,{field:'goods_detail',title: '商品详情', width:100,align:'center'}
                 ,{field:'order_total_price',title: '总价', width:100,align:'center'}
-                ,{field:'order_number',title: '订单号', width:100,align:'center'}
-                ,{field:'user_name',title: '购买用户', width:100,align:'center'}
-                ,{field:'user_phone',title: '手机号', width:100,align:'center'}
+                ,{field:'order_number',title: '订单号', width:200,align:'center'}
+                ,{field:'user_name',title: '购买用户', width:200,align:'center'}
+                ,{field:'user_phone',title: '手机号', width:200,align:'center'}
                 ,{field:'order_paytype',title: '支付类型', width:100,align:'center',templet:function(d){
                         if(d.order_paytype==1){
                             return '<a>微信</a>';
@@ -239,7 +239,7 @@
                         return layui.util.toDateString(d.time * 1000, "yyyy-MM-dd HH:mm:ss")
                     }
                 }
-                ,{fixed: 'right',title:'操作', width: 80, align:'center', toolbar: '#barDemo'}
+                ,{fixed: 'right',title:'操作', width: 160, align:'center', toolbar: '#barDemo'}
             ]]
         });
 
