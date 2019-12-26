@@ -45,6 +45,7 @@ class UserController extends Controller
      */
     public function login(Request $request){
         $param = $request->all();
+        Log::info(json_encode($param));
         $response_json = $this->initResponse();
         $fromErr = $this->validatorFrom([
             'code'=>'required',
@@ -63,7 +64,7 @@ class UserController extends Controller
         $secret = $config['secret'];
 
         if($param['code']){
-            if(in_array($param['code'],['123','1234','12345','123456'])){
+            if(in_array($param['code'],['123','1234','12345','123456','1234567'])){
                 $openid = [
                     'openid'=>$param['code'],
                     'access_token'=>'access_token'.$param['code'],
@@ -78,6 +79,7 @@ class UserController extends Controller
         if (isset($openid['openid'])) {
 
             $user = $this->user->info($openid['openid']);
+
 
             $expires_in = time()+86000;
             if ($user) {

@@ -84,7 +84,7 @@ class OrderController extends Controller{
             $arrive_time = isset($all['arrive_time'])?$all['arrive_time']:0;
             $agent_id = isset($all['agent_id'])?$all['agent_id']:0;
             if($agent_id != 0){
-                $agent = $this->agent->getAgentById($agent_id,$user_id);
+                $agent = $this->agent->getAgent($agent_id);
                 if(!$agent){
                     $response_json->status = Lib_const_status::USER_NOT_AGENT;
                     return $this->response($response_json);

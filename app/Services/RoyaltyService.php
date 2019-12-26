@@ -98,6 +98,7 @@ class RoyaltyService{
                 //处理当时2级用户
                 case 2:
                     if($parent_parent_id == $agent_user_id){
+
                         $pattern = self::PATTERN[self::PATTERN_SECOND];
                         $parent_contribute_amount = bcmul($order_royalty_price,$pattern[0],2);
                         $parent_parent_contribute_amount = bcmul($order_royalty_price,$pattern[1],2);
@@ -105,6 +106,7 @@ class RoyaltyService{
                             ['user_id'=>$best_id,'royalty_balance'=>$parent_contribute_amount],
                             ['user_id'=>$agent_user_id,'royalty_balance'=>$parent_parent_contribute_amount],
                         ];
+
                         $friend->updateContribution($user_id,$parent_contribute_amount,$parent_parent_contribute_amount);
                     }else{
                         $pattern = self::PATTERN[self::PATTERN_SECOND];
