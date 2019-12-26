@@ -112,9 +112,12 @@ class Order extends Model
 
     /**
      * 删除订单
+     * @param $user_id
+     * @param $order_id
+     * @return int
      */
     public function deleteOrder($user_id,$order_id){
-        $id = $this->where(['user_id'=>$user_id,'id'=>$order_id,'status'=>0])->value('id');
+        $id = $this->where(['user_id'=>$user_id,'id'=>$order_id])->whereIn('status',[0,4,5,6])->value('id');
         if($id){
             return $this->where(['user_id'=>$user_id,'id'=>$order_id])->delete();
         }else{
