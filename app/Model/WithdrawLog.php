@@ -34,6 +34,8 @@ class WithdrawLog extends Model
 
     /**
      * 获取提现记录  按时间排序返回
+     * @param $user_id
+     * @return mixed
      */
     public function WithdrawList($user_id){
         return $this->where('user_id',$user_id)->orderBy('withdraw_time','desc')->get();
