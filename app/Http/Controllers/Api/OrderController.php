@@ -55,7 +55,6 @@ class OrderController extends Controller{
             'goods'=>'required',
             'address_id'=>'required',
             'is_arrive'=>'in:1',
-            'remarks'=>'required',
         ],[
             'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
             'in'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
@@ -141,7 +140,7 @@ class OrderController extends Controller{
                 'agent_id'=>$agent_id,
                 'user_name'=>$address->name,
                 'user_phone'=>$address->phone,
-                'remarks'=>$all['remarks'],
+                'remarks'=>isset($all['remarks'])?$all['remarks']:'',
                 'order_number'=>$order_id,
                 'created_at'=>time()
             ];
