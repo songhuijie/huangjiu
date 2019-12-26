@@ -31,6 +31,7 @@ class CreateOrder extends Migration
             $table->string('user_name')->comment('用户姓名');
             $table->bigInteger('user_phone')->comment('用户手机号');
             $table->string('order_number')->comment('订单号');
+            $table->string('remarks')->comment('备注');
             $table->string('express')->default(0)->comment('快递单号');
             $table->integer('is_comment')->default(2)->comment('1为已评论2为未评论');
 //            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
