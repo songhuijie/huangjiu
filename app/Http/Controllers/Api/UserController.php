@@ -170,6 +170,23 @@ class UserController extends Controller
         $user_info->agent = $agent;
         $user_info->is_agent = $is_agent;//0表示没有代理  1表示有代理审核中 2表示代理审核通过 3表示代理未审核通过
 
+        //0普通会员 1代理商 2级代理 3级代理 4送货员
+        $friend = $this->friend->GetFriend($user_id);
+        $agent = $this->agent->getByUserID($user_id,1);
+        $status = 0;
+        if($agent){
+            $status = 1;
+        }else{
+            if($friend){
+                if($friend->status !=0){
+                    $status = $friend->status;
+                }elseif($friend->is_delivery !=0){
+                    $status = $friend->is_delivery;
+                }
+            }
+        }
+
+        $user_info->status = $status;
         $response_json = $this->initResponse();
         $response_json->code = Lib_const_status::CORRECT;
         $response_json->status = Lib_const_status::SUCCESS;
