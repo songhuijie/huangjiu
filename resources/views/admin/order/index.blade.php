@@ -177,6 +177,7 @@
                 ,{field:'order_number',title: '订单号', width:200,align:'center'}
                 ,{field:'user_name',title: '购买用户', width:200,align:'center'}
                 ,{field:'user_phone',title: '手机号', width:200,align:'center'}
+                ,{field:'remarks',title: '备注', width:200,align:'center'}
                 ,{field:'order_paytype',title: '支付类型', width:100,align:'center',templet:function(d){
                         if(d.order_paytype==1){
                             return '<a>微信</a>';

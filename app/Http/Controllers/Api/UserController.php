@@ -152,7 +152,9 @@ class UserController extends Controller
             }
         }else{
             $is_agent = 0;
+            $agent=[];
         }
+        $user_info->agent = $agent;
         $user_info->is_agent = $is_agent;//0表示没有代理  1表示有代理审核中 2表示代理审核通过 3表示代理未审核通过
 
         $response_json = $this->initResponse();
