@@ -90,11 +90,22 @@ class OrderController extends Controller{
 
             if($agent_id != 0){
 
+
+
+                $agent = $this->agent->getAgent($agent_id);
+                if(!$agent){
+                    $response_json->status = Lib_const_status::USER_NOT_AGENT;
+                    return $this->response($response_json);
+                }
+                if($agent->status != 1){
+                    $response_json->status = Lib_const_status::USER_AGENT_AUDIT_IN_PROGRESS_OR_FAILED;
+                    return $this->response($response_json);
+                }
                 try{
                     $int = explode(' ',$arrive_time)[1];
                     $time =  strtotime("$int");
-                    $start_time = strtotime($agent_id->start_time);
-                    $end_time = strtotime($agent_id->end_time);
+                    $start_time = strtotime($agent->start_time);
+                    $end_time = strtotime($agent->end_time);
                     Log::info($time);
                     Log::info($start_time);
                     Log::info($end_time);
@@ -109,16 +120,6 @@ class OrderController extends Controller{
                     Log::info('报错');
                     Log::info($e->getMessage());
                     $response_json->status = Lib_const_status::AGENT_NO_END;
-                    return $this->response($response_json);
-                }
-
-                $agent = $this->agent->getAgent($agent_id);
-                if(!$agent){
-                    $response_json->status = Lib_const_status::USER_NOT_AGENT;
-                    return $this->response($response_json);
-                }
-                if($agent->status != 1){
-                    $response_json->status = Lib_const_status::USER_AGENT_AUDIT_IN_PROGRESS_OR_FAILED;
                     return $this->response($response_json);
                 }
             }
