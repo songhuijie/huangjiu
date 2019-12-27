@@ -21,7 +21,7 @@ class User extends Model
      */
     // public $timestamps = false;
     protected $fillable = [
-        'id','parent','user_nickname','user_img','user_openid','user_balance','user_type','sex','country','access_token','expires_in','city','created_at','updated_at'
+        'id','parent','user_nickname','user_img','user_openid','user_balance','user_type','sex','country','access_token','expires_in','city',
     ];
     /**
      * The attributes that should be hidden for arrays.
