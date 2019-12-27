@@ -173,7 +173,7 @@ class AgentController extends Controller
             $lower_lower[$k]->contribution_amount = $this->friend->Contribution($v->user_id);
         }
         $best_lower = $this->friend->LowerLowerLevel($user_id,3);
-        foreach($lower_lower as $k=>$v){
+        foreach($best_lower as $k=>$v){
             $best_lower[$k]->user_info = $this->user->select($select)->find($v->user_id);
             $best_lower[$k]->user_status = $v->status;
             $best_lower[$k]->contribution_amount = $this->friend->Contribution($v->user_id);
