@@ -40,6 +40,10 @@ class TestController extends Controller{
 
         $a = '2019-12-27 22:40:00';
 //        $time =  explode(':',explode(' ',$a)[1]);
+        $int = explode(' ',$a)[1];
+        dd($int);
+        $time =  strtotime("$int");
+        dd($time);
         $time = strtotime('20:10:00');
         $start_time = strtotime('14:30:29');
         $end_time = strtotime('22:39:18');

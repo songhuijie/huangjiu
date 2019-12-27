@@ -91,7 +91,7 @@ class OrderController extends Controller{
             if($agent_id != 0){
 
                 try{
-                    $int = explode(':',explode(' ',$arrive_time)[1]);
+                    $int = explode(' ',$arrive_time)[1];
                     $time =  strtotime("$int");
                     $start_time = strtotime($agent_id->start_time);
                     $end_time = strtotime($agent_id->end_time);
