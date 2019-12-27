@@ -18,6 +18,7 @@ use App\Model\Goods;
 use App\Model\Order;
 use App\Model\User;
 use App\Services\AccessEntity;
+use App\Services\CourierBirdService;
 use App\Services\GoodsService;
 use App\Services\RoyaltyService;
 use Illuminate\Http\Request;
@@ -340,6 +341,34 @@ class OrderController extends Controller{
         }else{
             $response_json->status = Lib_const_status::ORDER_NOT_EXISTENT;
         }
+        return $this->response($response_json);
+    }
+
+    /**
+     * 物流信息
+     */
+    public function LogisticsInformation(Request $request){
+        $all = $request->all();
+        $fromErr = $this->validatorFrom([
+            'order_id'=>'required',
+        ],[
+            'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
+        ]);
+        if($fromErr){//输出表单验证错误信息
+            return $this->response($fromErr);
+        }
+
+        $access_entity = AccessEntity::getInstance();
+        $user_id = $access_entity->user_id;
+
+        $response_json = $this->initResponse();
+        $order_id = $this->order->find($all['order_id']);
+        $Order_Code = $order_id->express;
+        $type = $order_id->express_type;
+        $express_info = CourierBirdService::getOrderTracesByJson($Order_Code,$type);
+
+        $response_json->status = Lib_const_status::SUCCESS;
+        $response_json->data = $express_info['Reason'];
         return $this->response($response_json);
     }
 

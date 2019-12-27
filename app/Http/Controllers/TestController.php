@@ -15,6 +15,7 @@ use App\Model\Collection;
 use App\Model\Goods;
 use App\Model\IncomeDetails;
 use App\Model\User;
+use App\Services\CourierBirdService;
 use App\Services\MapServices;
 
 class TestController extends Controller{
@@ -35,6 +36,10 @@ class TestController extends Controller{
 //        return $this->response($response_json);
         //lat: "30.69015"
         //lng: "104.05293"
+
+        $order_id = '585756591863935200';
+        $result = CourierBirdService::getOrderTracesByJson($order_id,3);
+        dd($result);
         $lng = 104.037071;
         $lat = 30.67001;
         $agent_id = MapServices::distance($lng,$lat);
