@@ -85,7 +85,29 @@ class OrderController extends Controller{
             $is_arrive =isset($all['is_arrive'])?$all['is_arrive']:0;
             $arrive_time = isset($all['arrive_time'])?$all['arrive_time']:0;
             $agent_id = isset($all['agent_id'])?$all['agent_id']:0;
+
+
+
             if($agent_id != 0){
+
+                try{
+                    $time =  explode(':',explode(' ',$arrive_time)[1]);
+                    $start_time = explode(':',$agent_id->start_time);
+                    $end_time = explode(':',$agent_id->end_time);
+                    if($start_time[0] > $time[0] || $time[0] > $end_time[0]){
+                        $response_json->status = Lib_const_status::USER_NOT_AGENT;
+                        return $this->response($response_json);
+                    }
+                    if($start_time[1] > $time[1] || $time[1] > $end_time[1]){
+                        $response_json->status = Lib_const_status::USER_NOT_AGENT;
+                        return $this->response($response_json);
+                    }
+
+                }catch (\Exception $e){
+                    $response_json->status = Lib_const_status::USER_NOT_AGENT;
+                    return $this->response($response_json);
+                }
+
                 $agent = $this->agent->getAgent($agent_id);
                 if(!$agent){
                     $response_json->status = Lib_const_status::USER_NOT_AGENT;
