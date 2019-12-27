@@ -95,16 +95,16 @@ class OrderController extends Controller{
                     $start_time = explode(':',$agent_id->start_time);
                     $end_time = explode(':',$agent_id->end_time);
                     if($start_time[0] > $time[0] || $time[0] > $end_time[0]){
-                        $response_json->status = Lib_const_status::USER_NOT_AGENT;
+                        $response_json->status = Lib_const_status::AGENT_NO_END;
                         return $this->response($response_json);
                     }
                     if($start_time[1] > $time[1] || $time[1] > $end_time[1]){
-                        $response_json->status = Lib_const_status::USER_NOT_AGENT;
+                        $response_json->status = Lib_const_status::AGENT_NO_END;
                         return $this->response($response_json);
                     }
 
                 }catch (\Exception $e){
-                    $response_json->status = Lib_const_status::USER_NOT_AGENT;
+                    $response_json->status = Lib_const_status::AGENT_NO_END;
                     return $this->response($response_json);
                 }
 

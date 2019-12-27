@@ -36,6 +36,8 @@ class Lib_const_status{
     const USER_CAN_NOT_DELIVER = 10008;
     //当前用户不是代理
     const USER_NOT_BECOME = 10009;
+    //代理不在配送时间
+    const AGENT_NO_END = 10010;
 
     //用户已申请过代理
     const USER_AGENT_ALREADY_APPLY = 10011;
