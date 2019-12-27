@@ -170,8 +170,10 @@ class UserController extends Controller
         $user_info->agent = $agent;
         $user_info->is_agent = $is_agent;//0表示没有代理  1表示有代理审核中 2表示代理审核通过 3表示代理未审核通过
 
-        //0普通会员 1代理商 2级代理 3级代理 4送货员
+
+        //0普通会员 1代理商 2级代理 3级代理
         $friend = $this->friend->GetFriend($user_id);
+
         $agent = $this->agent->getByUserID($user_id,1);
         $status = 0;
         if($agent){
@@ -180,11 +182,11 @@ class UserController extends Controller
             if($friend){
                 if($friend->status !=0){
                     $status = $friend->status;
-                }elseif($friend->is_delivery !=0){
-                    $status = 4;
                 }
             }
         }
+        //是否是送货   送货员 0不是 1是
+        $user_info->is_delivery = $friend->is_delivery;
 
         $user_info->status = $status;
         $response_json = $this->initResponse();
