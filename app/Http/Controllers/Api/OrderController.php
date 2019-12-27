@@ -346,6 +346,8 @@ class OrderController extends Controller{
 
     /**
      * 物流信息
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function ExpressInformation(Request $request){
         $all = $request->all();
@@ -362,14 +364,23 @@ class OrderController extends Controller{
         $user_id = $access_entity->user_id;
 
         $response_json = $this->initResponse();
-        $order_id = $this->order->find($all['order_id']);
-        $Order_Code = $order_id->express;
-        $type = $order_id->express_type;
-        $express_info = CourierBirdService::getOrderTracesByJson($Order_Code,$type);
+        $order = $this->order->find($all['order_id']);
+
+        if($order->order_delivery == 0){
+            $Order_Code = $order->express;
+            $type = $order->express_type;
+            $express_info = CourierBirdService::getOrderTracesByJson($Order_Code,$type);
+            $agent = [];
+        }else{
+            $express_info = [];
+            $agent = $this->agent->find($order->agent_id);
+        }
+
 
 
         $response_json->status = Lib_const_status::SUCCESS;
-        $response_json->data = $express_info;
+        $response_json->data->express = $express_info;
+        $response_json->data->agent = $agent;
         return $this->response($response_json);
     }
 
