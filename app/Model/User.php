@@ -48,6 +48,9 @@ class User extends Model
         return $this->select($this->select_info)->find($id);
     }
 
+    public function created_at($value){
+
+    }
     /**
      * 根据用户授权token  获取用户过期时间
      * @param $access_token

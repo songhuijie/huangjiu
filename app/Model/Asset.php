@@ -55,7 +55,7 @@ class Asset extends Model
     public function getBalance($user_id){
         $result = $this->where('user_id',$user_id)->first();
         if($result){
-            return bcadd($result->royalty_balance,$result->agent_balance,2);
+            return $result->balance;
         }else{
             return 0;
         }

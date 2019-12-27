@@ -144,7 +144,7 @@ class AgentController extends Controller
 
         $access_entity = AccessEntity::getInstance();
         $user_id = $access_entity->user_id;
-        $select = ['user_nickname','user_img','sex'];
+        $select = ['user_nickname','user_img','sex','created_at'];
 
 
 
@@ -163,7 +163,7 @@ class AgentController extends Controller
         foreach($lower as $k=>$v){
             $lower[$k]->user_info = $this->user->select($select)->find($v->user_id);
             $lower[$k]->count = $this->friend->LowerCount($v->user_id);
-            $lower[$k]->user_status = 1;
+            $lower[$k]->user_status = $v->status;
             $lower[$k]->contribution_amount = $this->friend->Contribution($v->user_id);
         }
         $lower_lower = $this->friend->LowerLowerLevel($user_id,2);

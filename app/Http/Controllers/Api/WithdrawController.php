@@ -58,11 +58,12 @@ class WithdrawController extends Controller
         }
         $response_json = $this->initResponse();
 
+
         $access_entity = AccessEntity::getInstance();
         $user_id = $access_entity->user_id;
         $amount = $all['amount'];
-        $result = $this->asset->getBalance($user_id);
-        if($result){
+        $balance= $this->asset->getBalance($user_id);
+        if($balance > $amount){
             $withdraw_time = time();
             $withdraw_data = [
                 'user_id'=>$user_id,
