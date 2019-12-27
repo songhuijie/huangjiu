@@ -163,7 +163,12 @@ class AgentController extends Controller
         foreach($lower as $k=>$v){
             $lower[$k]->user_info = $this->user->select($select)->find($v->user_id);
             $lower[$k]->count = $this->friend->LowerCount($v->parent_id);
-            $lower[$k]->user_status = $v->status;
+            if($v->status == 0){
+                $lower[$k]->user_status = $v->is_delivery == 0?0:5;
+            }else{
+                $lower[$k]->user_status = $v->status;
+            }
+
             $lower[$k]->contribution_amount = $this->friend->Contribution($v->parent_id);
         }
 //        $lower_lower = $this->friend->LowerLowerLevel($user_id,3);

@@ -53,7 +53,6 @@ class GoodsController extends Controller
         }
         $goods_type = $request->input('goods_type');
 
-        $goods_types = $this->good_type->getAll();
         $good_type = $this->good_type->getFirst();
         if(!$goods_type){
             $goods_type = $good_type->id;
