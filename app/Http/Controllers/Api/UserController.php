@@ -75,7 +75,6 @@ class UserController extends Controller
         }
 
 
-
         if (isset($openid['openid'])) {
 
             $user = $this->user->info($openid['openid']);
@@ -147,6 +146,7 @@ class UserController extends Controller
 
         $access_entity = AccessEntity::getInstance();
         $user_id = $access_entity->user_id;
+
         $user_info = $this->user->getUserinfo($user_id);
         $asset = $this->asset->find($user_id);
         $agent = $this->agent->getByUserID($user_id);
