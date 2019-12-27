@@ -31,7 +31,6 @@ $api->version('v1', function ($api) {
         $api->group(['middleware'=>'CheckAccessToken'],function($api){
             //用户信息
             $api->post('/userInfo','UserController@userInfo');
-
             //获取用户地址
             $api->post('/addressList','AddressController@addressList');
             //添加用户地址

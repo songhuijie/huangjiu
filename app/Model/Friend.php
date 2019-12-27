@@ -113,6 +113,20 @@ class Friend extends Model
         return $this->where(['parent_id'=>$user_id])->count();
     }
 
+
+    /**
+     * 计算贡献
+     * @param $user_id
+     * @return string
+     */
+    public function Contribution($user_id){
+        $amount_one = $this->where(['parent_id'=>$user_id])->sum('parent_contribute_amount');
+        $amount_two = $this->where(['parent_parent_id'=>$user_id])->sum('parent_parent_contribute_amount');
+        $amount_three = $this->where(['best_id'=>$user_id])->sum('best_contribute_amount');
+
+        return bcadd($amount_three,bcadd($amount_one,$amount_two,2),2);
+    }
+
     /**
      * 获取当前用户下下级
      * @param $user_id
