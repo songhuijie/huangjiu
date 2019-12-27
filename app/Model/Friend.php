@@ -34,7 +34,7 @@ class Friend extends Model
         ''
     ];
 
-    protected $select = ['id as friend_id','user_id','status'];
+    protected $select = ['id as friend_id','parent_parent_id','best_id','parent_id','user_id','status'];
 
 
     /**
