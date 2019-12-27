@@ -61,9 +61,9 @@ class Friend extends Model
      */
     public function updateAgentByID($id,$type,$status){
         if($type == 1){
-            return $this->where('id',$id)->update(['is_delivery'=>$status]);
+            return $this->where('parent_id',$id)->update(['is_delivery'=>$status]);
         }else{
-            return $this->where('id',$id)->update(['status'=>$status]);
+            return $this->where('parent_id',$id)->update(['status'=>$status]);
         }
     }
 
@@ -94,13 +94,23 @@ class Friend extends Model
         return $this->where(['parent_id'=>$user_id])->first();
     }
 
+
+    /**
+     * 获取好友关系
+     * @param $user_id
+     * @return mixed
+     */
+    public function GetFriendInit($user_id){
+        return $this->where(['user_id'=>$user_id])->first();
+    }
+
     /**
      * 获取好友关系
      * @param $friend_id
      * @return mixed
      */
     public function GetFriendByBestOrParent($friend_id){
-        return $this->where(['id'=>$friend_id])->first();
+        return $this->where(['parent_id'=>$friend_id])->first();
     }
 
 

@@ -256,8 +256,7 @@ class OrderController extends Controller{
         $access_entity = AccessEntity::getInstance();
         $user_id = $access_entity->user_id;
         $response_json = $this->initResponse();
-        $order = $this->order->find($all['order_id']);
-
+        $order = $this->order->getOrderByID($all['order_id'],$user_id);
 
         if($order){
             switch ($order->order_status){

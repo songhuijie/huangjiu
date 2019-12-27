@@ -208,8 +208,6 @@ class AgentController extends Controller
             $friend = $this->friend->GetFriend($set_user_id);
 
             if($friend){
-//                $response_json->data = $friend;
-//                return $this->response($response_json);
                 switch ($type){
                     case 1:
                     case 2:
@@ -246,7 +244,7 @@ class AgentController extends Controller
 
         $all = $request->all();
         $fromErr = $this->validatorFrom([
-            'friend_id'=>'required|int',
+            'user_id'=>'required|int',
             'type'=>'int|in:1,2',
         ],[
             'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
@@ -256,27 +254,21 @@ class AgentController extends Controller
             return $this->response($fromErr);
         }
 
-        $friend_id = $all['friend_id'];
+        $set_user_id = $all['user_id'];
 
         $access_entity = AccessEntity::getInstance();
         $user_id = $access_entity->user_id;
         $response_json = $this->initResponse();
 
         $type = isset($all['type'])?$all['type']:1;
-        $friend = $this->friend->GetFriendByBestOrParent($friend_id);
+        $friend = $this->friend->GetFriendByBestOrParent($set_user_id);
         if($friend){
-            if($type != 1){
-                if($friend->parent_parent_id == $user_id || $friend->best_id == $user_id){
-                    $this->friend->updateAgentByID($friend->id,$type,Lib_config::AGENT_STATUS_NO);
-                    $response_json->status = Lib_const_status::SUCCESS;
-                }else{
-                    $response_json->status = Lib_const_status::USER_CAN_NOT_BECOME;
-                }
-            }else{
-                $this->friend->updateAgentByID($friend->id,$type,Lib_config::AGENT_STATUS_NO);
+            if($user_id == $friend->parent_parent_id || $user_id == $friend->best_id){
+                $this->friend->updateAgentByID($set_user_id,$type,Lib_config::AGENT_STATUS_NO);
                 $response_json->status = Lib_const_status::SUCCESS;
+            }else{
+                $response_json->status = Lib_const_status::USER_NOT_BECOME;
             }
-
         }else{
             $response_json->status = Lib_const_status::USER_CAN_NOT_BECOME;
         }

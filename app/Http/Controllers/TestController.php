@@ -14,6 +14,7 @@ use App\Model\Asset;
 use App\Model\Collection;
 use App\Model\Goods;
 use App\Model\IncomeDetails;
+use App\Model\Order;
 use App\Model\User;
 use App\Services\CourierBirdService;
 use App\Services\MapServices;
@@ -37,6 +38,11 @@ class TestController extends Controller{
         //lat: "30.69015"
         //lng: "104.05293"
 
+        $order = new Order();
+        $order = $order->find(1);
+        $goods_detail =  $order->goods_detail;
+        $goods_ids = array_column($goods_detail,'good_title','goods_id');
+        dd($goods_ids,isset($goods_ids[1]));
         $order_id = '773020792446578';
         $result = CourierBirdService::getOrderTracesByJson($order_id,4);
         dd($result);

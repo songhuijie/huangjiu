@@ -45,12 +45,23 @@ class Order extends Model
 
     public function getGoodsDetailAttribute($value)
     {
-        return json_decode($value);
+        return json_decode($value,true);
     }
 
     public function getAddressDetailAttribute($value)
     {
         return json_decode($value);
+    }
+
+    /**
+     * 更新订单状态
+     * @param $order_id
+     * @param $user_id
+     * @param $status
+     * @return mixed
+     */
+    public function getOrderByID($order_id,$user_id){
+        return $this->where(['id'=>$order_id,'user_id'=>$user_id])->first();
     }
 
     /**

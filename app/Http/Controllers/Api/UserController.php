@@ -181,7 +181,7 @@ class UserController extends Controller
                 if($friend->status !=0){
                     $status = $friend->status;
                 }elseif($friend->is_delivery !=0){
-                    $status = $friend->is_delivery;
+                    $status = 4;
                 }
             }
         }

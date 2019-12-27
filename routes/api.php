@@ -117,6 +117,10 @@ $api->version('v1', function ($api) {
             //申请提现
             $api->post('/withdraw/withdraw','IncomeController@withdraw');
 
+
+            //申请提现
+            $api->post('/relay/relay','IncomeController@Relay');
+
 //            $api->post('/cart/list','CartController@CartList');
 
         });

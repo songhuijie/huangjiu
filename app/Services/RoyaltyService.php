@@ -41,7 +41,7 @@ class RoyaltyService{
      */
     public static function HandleRoyalty($user_id,$order_royalty_price,$is_arrive,$agent_id){
         $friend = new Friend();
-        $friend = $friend->GetFriend($user_id);
+        $friend = $friend->GetFriendInit($user_id);//获取好友初始关系
         if($friend){
             if($agent_id != 0){
                 //经销商发货
@@ -112,73 +112,67 @@ class RoyaltyService{
             switch ($status){
                 //处理 1级情况
                 case 0:
-                    if($parent_id == $agent_user_id){
-                        $pattern = self::PATTERN[self::PATTERN_FIRST];
-                        $parent_contribute_amount = bcmul($order_royalty_price,$pattern[0],2);
-                        $asset_data = [
-                            ['user_id'=>$agent_user_id,'royalty_balance'=>$parent_contribute_amount],
-                        ];
-                        $friend->updateContribution($user_id,$parent_contribute_amount);
+
+                    $pattern = self::PATTERN[self::PATTERN_FOUR];
+                    $parent_contribute_amount_new = bcmul($order_royalty_price,$pattern[0],2);
+                    $agent_amount_new = bcmul($order_royalty_price,$pattern[1],2);
+                    if($best_id != 0){
+                        $parent_contribute_amount=0;
+                        $parent_parent_contribute_amount=0;
+                        $best_contribute_amount=$parent_contribute_amount_new;
+                        $update_user_id = $best_id;
+                    }elseif($parent_parent_id != 0){
+                        $parent_contribute_amount=0;
+                        $parent_parent_contribute_amount=$parent_contribute_amount_new;
+                        $best_contribute_amount=0;
+                        $update_user_id = $parent_parent_id;
                     }else{
-                        $pattern = self::PATTERN[self::PATTERN_FIRST];
-                        $parent_contribute_amount = bcmul($order_royalty_price,$pattern[0],2);
-                        $asset_data = [
-                            ['user_id'=>$agent_user_id,'royalty_balance'=>$parent_contribute_amount,'agent'=>1],
-                        ];
+                        $parent_contribute_amount=$parent_contribute_amount_new;
+                        $parent_parent_contribute_amount=0;
+                        $best_contribute_amount=0;
+                        $update_user_id = $parent_id;
                     }
+
+                    $asset_data = [
+                        ['user_id'=>$update_user_id,'royalty_balance'=>$parent_contribute_amount_new],
+                        ['user_id'=>$agent_user_id,'royalty_balance'=>$agent_amount_new],
+                    ];
+                    $friend->updateContribution($user_id,$parent_contribute_amount,$parent_parent_contribute_amount,$best_contribute_amount);
                     break;
                 //处理当时2级用户
                 case 2:
 
-                    if($parent_parent_id == $agent_user_id){
+                    $pattern = self::PATTERN[self::PATTERN_SECOND];
+                    $parent_contribute_amount_new = bcmul($order_royalty_price,$pattern[0],2);
+                    $parent_parent_contribute_amount_new = bcmul($order_royalty_price,$pattern[1],2);
 
-                        $pattern = self::PATTERN[self::PATTERN_SECOND];
-                        $parent_contribute_amount = bcmul($order_royalty_price,$pattern[0],2);
-                        $parent_parent_contribute_amount = bcmul($order_royalty_price,$pattern[1],2);
-                        $asset_data = [
-                            ['user_id'=>$parent_id,'royalty_balance'=>$parent_contribute_amount],
-                            ['user_id'=>$agent_user_id,'royalty_balance'=>$parent_parent_contribute_amount],
-                        ];
+                    $parent_contribute_amount=$parent_contribute_amount_new;
+                    $parent_parent_contribute_amount=0;
+                    $best_contribute_amount=0;
+                    $update_user_id = $parent_id;
+                    $update_two_user_id = $agent_user_id;
 
-                        $friend->updateContribution($user_id,$parent_contribute_amount,$parent_parent_contribute_amount);
-                    }else{
-                        //处理当时有100% 区分级用户
-                        $pattern = self::PATTERN[self::PATTERN_FOUR];
-                        $parent_contribute_amount = bcmul($order_royalty_price,$pattern[0],2);
-                        $parent_parent_contribute_amount = bcmul($order_royalty_price,$pattern[1],2);
-                        $asset_data = [
-                            ['user_id'=>$parent_id,'royalty_balance'=>$parent_contribute_amount],
-                            ['user_id'=>$agent_user_id,'royalty_balance'=>$parent_parent_contribute_amount,'agent'=>1],
-                        ];
-                        $friend->updateContribution($user_id,$parent_contribute_amount);
-                    }
+
+                    $asset_data = [
+                        ['user_id'=>$update_user_id,'royalty_balance'=>$parent_contribute_amount_new],
+                        ['user_id'=>$update_two_user_id,'royalty_balance'=>$parent_parent_contribute_amount_new],
+                    ];
+
+                    $friend->updateContribution($user_id,$parent_contribute_amount,$parent_parent_contribute_amount,$best_contribute_amount);
                     break;
                 case 3:
-                    if($best_id == $agent_user_id){
-                        Log::info('3级相等');
-                        $pattern = self::PATTERN[self::PATTERN_THIRD];
-                        $parent_contribute_amount = bcmul($order_royalty_price,$pattern[0],2);
-                        $parent_parent_contribute_amount = bcmul($order_royalty_price,$pattern[1],2);
-                        $best_contribute_amount = bcmul($order_royalty_price,$pattern[2],2);
-                        $asset_data = [
-                            ['user_id'=>$parent_id,'royalty_balance'=>$parent_contribute_amount],
-                            ['user_id'=>$parent_parent_id,'royalty_balance'=>$parent_parent_contribute_amount],
-                            ['user_id'=>$agent_user_id,'royalty_balance'=>$best_contribute_amount],
-                        ];
-                        $friend->updateContribution($user_id,$parent_contribute_amount,$parent_parent_contribute_amount,$best_contribute_amount);
-                    }else{
-                        Log::info('3级不相等');
-                        $pattern = self::PATTERN[self::PATTERN_THIRD];
-                        $parent_contribute_amount = bcmul($order_royalty_price,$pattern[0],2);
-                        $parent_parent_contribute_amount = bcmul($order_royalty_price,$pattern[1],2);
-                        $best_contribute_amount = bcmul($order_royalty_price,$pattern[2],2);
-                        $asset_data = [
-                            ['user_id'=>$parent_id,'royalty_balance'=>$parent_contribute_amount],
-                            ['user_id'=>$parent_parent_id,'royalty_balance'=>$parent_parent_contribute_amount],
-                            ['user_id'=>$agent_user_id,'royalty_balance'=>$best_contribute_amount,'agent'=>1],
-                        ];
-                        $friend->updateContribution($user_id,$parent_contribute_amount,$parent_parent_contribute_amount);
-                    }
+                    $pattern = self::PATTERN[self::PATTERN_THIRD];
+                    $parent_contribute_amount = bcmul($order_royalty_price,$pattern[0],2);
+                    $parent_parent_contribute_amount = bcmul($order_royalty_price,$pattern[1],2);
+                    $best_contribute_amount = bcmul($order_royalty_price,$pattern[2],2);
+
+                    $asset_data = [
+                        ['user_id'=>$parent_id,'royalty_balance'=>$parent_contribute_amount],
+                        ['user_id'=>$parent_parent_id,'royalty_balance'=>$parent_parent_contribute_amount],
+                        ['user_id'=>$agent_user_id,'royalty_balance'=>$best_contribute_amount],
+                    ];
+                    $best_contribute_amount = 0;
+                    $friend->updateContribution($user_id,$parent_contribute_amount,$parent_parent_contribute_amount,$best_contribute_amount);
                     break;
             }
 
@@ -203,43 +197,75 @@ class RoyaltyService{
         $parent_parent_id = $friend->parent_parent_id;//上上级
         $best_id = $friend->best_id;//最上级
 
+        $own_friend = new Friend();
         $status = $friend->status;//设置的几级用户
         $asset_data = [];
         switch ($status){
             case 0:
                 $pattern = self::PATTERN[self::PATTERN_FIRST];
-                $parent_contribute_amount = bcmul($order_royalty_price,$pattern[0],2);
+                $parent_contribute_amount_new = bcmul($order_royalty_price,$pattern[0],2);
+                if($best_id != 0){
+                    $parent_contribute_amount=0;
+                    $parent_parent_contribute_amount=0;
+                    $best_contribute_amount=$parent_contribute_amount_new;
+                    $update_user_id = $best_id;
+                }elseif($parent_parent_id != 0){
+                    $parent_contribute_amount=0;
+                    $parent_parent_contribute_amount=$parent_contribute_amount_new;
+                    $best_contribute_amount=0;
+                    $update_user_id = $parent_parent_id;
+                }else{
+                    $parent_contribute_amount=$parent_contribute_amount_new;
+                    $parent_parent_contribute_amount=0;
+                    $best_contribute_amount=0;
+                    $update_user_id = $parent_id;
+                }
+
                 $asset_data = [
-                    ['user_id'=>$parent_id,'royalty_balance'=>$parent_contribute_amount],
+                    ['user_id'=>$update_user_id,'royalty_balance'=>$parent_contribute_amount_new],
                 ];
-                $friend->updateContribution($user_id,$parent_contribute_amount);
+                $friend->updateContribution($user_id,$parent_contribute_amount,$parent_parent_contribute_amount,$best_contribute_amount);
                 break;
             case 2:
                 $pattern = self::PATTERN[self::PATTERN_SECOND];
-                if($best_id != 0){
-                    $parent_id = $parent_parent_id;
-                    $parent_parent_id = $best_id;
-                }
-                $parent_contribute_amount = bcmul($order_royalty_price,$pattern[0],2);
-                $parent_parent_contribute_amount = bcmul($order_royalty_price,$pattern[1],2);
-                $asset_data = [
-                    ['user_id'=>$parent_id,'royalty_balance'=>$parent_contribute_amount],
-                    ['user_id'=>$parent_parent_id,'royalty_balance'=>$parent_parent_contribute_amount],
-                ];
-                if($best_id != 0){
-                    $friend->updateContribution($user_id,0,$parent_contribute_amount,$parent_parent_contribute_amount);
+                $parent_contribute_amount_new = bcmul($order_royalty_price,$pattern[0],2);
+                $parent_parent_contribute_amount_new = bcmul($order_royalty_price,$pattern[1],2);
+                if($best_id == 0){
+                    $parent_contribute_amount=$parent_contribute_amount_new;
+                    $parent_parent_contribute_amount=$parent_parent_contribute_amount_new;
+                    $best_contribute_amount=0;
+                    $update_user_id = $parent_id;
+                    $update_two_user_id = $parent_parent_id;
                 }else{
-                    $friend->updateContribution($user_id,$parent_contribute_amount,$parent_parent_contribute_amount);
+                    $parent_contribute_amount=$parent_contribute_amount_new;
+                    $parent_parent_contribute_amount=0;
+                    $best_contribute_amount=$parent_parent_contribute_amount_new;
+                    $own_friend->GetFriend($parent_parent_id);
+
+                    $update_user_id = $parent_id;
+                    $update_two_user_id = $best_id;
                 }
+
+
+                $asset_data = [
+                    ['user_id'=>$update_user_id,'royalty_balance'=>$parent_contribute_amount_new],
+                    ['user_id'=>$update_two_user_id,'royalty_balance'=>$parent_parent_contribute_amount_new],
+                ];
+
+                $friend->updateContribution($user_id,$parent_contribute_amount,$parent_parent_contribute_amount,$best_contribute_amount);
 
                 break;
             case 3:
                 $pattern = self::PATTERN[self::PATTERN_THIRD];
-
-
                 $parent_contribute_amount = bcmul($order_royalty_price,$pattern[0],2);
                 $parent_parent_contribute_amount = bcmul($order_royalty_price,$pattern[1],2);
                 $best_contribute_amount = bcmul($order_royalty_price,$pattern[2],2);
+                $own_friend = $own_friend->GetFriend($parent_parent_id);
+                if($own_friend->status != 2){
+                    $parent_parent_id = $best_id;
+                    $best_contribute_amount =  $best_contribute_amount+$parent_parent_contribute_amount;
+                    $parent_parent_contribute_amount = 0;
+                }
                 $asset_data = [
                     ['user_id'=>$parent_id,'royalty_balance'=>$parent_contribute_amount],
                     ['user_id'=>$parent_parent_id,'royalty_balance'=>$parent_parent_contribute_amount],
@@ -247,7 +273,6 @@ class RoyaltyService{
                 ];
                 $friend->updateContribution($user_id,$parent_contribute_amount,$parent_parent_contribute_amount,$best_contribute_amount);
                 break;
-
         }
 
         if($asset_data){
