@@ -27,6 +27,14 @@ $api->version('v1', function ($api) {
         //根据精度获取代理
         $api->post('/agent/accuracy','AgentController@AgentAccuracy');
 
+        //推荐列表
+        $api->post('/recommend/list','RecommendController@RecommendList');
+        //推荐文章详情
+        $api->post('/recommend/detail','RecommendController@RecommendDetail');
+        //关于信息
+        $api->post('/about/about','RecommendController@AboutInfo');
+
+
         // 获取首页文章
         $api->group(['middleware'=>'CheckAccessToken'],function($api){
             //用户信息
@@ -53,12 +61,6 @@ $api->version('v1', function ($api) {
             //商品首页
 //            $api->post('/goods/list','GoodsController@GoodsList');
 
-            //推荐列表
-            $api->post('/recommend/list','RecommendController@RecommendList');
-            //推荐文章详情
-            $api->post('/recommend/detail','RecommendController@RecommendDetail');
-            //关于信息
-            $api->post('/about/about','RecommendController@AboutInfo');
 
             //购物车列表
             $api->post('/cart/list','CartController@CartList');
