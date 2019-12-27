@@ -140,7 +140,7 @@ class Friend extends Model
      * @return mixed
      */
     public function LowerCount($user_id){
-        return $this->where(['parent_parent_id'=>$user_id])->count();
+        return $this->where(['parent_id'=>$user_id])->count();
     }
 
 

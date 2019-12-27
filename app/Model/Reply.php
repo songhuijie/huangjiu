@@ -30,7 +30,7 @@ class Reply extends Model
     protected $hidden = [
         ''
     ];
-    protected $appends = ['user_name'];
+    protected $appends = ['user_name','user_img'];
 
     /**
      * 获取评论信息 根据goods_id
@@ -45,6 +45,12 @@ class Reply extends Model
         $user = new User();
         $user = $user->find($this->attributes['user_id']);
         return $user->user_nickname;
+    }
+    public function getUserImgAttribute($value)
+    {
+        $user = new User();
+        $user = $user->find($this->attributes['user_id']);
+        return $user->user_img;
     }
 
     /**

@@ -166,17 +166,17 @@ class AgentController extends Controller
             $lower[$k]->user_status = $v->status;
             $lower[$k]->contribution_amount = $this->friend->Contribution($v->parent_id);
         }
-        $lower_lower = $this->friend->LowerLowerLevel($user_id,3);
-        foreach($lower_lower as $k=>$v){
-            $lower_lower[$k]->user_info = $this->user->select($select)->find($v->user_id);
-            $lower_lower[$k]->count = $this->friend->LowerCount($v->parent_id);
-            $lower_lower[$k]->user_status = $v->status;
-            $lower_lower[$k]->contribution_amount = $this->friend->Contribution($v->parent_id);
-        }
+//        $lower_lower = $this->friend->LowerLowerLevel($user_id,3);
+//        foreach($lower_lower as $k=>$v){
+//            $lower_lower[$k]->user_info = $this->user->select($select)->find($v->user_id);
+//            $lower_lower[$k]->count = $this->friend->LowerCount($v->parent_id);
+//            $lower_lower[$k]->user_status = $v->status;
+//            $lower_lower[$k]->contribution_amount = $this->friend->Contribution($v->parent_id);
+//        }
 
-        $new_array = array_merge($lower->toArray(),$lower_lower->toArray());
+//        $new_array = array_merge($lower->toArray(),$lower_lower->toArray());
         $response_json->status = Lib_const_status::SUCCESS;
-        $response_json->data = $new_array;
+        $response_json->data = $lower;
         return $this->response($response_json);
     }
 
