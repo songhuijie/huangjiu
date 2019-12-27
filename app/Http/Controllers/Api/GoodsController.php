@@ -51,16 +51,19 @@ class GoodsController extends Controller
         if($fromErr){//输出表单验证错误信息
             return $this->response($fromErr);
         }
-        $goods_type = $request->input('goods_type',1);
+        $goods_type = $request->input('goods_type');
+
+        $goods_types = $this->good_type->getAll();
+        $good_type = $this->good_type->getFirst();
+        if(!$goods_type){
+            $goods_type = $good_type->id;
+        }
         $page = isset($all['page'])?$all['page']:Lib_config::PAGE;
 
         $limit = Lib_config::LIMIT;
         $response_json = $this->initResponse();
 
         $goods_types = $this->good_type->getAll();
-
-
-
 
         $goods_list =$this->good->getAllByGoodType($goods_type,$page,$limit);
 

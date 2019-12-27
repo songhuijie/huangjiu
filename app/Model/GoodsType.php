@@ -36,6 +36,10 @@ class GoodsType extends Model
         return $this->all();
     }
 
+    public function getFirst(){
+        return $this->first();
+    }
+
 //    public function goods(){
 //        return $this->hasMany(Goods::class, 'good_type', 'id');
 //    }
