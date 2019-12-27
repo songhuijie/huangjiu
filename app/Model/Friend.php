@@ -140,7 +140,7 @@ class Friend extends Model
      * @return mixed
      */
     public function CurrentLevel($user_id){
-        return $this->select($this->select)->where(['user_id'=>$user_id])->first();
+        return $this->select($this->select)->where(['parent_id'=>$user_id])->first();
     }
 
     /**
