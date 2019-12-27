@@ -19,6 +19,12 @@ $api->version('v1', function ($api) {
     $api->group(['prefix' => 'v1', 'Middleware' => 'CheckMiddle', 'namespace' => 'App\Http\Controllers\Api'], function ($api) {
         $api->post('/login','UserController@login');
         $api->any('/notify','OrderController@notify');
+
+        //商品首页
+        $api->post('/goods/list','GoodsController@GoodsList');
+        //商品详情
+        $api->post('/goods/detail','GoodsController@GoodsDetail');
+
         // 获取首页文章
         $api->group(['middleware'=>'CheckAccessToken'],function($api){
             //用户信息
@@ -36,15 +42,15 @@ $api->version('v1', function ($api) {
             $api->post('/addressDel','AddressController@addressDel');
 
 
-            //商品首页
-            $api->post('/goods/list','GoodsController@GoodsList');
+
             //商品详情
-            $api->post('/goods/detail','GoodsController@GoodsDetail');
+//            $api->post('/goods/detail','GoodsController@GoodsDetail');
             //商品搜索
             $api->post('/goods/search','GoodsController@SearchGoods');
             //搜索热词
             $api->post('/goods/hoswords','GoodsController@HotSearch');
-
+            //商品首页
+//            $api->post('/goods/list','GoodsController@GoodsList');
 
             //推荐列表
             $api->post('/recommend/list','RecommendController@RecommendList');
