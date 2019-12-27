@@ -106,6 +106,8 @@ class OrderController extends Controller{
 
 
                 }catch (\Exception $e){
+                    Log::info('报错');
+                    Log::info($e->getMessage());
                     $response_json->status = Lib_const_status::AGENT_NO_END;
                     return $this->response($response_json);
                 }
