@@ -24,6 +24,8 @@ $api->version('v1', function ($api) {
         $api->post('/goods/list','GoodsController@GoodsList');
         //商品详情
         $api->post('/goods/detail','GoodsController@GoodsDetail');
+        //根据精度获取代理
+        $api->post('/agent/accuracy','AgentController@AgentAccuracy');
 
         // 获取首页文章
         $api->group(['middleware'=>'CheckAccessToken'],function($api){
@@ -87,8 +89,7 @@ $api->version('v1', function ($api) {
             $api->post('/agent/get','AgentController@getAgent');
             //获取下级
             $api->post('/user/lower','AgentController@SubordinateUser');
-            //根据精度获取代理
-            $api->post('/agent/accuracy','AgentController@AgentAccuracy');
+
             //获取代理的订单
             $api->post('/agent/orderlist','AgentController@getAgentList');
 
