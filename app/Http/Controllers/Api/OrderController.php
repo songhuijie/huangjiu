@@ -98,7 +98,8 @@ class OrderController extends Controller{
                         $response_json->status = Lib_const_status::AGENT_NO_END;
                         return $this->response($response_json);
                     }
-                    if($start_time[1] > $time[1] || $time[1] > $end_time[1]){
+
+                    if(($start_time[0] <= $time[0] && $start_time[1] > $time[1]) || ($time[0] <= $end_time[0] && $time[1] > $end_time[1])){
                         $response_json->status = Lib_const_status::AGENT_NO_END;
                         return $this->response($response_json);
                     }

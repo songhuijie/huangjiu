@@ -38,7 +38,7 @@ class TestController extends Controller{
         //lat: "30.69015"
         //lng: "104.05293"
 
-        $a = '2019-12-27 14:30:00';
+        $a = '2019-12-27 14:29:00';
 //        $time =  explode(':',explode(' ',$a)[1]);
         $start_time = explode(':','14:30:29');
         $end_time = explode(':','22:39:18');
@@ -47,7 +47,7 @@ class TestController extends Controller{
             if($start_time[0] > $time[0] || $time[0] > $end_time[0]){
                 dd(1);
             }
-            if($start_time[1] > $time[1] || $time[1] > $end_time[1]){
+            if(($start_time[0] <= $time[0] && $start_time[1] > $time[1]) || ($time[0] <= $end_time[0] && $time[1] > $end_time[1])){
                 dd(3);
             }
             dd(2);
