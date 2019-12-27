@@ -22,7 +22,7 @@ class Agent extends Model
      */
     // public $timestamps = false;
     protected $fillable = [
-            'user_id','user_name','iphone','city','address','lng','lat'
+            'user_id','user_name','iphone','city','address','lng','lat','start_time','end_time','distribution_scope'
     ];
     /**
      * The attributes that should be hidden for arrays.

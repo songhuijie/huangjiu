@@ -161,24 +161,19 @@ class AgentController extends Controller
 
         $lower = $this->friend->LowerLevel($user_id);
         foreach($lower as $k=>$v){
-            $lower[$k]->user_info = $this->user->select($select)->find($v->user_id);
+            $lower[$k]->user_info = $this->user->select($select)->find($v->parent_id);
             $lower[$k]->count = $this->friend->LowerCount($v->user_id);
             $lower[$k]->user_status = $v->status;
-            $lower[$k]->contribution_amount = $this->friend->Contribution($v->user_id);
+            $lower[$k]->contribution_amount = $this->friend->Contribution($v->parent_id);
         }
-        $lower_lower = $this->friend->LowerLowerLevel($user_id,2);
+        $lower_lower = $this->friend->LowerLowerLevel($user_id,3);
         foreach($lower_lower as $k=>$v){
-            $lower_lower[$k]->user_info = $this->user->select($select)->find($v->user_id);
+            $lower_lower[$k]->user_info = $this->user->select($select)->find($v->parent_id);
             $lower_lower[$k]->user_status = $v->status;
-            $lower_lower[$k]->contribution_amount = $this->friend->Contribution($v->user_id);
+            $lower_lower[$k]->contribution_amount = $this->friend->Contribution($v->parent_id);
         }
-        $best_lower = $this->friend->LowerLowerLevel($user_id,3);
-        foreach($best_lower as $k=>$v){
-            $best_lower[$k]->user_info = $this->user->select($select)->find($v->user_id);
-            $best_lower[$k]->user_status = $v->status;
-            $best_lower[$k]->contribution_amount = $this->friend->Contribution($v->user_id);
-        }
-        $new_array = array_merge($lower->toArray(),$lower_lower->toArray(),$best_lower->toArray());
+
+        $new_array = array_merge($lower->toArray(),$lower_lower->toArray());
         $response_json->status = Lib_const_status::SUCCESS;
         $response_json->data = $new_array;
         return $this->response($response_json);

@@ -102,18 +102,24 @@ class Friend extends Model
     public function GetFriendByBestOrParent($friend_id){
         return $this->where(['id'=>$friend_id])->first();
     }
+
+
     /**
      * 获取当前用户下级
+     * @param $user_id
+     * @return mixed
      */
     public function LowerLevel($user_id){
-        return $this->select($this->select)->where(['parent_id'=>$user_id])->get();
+        return $this->select($this->select)->where(['parent_parent_id'=>$user_id])->get();
     }
 
     /**
      * 获取当前用户下级
+     * @param $user_id
+     * @return mixed
      */
     public function LowerCount($user_id){
-        return $this->where(['parent_id'=>$user_id])->count();
+        return $this->where(['parent_parent_id'=>$user_id])->count();
     }
 
 
