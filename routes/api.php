@@ -86,6 +86,9 @@ $api->version('v1', function ($api) {
             $api->post('/agent/cancelagent','AgentController@cancelAgent');
             //获取代理信息
             $api->post('/agent/get','AgentController@getAgent');
+            //更改代理订单状态
+            $api->post('/agent/changeOrder','AgentController@changeOrder');
+
             //获取下级
             $api->post('/user/lower','AgentController@SubordinateUser');
 

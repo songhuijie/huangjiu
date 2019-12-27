@@ -65,6 +65,21 @@ class Order extends Model
     }
 
     /**
+     * 更新订单状态 根据代理 用户 订单ID
+     * @param $order_id
+     * @param $agent_id
+     * @param $status
+     * @return mixed
+     */
+    public function updateStatusByAgent($order_id,$agent_id,$status){
+        $order_status = $this->where(['id'=>$order_id,'agent_id'=>$agent_id])->value('order_status');
+        if($status - $order_status ==1){
+            return $this->where(['id'=>$order_id,'agent_id'=>$agent_id])->update(['order_status'=>$status]);
+        }
+    }
+
+
+    /**
      * 根据订单号更改订单状态
      * @param $order_number
      * @param $status

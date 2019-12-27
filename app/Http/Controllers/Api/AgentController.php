@@ -317,6 +317,8 @@ class AgentController extends Controller
 
     /**
      * 获取代理订单列表
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getAgentList(Request $request){
 
@@ -338,7 +340,8 @@ class AgentController extends Controller
         $friend = $this->friend->GetFriend($user_id);
 
         if($friend){
-            if($friend->is_delivery == 1){
+
+            if($friend->is_delivery == 1 || $friend->status != 0){
                 $agent_user_id = ($friend->best_id == 0) ? ($friend->parent_parent_id==0)?$friend->parent_id:$friend->parent_parent_id:$friend->best_id;
 
                 $agent = $this->agent->getByUserID($agent_user_id,1);
@@ -366,8 +369,67 @@ class AgentController extends Controller
                 $response_json->status = Lib_const_status::USER_NOT_AGENT;
             }
         }
+        return $this->response($response_json);
+    }
 
 
+    /**
+     * 代理 更改订单状态
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function changeOrder(Request $request){
+        $all = $request->all();
+        $fromErr = $this->validatorFrom([
+            'order_id'=>'required',
+            'status'=>'required|in:3,4',
+        ],[
+            'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
+            'in'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
+        ]);
+        if($fromErr){//输出表单验证错误信息
+            return $this->response($fromErr);
+        }
+
+        $access_entity = AccessEntity::getInstance();
+        $user_id = $access_entity->user_id;
+
+        $response_json = $this->initResponse();
+        $friend = $this->friend->GetFriend($user_id);
+
+        if($friend){
+
+            if($friend->is_delivery == 1 || $friend->status != 0){
+                $agent_user_id = ($friend->best_id == 0) ? ($friend->parent_parent_id==0)?$friend->parent_id:$friend->parent_parent_id:$friend->best_id;
+
+                $agent = $this->agent->getByUserID($agent_user_id,1);
+                if($agent){
+                    $data = [
+                        'order_id'=>$all['order_id'],
+                        'user_id'=>$agent_user_id,
+                        'agent_id'=>$agent->id,
+                        'status'=>$all['status'],
+                    ];
+                    $int = $this->order->updateStatusByAgent($all['order_id'],$agent->id,$all['status']);
+                    $response_json->status = Lib_const_status::SUCCESS;
+                    $response_json->data = $data;
+                }else{
+                    $response_json->status = Lib_const_status::USER_NOT_AGENT;
+                }
+
+            }else{
+                $response_json->status = Lib_const_status::USER_CAN_NOT_DELIVER;
+            }
+
+        }else{
+            $agent = $this->agent->getByUserID($user_id,1);
+            if($agent){
+                $this->order->updateStatusByAgent($all['order_id'],$agent->id,$all['status']);
+                $response_json->status = Lib_const_status::SUCCESS;
+            }else{
+                $response_json->status = Lib_const_status::USER_NOT_AGENT;
+            }
+        }
 
         return $this->response($response_json);
     }
