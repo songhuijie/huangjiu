@@ -39,12 +39,18 @@ class Asset extends Model
 
     /**
      * 更新财产
-     * @param $data
+     * @param $user_id
+     * @param $balance
+     * @param $type
      * @return mixed
      */
-    public function updateRoyaltyBalance($data){
-        $royalty_balance = $data['royalty_balance'];
-        return $this->where(['user_id'=>$data['user_id']])->update(['balance'=>DB::raw("balance + $royalty_balance")]);
+    public function updateRoyaltyBalance($user_id,$balance,$type){
+        if($type == 1){
+            return $this->where(['user_id'=>$user_id])->update(['balance'=>DB::raw("balance + $balance")]);
+        }else{
+            return $this->where(['user_id'=>$user_id])->update(['balance'=>DB::raw("balance - $balance")]);
+        }
+
     }
 
     /**

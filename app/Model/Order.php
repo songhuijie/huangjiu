@@ -133,7 +133,7 @@ class Order extends Model
      * @return mixed
      */
     public function getWhereByStatus($agent_id,$status){
-        return $this->where(['agent_id'=>$agent_id,'order_status'=>$status])->get();
+        return $this->where(['agent_id'=>$agent_id,'order_status'=>$status,'order_delivery'=>4])->get();
     }
     /**
      * 删除订单

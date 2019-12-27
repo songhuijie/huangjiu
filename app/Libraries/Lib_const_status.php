@@ -11,6 +11,7 @@ class Lib_const_status{
     const CORRECT = 0;
     const SUCCESS = 0;
     const SERVICE_ERROR = 1;
+    const OTHER_ERROR = 2;
     //请求必要参数为空或者格式错误
     const ERROR_REQUEST_PARAMETER = 10;
     //请求过多,暂时被限制

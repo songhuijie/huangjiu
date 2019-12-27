@@ -37,4 +37,9 @@ class Lib_config{
     const AGENT_THIRD_LEVEL = 3;
     const AGENT_STATUS_NO  = 0;
 
+
+    const ADD    = '+';
+    const REDUCE = '-';
+    const WITHDRAW = 3;
+
 }

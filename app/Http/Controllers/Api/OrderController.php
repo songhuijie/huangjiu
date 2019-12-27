@@ -54,6 +54,7 @@ class OrderController extends Controller{
         $fromErr = $this->validatorFrom([
             'goods'=>'required',
             'address_id'=>'required',
+            'order_delivery'=>'required',
             'is_arrive'=>'in:1',
         ],[
             'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
@@ -130,7 +131,7 @@ class OrderController extends Controller{
             }
             $order_data = [
                 'user_id'=>$user_id,
-                'order_delivery'=>0,//4  0快递配送 1自提,2配送到家,3配送到店,4送货上门'
+                'order_delivery'=>isset($all['order_delivery'])?$all['order_delivery']:0,//4  0快递配送 1自提,2配送到家,3配送到店,4送货上门'
                 'address_detail'=>json_encode($address),
                 'goods_detail'=>json_encode($goods_detail),
                 'order_royalty_price'=>$total_royalty_price,

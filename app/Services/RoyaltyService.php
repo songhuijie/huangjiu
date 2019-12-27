@@ -8,6 +8,7 @@
 namespace App\Services;
 
 use App\Events\IncomeEvent;
+use App\Libraries\Lib_config;
 use App\Model\Agent;
 use App\Model\Asset;
 use App\Model\Friend;
@@ -262,22 +263,11 @@ class RoyaltyService{
      * @param $asset_data
      */
     public static function AssetIncome($asset_data){
-        $asset = new Asset();
-        $income = new IncomeDetails();
-        $income_data = [];
-        $income_time = time();
-        foreach($asset_data as $v){
-            $asset->updateRoyaltyBalance($v);
 
-            $data = [
-                'user_id'=>$v['user_id'],
-                'income_type'=>isset($v['agent'])?2:1,
-                'amount'=>$v['royalty_balance'],
-                'income_time'=>$income_time,
-            ];
-            $income_data[] = $data;
+        $symbol = Lib_config::ADD;
+        foreach($asset_data as $v) {
+            $type = isset($v['agent'])?2:1;
+            AssetService::HandleBalance($v['user_id'],$v['royalty_balance'],$symbol,$type);
         }
-        event(new IncomeEvent($income_data,$income));
-
     }
 }
