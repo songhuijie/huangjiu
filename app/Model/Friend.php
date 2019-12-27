@@ -135,6 +135,15 @@ class Friend extends Model
     }
 
     /**
+     * 获取当前用户状态
+     * @param $user_id
+     * @return mixed
+     */
+    public function CurrentLevel($user_id){
+        return $this->select($this->select)->where(['user_id'=>$user_id])->first();
+    }
+
+    /**
      * 获取当前用户下级
      * @param $user_id
      * @return mixed
