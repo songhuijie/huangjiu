@@ -95,6 +95,10 @@ class OrderController extends Controller{
                     $time =  strtotime("$int");
                     $start_time = strtotime($agent_id->start_time);
                     $end_time = strtotime($agent_id->end_time);
+                    Log::info($time);
+                    Log::info($start_time);
+                    Log::info($end_time);
+                    Log::info($start_time > $time || $time > $end_time);
                     if($start_time > $time || $time > $end_time){
                         $response_json->status = Lib_const_status::AGENT_NO_END;
                         return $this->response($response_json);
