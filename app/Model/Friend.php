@@ -68,6 +68,17 @@ class Friend extends Model
     }
 
     /**
+     * 取消代理和送货
+     * @param $id
+     * @param $status
+     * @return mixed
+     */
+    public function updateAllAgentByID($id,$status){
+
+        return $this->where('parent_id',$id)->update(['is_delivery'=>$status,'status'=>$status]);
+
+    }
+    /**
      * 添加好友关系
      * @param $user_id
      * @param $parent_id

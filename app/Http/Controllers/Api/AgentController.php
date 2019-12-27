@@ -265,7 +265,7 @@ class AgentController extends Controller
         $friend = $this->friend->GetFriendByBestOrParent($set_user_id);
         if($friend){
             if($user_id == $friend->parent_parent_id || $user_id == $friend->best_id){
-                $this->friend->updateAgentByID($set_user_id,$type,Lib_config::AGENT_STATUS_NO);
+                $this->friend->updateAllAgentByID($set_user_id,Lib_config::AGENT_STATUS_NO);
                 $response_json->status = Lib_const_status::SUCCESS;
             }else{
                 $response_json->status = Lib_const_status::USER_NOT_BECOME;
