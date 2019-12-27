@@ -376,11 +376,10 @@ class OrderController extends Controller{
             $agent = $this->agent->find($order->agent_id);
         }
 
-
-
         $response_json->status = Lib_const_status::SUCCESS;
         $response_json->data->express = $express_info;
         $response_json->data->agent = $agent;
+        $response_json->data->order = $order;
         return $this->response($response_json);
     }
 

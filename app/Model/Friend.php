@@ -46,9 +46,9 @@ class Friend extends Model
      */
     public function updateAgent($set_user_id,$type,$status){
         if($type == 1){
-            return $this->where('user_id',$set_user_id)->update(['is_delivery'=>$status]);
+            return $this->where('parent_id',$set_user_id)->update(['is_delivery'=>$status]);
         }else{
-            return $this->where('user_id',$set_user_id)->update(['status'=>$status]);
+            return $this->where('parent_id',$set_user_id)->update(['status'=>$status]);
         }
     }
 
@@ -91,7 +91,7 @@ class Friend extends Model
      * @return mixed
      */
     public function GetFriend($user_id){
-        return $this->where(['user_id'=>$user_id])->first();
+        return $this->where(['parent_id'=>$user_id])->first();
     }
 
     /**

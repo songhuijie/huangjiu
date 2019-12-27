@@ -206,20 +206,30 @@ class AgentController extends Controller
         $type = isset($all['type'])?$all['type']:1;
         if($agent){
             $friend = $this->friend->GetFriend($set_user_id);
+
             if($friend){
-                if($type == 2){
-                    if($friend->parent_parent_id == 0 && $friend->best_id == 0){
-                        $response_json->status = Lib_const_status::USER_CAN_NOT_BECOME_SECOND;
-                        return $this->response($response_json);
-                    }
-                }else{
-                    if($friend->best_id != $user_id){
-                        $response_json->status = Lib_const_status::USER_CAN_NOT_BECOME_THIRD;
-                        return $this->response($response_json);
-                    }
+//                $response_json->data = $friend;
+//                return $this->response($response_json);
+                switch ($type){
+                    case 1:
+                    case 2:
+                        $this->friend->updateAgent($set_user_id,$type,$type);
+                        $response_json->status = Lib_const_status::SUCCESS;
+                        break;
+                    case 3:
+                        if($friend->best_id == $user_id){
+                            $this->friend->updateAgent($set_user_id,$type,$type);
+                            $response_json->status = Lib_const_status::SUCCESS;
+                        }else{
+                            $response_json->status = Lib_const_status::USER_CAN_NOT_BECOME_THIRD;
+                        }
+                        break;
+                    default:
+                        break;
                 }
-                $this->friend->updateAgent($set_user_id,$type,$type);
-                $response_json->status = Lib_const_status::SUCCESS;
+
+            }else{
+                $response_json->status = Lib_const_status::USER_NOT_BECOME;
             }
         }else{
             $response_json->status = Lib_const_status::USER_NOT_AGENT;
