@@ -38,18 +38,22 @@ class TestController extends Controller{
         //lat: "30.69015"
         //lng: "104.05293"
 
-        $a = '2019-12-27 22:10:00';
+        $a = '2019-12-27 22:40:00';
 //        $time =  explode(':',explode(' ',$a)[1]);
-        $start_time = explode(':','14:30:29');
-        dump(strtotime('14:30:29'));
-        dd(strtotime('22:39:18'));
-        $end_time = explode(':','22:39:18');
+        $time = strtotime('20:10:00');
+        $start_time = strtotime('14:30:29');
+        $end_time = strtotime('22:39:18');
+
+
+        if($start_time > $time || $time > $end_time){
+            dd(2);
+        }
+        dd(1);
         try{
             $time =  explode(':',explode(' ',$a)[1]);
             if($start_time[0] > $time[0] || $time[0] > $end_time[0]){
                 dd(1);
             }
-            28800
             if(($start_time[0] <= $time[0] && $start_time[1] > $time[1]) || ($time[0] <= $end_time[0] && $time[1] > $end_time[1])){
                 dd(3);
             }
