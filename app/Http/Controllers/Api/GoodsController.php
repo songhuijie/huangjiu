@@ -52,7 +52,7 @@ class GoodsController extends Controller
             return $this->response($fromErr);
         }
         $goods_type = $request->input('goods_type',1);
-        $page = $all['page']?$all['page']:Lib_config::PAGE;
+        $page = isset($all['page'])?$all['page']:Lib_config::PAGE;
         $limit = Lib_config::LIMIT;
         $response_json = $this->initResponse();
 
