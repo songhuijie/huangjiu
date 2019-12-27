@@ -116,7 +116,12 @@ class Goods extends Model
         return  $this->where(['id'=>$goods_id])->update(['sell_num'=>DB::raw("sell_num + $num")]);
     }
 
+
     public function getCart(){
         return $this->belongsTo(Cart::class,'id','sku_id');
+    }
+
+    public function reply(){
+        return $this->hasMany(Reply::class,'goods_id','id');
     }
 }

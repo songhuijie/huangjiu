@@ -30,12 +30,21 @@ class Reply extends Model
     protected $hidden = [
         ''
     ];
+    protected $appends = ['user_name'];
 
     /**
      * 获取评论信息 根据goods_id
      */
     public function getReply($goods_id){
         return $this->where('goods_id',$goods_id)->get();
+    }
+
+
+    public function getUserNameAttribute($value)
+    {
+        $user = new User();
+        $user = $user->find($this->attributes['user_id']);
+        return $user->user_nickname;
     }
 
     /**
@@ -45,5 +54,12 @@ class Reply extends Model
      */
     public function insertReply($data){
         return $this->insert($data);
+    }
+
+    /**
+     * user 表建立关系
+     */
+    public function user(){
+        return $this->hasOne(User::class,'user_id','id');
     }
 }

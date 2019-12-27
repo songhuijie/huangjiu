@@ -90,11 +90,13 @@ class GoodsController extends Controller
         $response_json = $this->initResponse();
 
         $detail = $this->good->find($all['goods_id']);
+
         $access_entity = AccessEntity::getInstance();
         $user_id = $access_entity->user_id;
         $collect = $this->collect->getCollect($user_id);
         $collects = array_column($collect,'goods_id');
         $detail->is_collect = in_array($detail->id,$collects)?1:0;
+        $detail->reply;
         if($detail){
             $response_json->status = Lib_const_status::SUCCESS;
             $response_json->data = $detail;
