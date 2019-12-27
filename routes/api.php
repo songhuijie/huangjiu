@@ -106,6 +106,8 @@ $api->version('v1', function ($api) {
             $api->post('/order/list','OrderController@OrderList');
             //取消订单
             $api->post('/order/cancel','OrderController@OrderCancel');
+            //订单物流信息
+            $api->post('/order/expressInfo','OrderController@ExpressInformation');
 
 
             //收入明细

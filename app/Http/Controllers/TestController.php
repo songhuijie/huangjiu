@@ -37,8 +37,8 @@ class TestController extends Controller{
         //lat: "30.69015"
         //lng: "104.05293"
 
-        $order_id = '585756591863935200';
-        $result = CourierBirdService::getOrderTracesByJson($order_id,3);
+        $order_id = '773020792446578';
+        $result = CourierBirdService::getOrderTracesByJson($order_id,4);
         dd($result);
         $lng = 104.037071;
         $lat = 30.67001;

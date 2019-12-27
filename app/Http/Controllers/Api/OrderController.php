@@ -347,7 +347,7 @@ class OrderController extends Controller{
     /**
      * 物流信息
      */
-    public function LogisticsInformation(Request $request){
+    public function ExpressInformation(Request $request){
         $all = $request->all();
         $fromErr = $this->validatorFrom([
             'order_id'=>'required',
@@ -367,8 +367,9 @@ class OrderController extends Controller{
         $type = $order_id->express_type;
         $express_info = CourierBirdService::getOrderTracesByJson($Order_Code,$type);
 
+
         $response_json->status = Lib_const_status::SUCCESS;
-        $response_json->data = $express_info['Reason'];
+        $response_json->data = $express_info;
         return $this->response($response_json);
     }
 

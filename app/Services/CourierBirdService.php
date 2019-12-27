@@ -62,6 +62,35 @@ class CourierBirdService{
         return $data;
     }
 
+//    public static function  express_send($number,$logisticcode){
+//        $config = self::getConfig();
+//        $EBusinessID =$config['EBusinessID'];
+//        $AppKey = $config['express_key'];
+//        $ReqURL = "http://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx";
+//        /**
+//         * 电商id
+//         */
+//        $logins = self::EXPRESS_TYPE[$logisticcode];
+//        $requestData= "{'OrderCode':'','ShipperCode':'$logins','LogisticCode':'$number'}";
+//
+//        $datas = array(
+//            'EBusinessID' => $EBusinessID,
+//            'RequestType' => '1002',
+//            'RequestData' => urlencode($requestData) ,
+//            'DataType' => '2-json',
+//        );
+//        $datas['DataSign'] = self::encrypt($requestData,$AppKey);
+//        $result= self::sendPost($ReqURL, $datas);
+//
+//        //根据公司业务处理返回的信息......
+//        $res = json_decode($result,true);
+//        if($res['Success'] == true){
+//            $last_names = array_column($res['Traces'],'AcceptTime');
+//            array_multisort($last_names,SORT_DESC,$res['Traces']);
+//        }
+//        return $res;
+//    }
+
     /**
      * Json方式 查询订单物流轨迹
      * @param $Order_Code
@@ -71,7 +100,6 @@ class CourierBirdService{
     public static function  getOrderTracesByJson($Order_Code,$type){
 
         $config = self::getConfig();
-//        $requestData= "{'OrderCode':$Order_Code}";
         $express_type = self::EXPRESS_TYPE[$type];
         $requestData= "{'OrderCode':'','ShipperCode':'$express_type','LogisticCode':'$Order_Code'}";
 
@@ -83,11 +111,20 @@ class CourierBirdService{
             'DataType' => '2',
         );
         $datas['DataSign'] = self::encrypt($requestData, $config['express_key']);
+
         $result=self::sendPost(self::REQ_URL, $datas);
 
         //根据公司业务处理返回的信息......
 
-        return json_decode($result,true);
+        $data = json_decode($result,true);
+        if($data['Success'] == true){
+            $last_names = array_column($data['Traces'],'AcceptTime');
+            array_multisort($last_names,SORT_DESC,$data['Traces']);
+            return $data['Traces'];
+        }
+
+        return [];
+
     }
 
     /**
