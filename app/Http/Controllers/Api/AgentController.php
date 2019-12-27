@@ -162,13 +162,14 @@ class AgentController extends Controller
         $lower = $this->friend->LowerLevel($user_id);
         foreach($lower as $k=>$v){
             $lower[$k]->user_info = $this->user->select($select)->find($v->user_id);
-            $lower[$k]->count = $this->friend->LowerCount($v->user_id);
+            $lower[$k]->count = $this->friend->LowerCount($v->parent_id);
             $lower[$k]->user_status = $v->status;
             $lower[$k]->contribution_amount = $this->friend->Contribution($v->parent_id);
         }
         $lower_lower = $this->friend->LowerLowerLevel($user_id,3);
         foreach($lower_lower as $k=>$v){
             $lower_lower[$k]->user_info = $this->user->select($select)->find($v->user_id);
+            $lower_lower[$k]->count = $this->friend->LowerCount($v->parent_id);
             $lower_lower[$k]->user_status = $v->status;
             $lower_lower[$k]->contribution_amount = $this->friend->Contribution($v->parent_id);
         }
