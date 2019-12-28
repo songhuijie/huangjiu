@@ -21,7 +21,7 @@ class User extends Model
      */
     // public $timestamps = false;
     protected $fillable = [
-        'id','parent','user_nickname','user_img','user_openid','user_balance','user_type','sex','country','access_token','expires_in','city',
+        'id','parent','user_nickname','user_img','user_openid','user_balance','user_type','sex','country','access_token','expires_in','city','created_at','updated_at'
     ];
     /**
      * The attributes that should be hidden for arrays.
@@ -49,9 +49,7 @@ class User extends Model
         return $this->select($this->select_info)->find($id);
     }
 
-    public function created_at($value){
 
-    }
     /**
      * 根据用户授权token  获取用户过期时间
      * @param $access_token
