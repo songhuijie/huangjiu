@@ -35,59 +35,8 @@ class TestController extends Controller{
 //        $response_json = new \StdClass();
 //        $response_json->data = $agents;
 //        return $this->response($response_json);
-        //lat: "30.69015"
-        //lng: "104.05293"
-
-        $a = '2019-12-27 22:10:00';
-//        $time =  explode(':',explode(' ',$a)[1]);
-        $int = explode(' ',$a)[1];
-
-        $time =  strtotime("$int");
-        $start_time = strtotime('14:30:29');
-        $end_time = strtotime('22:39:18');
 
 
-        if($start_time > $time || $time > $end_time){
-            dd(2);
-        }
-        dd(1);
-        try{
-            $time =  explode(':',explode(' ',$a)[1]);
-            if($start_time[0] > $time[0] || $time[0] > $end_time[0]){
-                dd(1);
-            }
-            if(($start_time[0] <= $time[0] && $start_time[1] > $time[1]) || ($time[0] <= $end_time[0] && $time[1] > $end_time[1])){
-                dd(3);
-            }
-            dd(2);
-        }catch (\Exception $e){
-            echo '时间格式不对';
-
-        }
-        dd(1);
-        $order = new Order();
-        $order = $order->find(1);
-        $goods_detail =  $order->goods_detail;
-        $goods_ids = array_column($goods_detail,'good_title','goods_id');
-        dd($goods_ids,isset($goods_ids[1]));
-        $order_id = '773020792446578';
-        $result = CourierBirdService::getOrderTracesByJson($order_id,4);
-        dd($result);
-        $lng = 104.037071;
-        $lat = 30.67001;
-        $agent_id = MapServices::distance($lng,$lat);
-        dd($agent_id);
-        $good = new Goods();
-        $goods_id = 1;
-        $type = 2;
-        $num = 1;
-        $result = $good->updateStock($goods_id,$type,$num);
-        dd($result);
-
-        $user = new User();
-        $access_token = 'access_token1234567';
-        $token_array = $user->getByAccessToken($access_token);
-        dd($token_array);
 
         $a = "1,概况,home,index/default,0,statistics,0,1
 2,会员,set,member/index,0,member,0,1
@@ -97,23 +46,26 @@ class TestController extends Controller{
 6,设置,unlink,config/index,0,setup,0,1
 7,详细概况,,index/default,1,statistics.list,0,1
 8,会员列表,,member/index,2,member.list,0,1
-9,订单列表,,order/order,3,order.list,0,1
-30,评论,voice,comment/index,0,comment,0,1
+9,订单列,,order/order,3,order.list,0,1
 10,推荐列表,,recommend/index,5,recommend.list,0,1
 11,程序配置,,config/index,6,setup.list,0,1
-31,评论管理,,comment/index,30,comment.list,0,1
 12,商品类型,,label/index,4,label.list,0,1
+13,代理,notice,agent/index,0,agent,0,1
+30,地址,voice,address/index,0,comment,0,1
+31,地址管理,,address/index,30,address.list,0,1
 32,权限管理,notice,admin/admin,0,admin,0,1
 33,管理员,,admin/admin,32,admin.list,0,1
-34,图片-图标管理,,config/picture,6,setup.picture,0,1
-35,图片类型,,config/type,6,config.type,0,1
 37,商品列表,,goods/index,4,label.destination,0,1
-38,定制需求,,config/essential,6,config.essential,0,1
-39,角色管理,,admin/role,32,admin.role,0,1";
-        $b = explode("\r\n",$a);
+39,关于,about,about/about,0,about.about,0,1
+40,关于,,about/about,39,about.about,0,1
+42,代理审核,,agent/index,13,agent.index,0,1
+43,提现,notice,withdraw/index,0,withdraw.index,0,1
+44,提现记录,,withdraw/index,43,withdraw.index,0,1";
+        $b = explode("\n",$a);
         $datas = [];
         $data = [];
         foreach($b as $k=>$v){
+
             echo '[';
             echo "<br/>";
             echo "'id'=>'".explode(',',$v)[0]."',";echo "<br/>";
@@ -126,6 +78,7 @@ class TestController extends Controller{
             echo "'status'=>'".explode(',',$v)[7]."',";echo "<br/>";
             echo '],';echo "<br/>";
         }
+
         dd(1);
         $asset  = new Asset();
         $income  = new IncomeDetails();

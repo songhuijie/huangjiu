@@ -27,6 +27,8 @@ class CreateConfig extends Migration
             $table->string('cert_pem')->comment('cert_pem');
             $table->string('key_pem')->comment('key_pem');
             $table->text('aboutUs')->comment('关于我们');
+            $table->string('express_key')->comment('快递鸟的Key');
+            $table->string('EBusinessID')->comment('快递鸟的商户ID');
             $table->comment = '配置表';
         });
 

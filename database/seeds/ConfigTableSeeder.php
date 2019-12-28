@@ -27,6 +27,8 @@ class ConfigTableSeeder extends Seeder
              'cert_pem' => '1',
              'key_pem' => '1',
              'aboutUs' => '1',
+             'express_key' => '1',
+             'EBusinessID' => '1',
          ]
      ];
 
