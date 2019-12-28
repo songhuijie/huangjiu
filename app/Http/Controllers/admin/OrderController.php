@@ -37,8 +37,8 @@ class OrderController extends Controller{
         if(!empty($request->input('type'))){
             $data=$request->all();
             if($data['type']=="select"){
-                $data['page']=Lib_config::PAGE;
-                $data['limit']=Lib_config::LIMIT;
+                $page = Lib_config::PAGE;
+                $size = Lib_config::LIMIT;
                 if(!empty($data['page'])){
                     $page=$data['page'];
                     $size=$data['limit'];

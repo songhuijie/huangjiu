@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Libraries\Lib_config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -117,8 +118,8 @@ class Order extends Model
      */
     public function getWhere($param){
 
-        empty($param['limit'])?$limit = 10:$limit= $param['limit'];
-        empty($param['page'])?$page = 1:$page= $param['page'];
+        empty($param['limit'])?$limit = Lib_config::LIMIT:$limit= $param['limit'];
+        empty($param['page'])?$page = Lib_config::PAGE:$page= $param['page'];
         empty($param['keyword'])?$keyword = null:$keyword= $param['keyword'];
         $order_status = isset($param['order_status'])?$param['order_status']:null;
         if($page>0){
@@ -131,7 +132,7 @@ class Order extends Model
         if($order_status != null){
             $query = $query->where('order_status',$order_status);
         }
-        $data['data'] = $query->orderBy('id', 'asc')->offset(($page-1)*$limit)->limit($limit)->get();
+        $data['data'] = $query->orderBy('id', 'asc')->offset($page)->limit($limit)->get();
         $data['count'] = $query->orderBy('id', 'asc')->count();
         return $data;
     }
