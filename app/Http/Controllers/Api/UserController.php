@@ -110,6 +110,7 @@ class UserController extends Controller
                     'expires_in'=> $expires_in,
                     'country'=> '',
                     'city'=> '',
+                    'created_at'=> time(),
                 ];
 
                 $result = $this->user->insert($data);

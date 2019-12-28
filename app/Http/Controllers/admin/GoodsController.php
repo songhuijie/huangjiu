@@ -31,6 +31,7 @@ class GoodsController extends Controller
 				$pages=($page-1)*$size;
 				$count=DB::table("goods")->count();
 				$list=DB::table("goods")->offset($pages)->limit($size)->get();
+
 				//搜索
 				if(!empty($data["keyword"])){
 					$where=" where ";
