@@ -8,6 +8,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Libraries\Lib_config;
 use App\Model\Order;
 use App\Services\GoodsService;
 use App\Services\GoodTypeService;
@@ -36,8 +37,8 @@ class OrderController extends Controller{
         if(!empty($request->input('type'))){
             $data=$request->all();
             if($data['type']=="select"){
-                $page=1;
-                $size=5;
+                $data['page']=Lib_config::PAGE;
+                $data['limit']=Lib_config::LIMIT;
                 if(!empty($data['page'])){
                     $page=$data['page'];
                     $size=$data['limit'];
