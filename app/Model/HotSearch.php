@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class HotSearch extends Model
 {
@@ -24,6 +25,7 @@ class HotSearch extends Model
 
     ];
     protected $select = ['search_word'];
+    protected $select_all = ['id','search_word','search_times'];
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -37,5 +39,18 @@ class HotSearch extends Model
 
         return $this->select($this->select)->where('search_times','>','10')->get();
     }
+
+
+    /**
+     * 根据词获取数据
+     * @return mixed
+     */
+    public function getByWords($data){
+
+        return $this->select($this->select_all)->whereIn('search_word',$data)->get();
+    }
+
+
+
 
 }

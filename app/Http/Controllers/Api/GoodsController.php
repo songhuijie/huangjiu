@@ -12,6 +12,7 @@ use App\Model\GoodsType;
 use App\Services\AccessEntity;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use App\Model\User;
@@ -128,7 +129,10 @@ class GoodsController extends Controller
         $response_json = $this->initResponse();
 
         $page = isset($all['page'])?$all['page']:1;
-        $detail = $this->good->search($all['query'],$page,Lib_config::SEARCH_LIMIT);
+
+        $query = $all['query'];
+        Artisan::call("handle:word $query");
+        $detail = $this->good->search($query,$page,Lib_config::SEARCH_LIMIT);
         if($detail){
             $response_json->status = Lib_const_status::SUCCESS;
             $response_json->data = $detail;
