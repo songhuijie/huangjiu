@@ -111,6 +111,7 @@ class UserController extends Controller
                     'country'=> '',
                     'city'=> '',
                     'created_at'=> time(),
+                    'updated_at'=> time(),
                 ];
 
                 $result = $this->user->insert($data);
