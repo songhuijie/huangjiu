@@ -188,7 +188,7 @@ class UserController extends Controller
             }
         }
         //是否是送货   送货员 0不是 1是
-        $user_info->is_delivery = $friend->is_delivery;
+        $user_info->is_delivery = isset($friend->is_delivery)?$friend->is_delivery:0;
 
         $user_info->status = $status;
         $response_json = $this->initResponse();
