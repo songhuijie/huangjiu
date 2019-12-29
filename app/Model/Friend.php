@@ -85,15 +85,19 @@ class Friend extends Model
      * @return mixed
      */
     public function FriendRelationship($user_id,$parent_id){
-        $friend = $this->where(['user_id'=>$parent_id])->first();
-        if($friend){
-            if($friend->best_id != 0){
-                $friend->parent_parent_id = $friend->best_id;
+        $own = $this->where(['user_id'=>$user_id])->first();
+        if(!$own){
+            $friend = $this->where(['user_id'=>$parent_id])->first();
+            if($friend){
+                if($friend->best_id != 0){
+                    $friend->parent_parent_id = $friend->best_id;
+                }
+                return $this->insert(['user_id'=>$user_id,'parent_id'=>$parent_id,'parent_parent_id'=>$friend->parent_id,'best_id'=>$friend->parent_parent_id,'status'=>$friend->status,'is_delivery'=>$friend->is_delivery]);
+            }else{
+                return $this->insert(['user_id'=>$user_id,'parent_id'=>$parent_id]);
             }
-            return $this->insert(['user_id'=>$user_id,'parent_id'=>$parent_id,'parent_parent_id'=>$friend->parent_id,'best_id'=>$friend->parent_parent_id]);
-        }else{
-            return $this->insert(['user_id'=>$user_id,'parent_id'=>$parent_id]);
         }
+
     }
 
     /**
