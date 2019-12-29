@@ -161,7 +161,7 @@ class AgentController extends Controller
 
         $lower = $this->friend->LowerLevel($user_id);
         foreach($lower as $k=>$v){
-            $lower[$k]->user_info = $this->user->select($select)->find($v->user_id);
+            $lower[$k]->user_info = $this->user->select($select)->find($v->parent_id);
             $lower[$k]->count = $this->friend->LowerCount($v->parent_id);
             $current = $this->friend->CurrentLevel($v->user_id);
             $agent = $this->agent->getByUserID($v->user_id,1);
@@ -172,6 +172,7 @@ class AgentController extends Controller
             }
             $lower[$k]->is_delivery = isset($current->is_delivery)?$current->is_delivery:0;
             $lower[$k]->contribution_amount = $this->friend->Contribution($v->parent_id);
+            $lower[$k]->user_id = $v->parent_id;
         }
 //        $lower_lower = $this->friend->LowerLowerLevel($user_id,3);
 //        foreach($lower_lower as $k=>$v){

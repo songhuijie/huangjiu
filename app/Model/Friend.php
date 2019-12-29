@@ -131,7 +131,7 @@ class Friend extends Model
      * @return mixed
      */
     public function LowerLevel($user_id){
-        return $this->select($this->select)->where(['parent_parent_id'=>$user_id])->get();
+        return $this->select($this->select)->where(['parent_parent_id'=>$user_id])->orWhere(['best_id'=>$user_id])->get();
     }
 
     /**
