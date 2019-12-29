@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 
-        //* * * * * /usr/local/bin/php /usr/local/var/www/projectName/artisan schedule:run >> /dev/null 2>&1
+        //* * * * * php /xianshangke/dailishang/huangjiu.xcooteam.cn/huangjiu/artisan schedule:run >> /dev/null 2>&1
 
         /**
          *         ->cron(‘* * * * *’); 在自定义Cron调度上运行任务

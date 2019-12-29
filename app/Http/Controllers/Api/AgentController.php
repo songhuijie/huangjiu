@@ -168,9 +168,9 @@ class AgentController extends Controller
             if($agent){
                 $lower[$k]->user_status = 1;
             }else{
-                $lower[$k]->user_status = $current->status;
+                $lower[$k]->user_status = isset($current->status)?$current->status:0;
             }
-            $lower[$k]->is_delivery = $current->is_delivery;
+            $lower[$k]->is_delivery = isset($current->is_delivery)?$current->is_delivery:0;
             $lower[$k]->contribution_amount = $this->friend->Contribution($v->parent_id);
         }
 //        $lower_lower = $this->friend->LowerLowerLevel($user_id,3);
