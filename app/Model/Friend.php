@@ -87,7 +87,7 @@ class Friend extends Model
     public function FriendRelationship($user_id,$parent_id){
         $own = $this->where(['user_id'=>$user_id])->first();
         if(!$own){
-            $friend = $this->where(['user_id'=>$parent_id])->first();
+            $friend = $this->where(['parent_id'=>$parent_id])->first();
             if($friend){
                 if($friend->best_id != 0){
                     $friend->parent_parent_id = $friend->best_id;
