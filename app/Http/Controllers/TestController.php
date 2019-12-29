@@ -62,7 +62,6 @@ class TestController extends Controller{
         $lower = $friend->LowerLevel($user_id);
 
         $lower = self::array_unset_tt($lower,'parent_id');
-        dd($lower,$new_lower);
         $select = ['user_nickname','user_img','sex','created_at'];
         foreach($lower as $k=>$v){
             $lower[$k]['user_info'] = $user->select($select)->find($v['parent_id']);
