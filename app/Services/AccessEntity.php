@@ -76,4 +76,5 @@ class AccessEntity{
         $this->setLang();
         return $this->lang;
     }
+
 }

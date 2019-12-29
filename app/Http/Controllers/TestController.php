@@ -12,6 +12,7 @@ use App\Model\About;
 use App\Model\Agent;
 use App\Model\Asset;
 use App\Model\Collection;
+use App\Model\Friend;
 use App\Model\Goods;
 use App\Model\IncomeDetails;
 use App\Model\Order;
@@ -20,6 +21,23 @@ use App\Services\CourierBirdService;
 use App\Services\MapServices;
 
 class TestController extends Controller{
+
+    /**
+     * 数组去重
+     */
+    public static function array_unset_tt($arr,$key){
+        //建立一个目标数组
+        $res = array();
+        foreach ($arr as $value) {
+            //查看有没有重复项
+            if(isset($res[$value[$key]])){
+                unset($value[$key]);  //有：销毁
+            }else{
+                $res[$value[$key]] = $value;
+            }
+        }
+        return $res;
+    }
 
     public function test(){
 //
@@ -37,6 +55,31 @@ class TestController extends Controller{
 //        return $this->response($response_json);
 
 
+        $friend = new Friend();
+        $user = new User();
+        $agent = new Agent();
+        $user_id = 1;
+        $lower = $friend->LowerLevel($user_id);
+
+        $lower = self::array_unset_tt($lower,'parent_id');
+        dd($lower,$new_lower);
+        $select = ['user_nickname','user_img','sex','created_at'];
+        foreach($lower as $k=>$v){
+            $lower[$k]['user_info'] = $user->select($select)->find($v['parent_id']);
+            $lower[$k]['count'] = $friend->LowerCount($v['parent_id']);
+            $current = $friend->CurrentLevel($v['user_id']);
+            $agent = '';
+            if($agent){
+                $lower[$k]['user_status'] = 1;
+            }else{
+                $lower[$k]['user_status'] = isset($current['status'])?$current['status']:0;
+            }
+            $lower[$k]['is_delivery'] = isset($current['is_delivery'])?$current['is_delivery']:0;
+            $lower[$k]['contribution_amount'] = $friend->Contribution($v['parent_id']);
+            $lower[$k]['user_id'] = $v['parent_id'];
+        }
+
+        dd($lower);
 
         $a = "1,概况,home,index/default,0,statistics,0,1
 2,会员,set,member/index,0,member,0,1

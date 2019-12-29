@@ -137,6 +137,24 @@ class AgentController extends Controller
     }
 
 
+
+    /**
+     * 数组去重
+     */
+    public static function array_unset_tt($arr,$key){
+        //建立一个目标数组
+        $res = array();
+        foreach ($arr as $value) {
+            //查看有没有重复项
+            if(isset($res[$value[$key]])){
+                unset($value[$key]);  //有：销毁
+            }else{
+                $res[$value[$key]] = $value;
+            }
+        }
+        return $res;
+    }
+
     /**
      * 获取下级用户
      */
@@ -160,19 +178,20 @@ class AgentController extends Controller
         }
 
         $lower = $this->friend->LowerLevel($user_id);
+        $lower = array_values(self::array_unset_tt($lower,'parent_id'));
         foreach($lower as $k=>$v){
-            $lower[$k]->user_info = $this->user->select($select)->find($v->parent_id);
-            $lower[$k]->count = $this->friend->LowerCount($v->parent_id);
-            $current = $this->friend->CurrentLevel($v->user_id);
-            $agent = $this->agent->getByUserID($v->user_id,1);
+            $lower[$k]['user_info'] = $this->user->select($select)->find($v['parent_id']);
+            $lower[$k]['count'] = $this->friend->LowerCount($v['parent_id']);
+            $current = $this->friend->CurrentLevel($v['user_id']);
+            $agent = $this->agent->getByUserID($v['user_id'],1);
             if($agent){
-                $lower[$k]->user_status = 1;
+                $lower[$k]['user_status'] = 1;
             }else{
-                $lower[$k]->user_status = isset($current->status)?$current->status:0;
+                $lower[$k]['user_status'] = isset($current['status'])?$current['status']:0;
             }
-            $lower[$k]->is_delivery = isset($current->is_delivery)?$current->is_delivery:0;
-            $lower[$k]->contribution_amount = $this->friend->Contribution($v->parent_id);
-            $lower[$k]->user_id = $v->parent_id;
+            $lower[$k]['is_delivery'] = isset($current['is_delivery'])?$current['is_delivery']:0;
+            $lower[$k]['contribution_amount'] = $this->friend->Contribution($v['parent_id']);
+            $lower[$k]['user_id'] = $v['parent_id'];
         }
 //        $lower_lower = $this->friend->LowerLowerLevel($user_id,3);
 //        foreach($lower_lower as $k=>$v){

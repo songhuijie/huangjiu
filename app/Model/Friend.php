@@ -34,7 +34,7 @@ class Friend extends Model
         ''
     ];
 
-    protected $select = ['id as friend_id','parent_parent_id','best_id','parent_id','user_id','status','is_delivery'];
+    protected $select = ['id as friend_id','parent_id','parent_parent_id','best_id','user_id','status','is_delivery'];
 
 
     /**
@@ -132,7 +132,7 @@ class Friend extends Model
      * @return mixed
      */
     public function LowerLevel($user_id){
-        return $this->select($this->select)->distinct ('parent_id')->where(['parent_parent_id'=>$user_id])->orWhere(['best_id'=>$user_id])->get();
+        return $this->select($this->select)->where(['parent_parent_id'=>$user_id])->orWhere(['best_id'=>$user_id])->get()->toArray();
     }
 
     /**
