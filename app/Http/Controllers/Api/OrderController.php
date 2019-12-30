@@ -207,9 +207,6 @@ class OrderController extends Controller{
 
         $config = $this->config->getConfig();
 
-
-
-
         $access_entity = AccessEntity::getInstance();
         $user_id = $access_entity->user_id;
         $response_json = $this->initResponse();
