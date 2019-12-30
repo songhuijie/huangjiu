@@ -12,6 +12,7 @@ use App\Libraries\Lib_config;
 use App\Model\Order;
 use App\Services\GoodsService;
 use App\Services\GoodTypeService;
+use App\Services\RoyaltyService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -91,6 +92,11 @@ class OrderController extends Controller{
                 if(!empty($data['update'])){
                     $id = $data['id'];
                     unset($data['update'],$data['type'],$data['id']);
+                    $order = $this->order->find($id);
+                    if($data['order_status'] == Lib_config::ORDER_STATUS_FOUR){
+                        //处理商品提成
+                        RoyaltyService::HandleRoyalty($order->user_id,$order->order_royalty_price,$order->is_arrive,$order->agent_id);
+                    }
                     $reust = $this->order->where(['id'=>$id])->update($data);
                     if($reust){
                         return array("code"=>1,"msg"=>"修改成功","status"=>1);

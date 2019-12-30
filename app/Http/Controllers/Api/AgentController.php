@@ -12,6 +12,7 @@ use App\Model\Order;
 use App\Model\User;
 use App\Services\AccessEntity;
 use App\Services\MapServices;
+use App\Services\RoyaltyService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -462,7 +463,12 @@ class AgentController extends Controller
         $friend = $this->friend->GetFriend($user_id);
         $agent = $this->agent->getByUserID($user_id,1);
         if($agent){
+            $order = $this->order->find($all['order_id']);
             $this->order->updateStatusByAgent($all['order_id'],$agent->id,$all['status']);
+            if($all['status'] == 4){
+                //处理商品提成
+                RoyaltyService::HandleRoyalty($order->user_id,$order->order_royalty_price,$order->is_arrive,$order->agent_id);
+            }
             $response_json->status = Lib_const_status::SUCCESS;
         }else{
             if($friend){
