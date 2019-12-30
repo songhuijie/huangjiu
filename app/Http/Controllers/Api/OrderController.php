@@ -129,7 +129,7 @@ class OrderController extends Controller{
             foreach($goods as $k=>$v){
 
                 if($all['is_shopping'] == 1){
-                    $this->cart->getCart();
+                    $this->cart->getCart('');
                 }
 
                 $pay_goods = $this->goods->getGoodsBySkuId($k);
