@@ -39,7 +39,7 @@ class RecommendController extends Controller
             return $this->response($fromErr);
         }
         $page = $all['page']?$all['page']:Lib_config::PAGE;
-        $limit = Lib_config::LIMIT;
+        $limit = $all['limit']?$all['limit']:Lib_config::LIMIT;
         $response_json = $this->initResponse();
         $res = $this->recommend->getAll($page,$limit);
         $response_json->status = Lib_const_status::SUCCESS;
