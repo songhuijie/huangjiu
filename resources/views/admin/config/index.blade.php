@@ -87,6 +87,18 @@
                             <input type="text" name="key_pem" required  lay-verify="required" value="{{$config->key_pem}}" placeholder="请输入微信退款 key_pem" autocomplete="off" class="layui-input">
                         </div>
                     </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">快递鸟api_key</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="express_key" required  lay-verify="required" value="{{$config->express_key}}" placeholder="请输入快递鸟api_key" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">快递鸟商户ID</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="EBusinessID" required  lay-verify="required" value="{{$config->EBusinessID}}" placeholder="请输入快递鸟商户ID" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
                   <div class="layui-form-item">
                     <div class="layui-input-block">
                       <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
