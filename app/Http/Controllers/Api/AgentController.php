@@ -475,7 +475,7 @@ class AgentController extends Controller
                     $friend = $friends;
                 }else{
                     $friend = $this->friend->GetFriendInit($order->user_id);
-                    $friend = $this->friend->GetFriendInit($friend->parent_id);
+                    $friend = $this->friend->GetFriend($friend->parent_id);
                 }
                 $delivery_phone = null;
                 if($friend){
