@@ -14,6 +14,43 @@ class MapServices{
 
     const INIT_URL = 'https://apis.map.qq.com';
 
+
+    /**
+     *  根据经纬度获取详细地址
+     * @param $lng
+     * @param $lat
+     * @return array
+     */
+    public static function get_address($lng,$lat){
+        $config = self::getMapKey();
+        $map_key = $config['map_key'];
+        $Secret_key = $config['map_secret_key'];
+
+        $param_data = [
+            'location'=>"$lat,$lng",
+            'get_poi'=>0,//不返回周边信息 1返回
+            'key'=>$map_key,
+        ];
+        $new_param  = self::autograph($param_data);
+
+        $param = "/ws/geocoder/v1/?".$new_param;
+        $sig = md5($param.$Secret_key);
+        $url = self::INIT_URL.$param .'&sig='.$sig;
+        $result = self::curl_get($url);
+
+        if($result){
+            $res= json_decode($result,true);
+            if ($res['status'] == 0) {
+                return $res['result']['address_component'];
+            }else{
+                return [];
+            }
+
+        }else{
+            return [];
+        }
+
+    }
     /**
      * 根据地址匹配精度
      * @param $address
@@ -34,7 +71,6 @@ class MapServices{
         $param = "/ws/geocoder/v1/?".$new_param;
         $sig = md5($param.$Secret_key);
         $url = self::INIT_URL.$param .'&sig='.$sig;
-        $result = self::curl_get($url);
 
         $result = self::curl_get($url);
         if($result)

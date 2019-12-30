@@ -26,6 +26,8 @@ $api->version('v1', function ($api) {
         $api->post('/goods/detail','GoodsController@GoodsDetail');
         //根据精度获取代理
         $api->post('/agent/accuracy','AgentController@AgentAccuracy');
+        //根据精度获取详细地址
+        $api->post('/accuracy/address','AgentController@AccuracyAddress');
 
         //推荐列表
         $api->post('/recommend/list','RecommendController@RecommendList');

@@ -341,6 +341,33 @@ class AgentController extends Controller
     }
 
     /**
+     * 根据经纬度获取
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function AccuracyAddress(Request $request){
+        $all = $request->all();
+        $fromErr = $this->validatorFrom([
+            'lat'=>'required',
+            'lng'=>'required',
+        ],[
+            'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
+        ]);
+        if($fromErr){//输出表单验证错误信息
+            return $this->response($fromErr);
+        }
+        $lat = $all['lat'];
+        $lng = $all['lng'];
+
+        $address = MapServices::get_address($lng,$lat);
+
+        $response_json = $this->initResponse();
+        $response_json->status = Lib_const_status::SUCCESS;
+        $response_json->data = $address;
+        return $this->response($response_json);
+
+    }
+    /**
      * 获取代理订单列表
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse

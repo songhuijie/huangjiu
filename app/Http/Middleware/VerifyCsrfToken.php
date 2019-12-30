@@ -30,5 +30,6 @@ class VerifyCsrfToken extends Middleware
         '/about/*',
         '/agent/*',
         '/withdraw/*',
+        '/order/*',
     ];
 }

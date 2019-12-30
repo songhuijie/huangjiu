@@ -30,23 +30,85 @@
 </head>
 
 <body>
-    <div id="wrapper" style="margin-top:20px;">
-      <div id="page-wrapper">
-         <form class="layui-form" >
-                     <div class="layui-form-item">
-                        <label class="layui-form-label">订单状态</label>
-                        <div class="layui-input-block">
-                            <select name="order_status" lay-verify="">
-                                @foreach($type as $k=>$v)
-                                    @if($order && $order->order_status == $k)
-                                        <option value="{{$k}}" selected>{{$v}}</option>
-                                    @else
-                                        <option value="{{$k}}">{{$v}}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                        </div>
-                      </div>
+        <div id="wrapper" style="margin-top:20px;">
+          <div id="page-wrapper">
+             <form class="layui-form" >
+
+                         @switch($order->order_status)
+                             @case(0)
+                             <div class="layui-form-item">
+                                 <label class="layui-form-label">订单状态</label>
+                                     <div class="layui-input-block">
+                                         <select name="order_status" lay-verify="">
+                                                 <option value="1">支付成功待发货</option>
+                                                 <option value="5">退款</option>
+                                         </select>
+                                     </div>
+                             </div>
+
+
+                             <div class="layui-form-item">
+                                 <label class="layui-form-label">快递单号</label>
+                                 <div class="layui-input-block">
+                                     <input type="text" name="express" required  lay-verify="required" value="@if(!empty($label)){{$label->express}} @endif" placeholder="请输入快递单号" autocomplete="off" class="layui-input">
+                                 </div>
+                             </div>
+
+                             <div class="layui-form-item">
+                                 <label class="layui-form-label">快递类型</label>
+                                 <div class="layui-input-block">
+                                     <select name="express_type" lay-verify="">
+                                         @foreach($express_type as $k=>$v)
+                                             <option value="{{$k}}" {{$k==1?'selected':''}}>{{$v}}</option>
+                                         @endforeach
+                                     </select>
+                                 </div>
+                             </div>
+                                @break
+                             @case(1)
+                                 <div class="layui-form-item">
+                                     <label class="layui-form-label">订单状态</label>
+                                     <div class="layui-input-block">
+                                         <select name="order_status" lay-verify="">
+                                             <option value="2">待配送</option>
+                                             <option value="5">退款</option>
+                                         </select>
+                                     </div>
+                                 </div>
+                                @break
+                             @case(2)
+                                 <div class="layui-form-item">
+                                     <label class="layui-form-label">订单状态</label>
+                                     <div class="layui-input-block">
+                                         <select name="order_status" lay-verify="">
+                                             <option value="3">已发货</option>
+                                             <option value="5">退款</option>
+                                         </select>
+                                     </div>
+                                 </div>
+                                @break
+                             @case(3)
+                                 <div class="layui-form-item">
+                                     <label class="layui-form-label">订单状态</label>
+                                     <div class="layui-input-block">
+                                         <select name="order_status" lay-verify="">
+                                             <option value="4">完成</option>
+                                             <option value="5">退款</option>
+                                         </select>
+                                     </div>
+                                 </div>
+                                @break
+                             @case(4)
+                                 <div class="layui-form-item">
+                                     <label class="layui-form-label">订单状态</label>
+                                     <div class="layui-input-block">
+                                         <select name="order_status" lay-verify="">
+                                             <option value="5">退款</option>
+                                         </select>
+                                     </div>
+                                 </div>
+                                @break
+                         @endswitch
 
 
                       
@@ -118,7 +180,7 @@
             data:date,
             type:"post",
             datatype:"json",
-            url:"{{url('label/detail')}}",
+            url:"{{url('order/detail')}}",
             success:function(res){
                 console.log(res);
                 if(res.code==0){

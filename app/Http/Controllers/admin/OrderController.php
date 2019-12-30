@@ -47,23 +47,23 @@ class OrderController extends Controller{
                 return array('code'=>0,'msg'=>'获取到数据','limit'=>$size,'page'=>$page,'count'=>$order['count'],'data'=>$order['data']);
             }
 
-            if($data['type']='edit'){
-                unset($data['type']);
-                $label=DB::table("user")->where("id","=",$data['id'])->first();
-                if($label->status==1){
-                    $data['status']=0;
-                }else{
-                    $data['status']=1;
-                }
-
-                $reust = DB::table("user")->where("id","=",$data['id'])->update($data);
-                if($reust){
-                    return array("code"=>1,"msg"=>"修改成功");
-                }else{
-                    return array("code"=>0,"msg"=>"修改失败,请重试");
-                }
-
-            }
+//            if($data['type']='edit'){
+//                unset($data['type']);
+//                $label=DB::table("order")->where("id","=",$data['id'])->first();
+//                if($label->status==1){
+//                    $data['status']=0;
+//                }else{
+//                    $data['status']=1;
+//                }
+//
+//                $reust = DB::table("order")->where("id","=",$data['id'])->update($data);
+//                if($reust){
+//                    return array("code"=>1,"msg"=>"修改成功");
+//                }else{
+//                    return array("code"=>0,"msg"=>"修改失败,请重试");
+//                }
+//
+//            }
 
         }
 
@@ -87,7 +87,9 @@ class OrderController extends Controller{
         if(!empty($request->input('type'))){
             $data=$request->all();
             if($data['type']=='edit'){
+
                 if(!empty($data['update'])){
+                    dd($data);
                     $reust =1;
                     if($reust){
                         return array("code"=>1,"msg"=>"修改成功","status"=>1);
@@ -97,7 +99,8 @@ class OrderController extends Controller{
 
                 }
                 $order_info =$this->order->find($data['id']);
-                return view("admin/order/detail",['type'=>$this->type,'order'=>$order_info]);
+                $express_type = Lib_config::EXPRESS_TYPE;
+                return view("admin/order/detail",['type'=>$this->type,'order'=>$order_info,'express_type'=>$express_type]);
             }elseif($data['type'] == 'view'){
                 $order_info =$this->order->find($data['id']);
                 return view("admin/order/view",['type'=>$this->type,'order'=>$order_info]);

@@ -55,6 +55,11 @@ class TestController extends Controller{
 //        return $this->response($response_json);
 
 
+        $lng = '39.984154';
+        $lat = '116.307490';
+       $result = MapServices::get_address($lng,$lat);
+       dd($result);
+
         $friend = new Friend();
         $user = new User();
         $agent = new Agent();
