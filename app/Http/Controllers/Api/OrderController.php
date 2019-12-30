@@ -283,7 +283,7 @@ class OrderController extends Controller{
                         }else{
                             $friend = $this->friend->GetFriendInit($friend->user_id);
                             $friend = $this->friend->GetFriend($friend->parent_id);
-
+                            Log::info('进入关系2');
                             if($friend->is_delivery == 1){
                                 $user = $this->user->find($friend->parent_id);
                                 if($user->phone_number){
