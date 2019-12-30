@@ -4,6 +4,7 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Cart extends Model
 {
@@ -81,8 +82,11 @@ class Cart extends Model
 
     public function updateCartByPay($user_id,$goods_id,$num){
         $cart_num = $this->where(['user_id'=>$user_id,'goods_id'=>$goods_id])->value('cart_num');
+        Log::info('购物车剩余数量'.$cart_num);
+        Log::info('结算数量'.$num);
         if($cart_num){
             if($num >= $cart_num){
+
                 $this->where(['user_id'=>$user_id,'goods_id'=>$goods_id])->delete();
             }else{
                 $this->where(['user_id'=>$user_id,'goods_id'=>$goods_id])->update(['cart_num'=>DB::raw("cart_num - $num")]);
