@@ -20,6 +20,7 @@ use App\Model\Goods;
 use App\Model\Order;
 use App\Model\User;
 use App\Services\AccessEntity;
+use App\Services\AlibabaSms;
 use App\Services\CourierBirdService;
 use App\Services\GoodsService;
 use App\Services\RoyaltyService;
