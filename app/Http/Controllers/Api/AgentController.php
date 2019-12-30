@@ -184,6 +184,7 @@ class AgentController extends Controller
         $lower = array_values(self::array_unset_tt($lower,'parent_id'));
         foreach($lower as $k=>$v){
             $lower[$k]['user_info'] = $this->user->select($select)->find($v['parent_id']);
+            $lower[$k]['created_at'] = $lower[$k]['user_info']->created_at;
             $lower[$k]['count'] = $this->friend->LowerCount($v['parent_id']);
             $current = $this->friend->CurrentLevel($v['parent_id']);
             $agent = $this->agent->getByUserID($v['user_id'],1);
