@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Libraries\Lib_config;
 use App\Libraries\Lib_const_status;
 use App\Model\Agent;
 use App\Model\Asset;
@@ -197,6 +198,31 @@ class UserController extends Controller
         $response_json->data = $user_info;
         return $this->response($response_json);
 
+    }
+
+    /**
+     *  设置手机号
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function setPhone(Request $request){
+        $all = $request->all();
+        $fromErr = $this->validatorFrom([
+            'phone'=>'required|mobile',
+        ],[
+            'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
+        ]);
+        if($fromErr){//输出表单验证错误信息
+            return $this->response($fromErr);
+        }
+
+        $access_entity = AccessEntity::getInstance();
+        $user_id = $access_entity->user_id;
+        $response_json = $this->initResponse();
+
+        $this->user->where('id',$user_id)->update(['phone_number'=>$all['phone']]);
+        $response_json->status = Lib_const_status::SUCCESS;
+        return $this->response($response_json);
     }
 
     // 图片上传
