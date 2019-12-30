@@ -40,11 +40,11 @@
              <div class="layui-form-item">
 
                  @foreach($order->goods_detail as $k=>$v)
-                         <p class="">商品名称:{{$v->good_title}}</p><br/>
-                         <p class="">商品副标题:{{$v->good_dsc}}</p><br/>
-                         <p class="">购买数量:{{$v->goods_num}}</p><br/>
-                         <p class="">商品价格:{{$v->new_price}}</p><br/>
-                         <p class="">商品图片:<img  src="{{$v->good_image}}"  name="headimg" id="img1" width="20%"></p><br/>
+                         <p class="">商品名称:{{$v['good_title']}}</p><br/>
+                         <p class="">商品副标题:{{$v['good_dsc']}}</p><br/>
+                         <p class="">购买数量:{{$v['goods_num']}}</p><br/>
+                         <p class="">商品价格:{{$v['new_price']}}</p><br/>
+                         <p class="">商品图片:<img  src="{{$v['good_image']}}"  name="headimg" id="img1" width="20%"></p><br/>
                  @endforeach
              </div>
              <div class="layui-form-item">

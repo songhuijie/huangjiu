@@ -208,7 +208,7 @@
                         }
                     }}
                 ,{field:'order_status',title: '订单状态', width:100,align:'center',templet:function(d){
-                        switch (d.order_delivery){
+                        switch (d.order_status){
                             case 0:
                                 return '待支付';
                                 break;
@@ -216,13 +216,13 @@
                                 return '支付成功待发货';
                                 break;
                             case 2:
-                                return '已发货';
+                                return '待配送';
                                 break;
                             case 3:
-                                return '已完成';
+                                return '已发货';
                                 break;
                             case 4:
-                                return '维权';
+                                return '完成';
                                 break;
                             case 5:
                                 return '退款';
