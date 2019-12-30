@@ -462,8 +462,9 @@ class AgentController extends Controller
         $response_json = $this->initResponse();
         $friend = $this->friend->GetFriend($user_id);
         $agent = $this->agent->getByUserID($user_id,1);
+        $order = $this->order->find($all['order_id']);
         if($agent){
-            $order = $this->order->find($all['order_id']);
+
             $this->order->updateStatusByAgent($all['order_id'],$agent->id,$all['status']);
             if($all['status'] == 4){
                 //处理商品提成
@@ -485,6 +486,10 @@ class AgentController extends Controller
                             'status'=>$all['status'],
                         ];
                         $int = $this->order->updateStatusByAgent($all['order_id'],$agent->id,$all['status']);
+                        if($all['status'] == 4){
+                            //处理商品提成
+                            RoyaltyService::HandleRoyalty($order->user_id,$order->order_royalty_price,$order->is_arrive,$order->agent_id);
+                        }
                         $response_json->status = Lib_const_status::SUCCESS;
                         $response_json->data = $data;
                     }else{
@@ -495,14 +500,6 @@ class AgentController extends Controller
                     $response_json->status = Lib_const_status::USER_CAN_NOT_DELIVER;
                 }
 
-            }else{
-                $agent = $this->agent->getByUserID($user_id,1);
-                if($agent){
-                    $this->order->updateStatusByAgent($all['order_id'],$agent->id,$all['status']);
-                    $response_json->status = Lib_const_status::SUCCESS;
-                }else{
-                    $response_json->status = Lib_const_status::USER_NOT_AGENT;
-                }
             }
         }
 
