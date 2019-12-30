@@ -32,6 +32,12 @@ class WithdrawLog extends Model
     ];
 
 
+    public function getWithdrawTimeAttribute($value)
+    {
+
+        return date('Y-m-d H:i:s',$value);
+    }
+
     /**
      * 获取提现记录  按时间排序返回
      * @param $user_id
