@@ -59,7 +59,6 @@ class GoodsController extends Controller
             $goods_type = $good_type->id;
         }
         $page = isset($all['page'])?$all['page']:Lib_config::PAGE;
-
         $limit = Lib_config::LIMIT;
         $response_json = $this->initResponse();
 

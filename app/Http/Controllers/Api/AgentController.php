@@ -377,6 +377,7 @@ class AgentController extends Controller
         $all = $request->all();
         $fromErr = $this->validatorFrom([
             'status'=>'required|in:2,3,4',
+            'page'=>'int'
         ],[
             'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
             'in'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
@@ -385,6 +386,8 @@ class AgentController extends Controller
             return $this->response($fromErr);
         }
 
+        $page = isset($all['page'])?$all['page']:Lib_config::PAGE;
+        $limit = Lib_config::LIMIT;
         $access_entity = AccessEntity::getInstance();
         $user_id = $access_entity->user_id;
         $response_json = $this->initResponse();
@@ -392,7 +395,7 @@ class AgentController extends Controller
 
         $agent = $this->agent->getByUserID($user_id,1);
         if($agent){
-            $order = $this->order->getWhereByStatus($agent->id,$all['status']);
+            $order = $this->order->getWhereByStatus($agent->id,$all['status'],$page,$limit);
             $response_json->status = Lib_const_status::SUCCESS;
             $response_json->data = $order;
         }else{
@@ -405,7 +408,7 @@ class AgentController extends Controller
 
                     $agent = $this->agent->getByUserID($agent_user_id,1);
                     if($agent){
-                        $order = $this->order->getWhereByStatus($agent->id,$all['status']);
+                        $order = $this->order->getWhereByStatus($agent->id,$all['status'],$page,$limit);
                         $response_json->status = Lib_const_status::SUCCESS;
                         $response_json->data = $order;
                     }else{
@@ -421,7 +424,7 @@ class AgentController extends Controller
             }else{
                 $agent = $this->agent->getByUserID($user_id,1);
                 if($agent){
-                    $order = $this->order->getWhereByStatus($agent->id,$all['status']);
+                    $order = $this->order->getWhereByStatus($agent->id,$all['status'],$page,$limit);
                     $response_json->status = Lib_const_status::SUCCESS;
                     $response_json->data = $order;
                 }else{

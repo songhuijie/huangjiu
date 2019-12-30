@@ -111,10 +111,12 @@ class Order extends Model
      * 根据状态获取订单
      * @param $user_id
      * @param $status
+     * @param $page
+     * @param $limit
      * @return mixed
      */
-    public function getOrder($user_id,$status){
-        return $this->where(['order_status'=>$status,'user_id'=>$user_id])->orderBy('created_at','desc')->get();
+    public function getOrder($user_id,$status,$page,$limit){
+        return $this->where(['order_status'=>$status,'user_id'=>$user_id])->orderBy('created_at','desc')->offset(($page-1)*$limit)->limit($limit)->get();
     }
 
     /**
@@ -148,10 +150,12 @@ class Order extends Model
      * 代理用户获取订单
      * @param $agent_id
      * @param $status
+     * @param $page
+     * @param $limit
      * @return mixed
      */
-    public function getWhereByStatus($agent_id,$status){
-        return $this->where(['agent_id'=>$agent_id,'order_status'=>$status,'order_delivery'=>4])->get();
+    public function getWhereByStatus($agent_id,$status,$page,$limit){
+        return $this->where(['agent_id'=>$agent_id,'order_status'=>$status,'order_delivery'=>4])->offset(($page-1)*$limit)->limit($limit)->get();
     }
     /**
      * 删除订单

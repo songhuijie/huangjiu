@@ -329,17 +329,22 @@ class OrderController extends Controller{
         $all = $request->all();
         $fromErr = $this->validatorFrom([
             'status'=>'required|in:0,1,2,3,4',
+            'page'=>'int',
         ],[
             'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
+            'int'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
         ]);
         if($fromErr){//输出表单验证错误信息
             return $this->response($fromErr);
         }
 
+        $page = isset($all['page'])?$all['page']:Lib_config::PAGE;
+        $limit = Lib_config::LIMIT;
+
         $response_json = $this->initResponse();
         $access_entity = AccessEntity::getInstance();
         $user_id = $access_entity->user_id;
-        $orders = $this->order->getOrder($user_id,$all['status']);
+        $orders = $this->order->getOrder($user_id,$all['status'],$page,$limit);
         $response_json->status = Lib_const_status::SUCCESS;
         $response_json->data = $orders;
         return $this->response($response_json);
