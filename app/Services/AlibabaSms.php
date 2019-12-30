@@ -14,8 +14,8 @@ use App\Model\Config;
 
 class AlibabaSms{
 
-    const SING_NAME = '洋烈特产商城';
-    const TEMPLATE_CODE = 'SMS_181555580';
+    const SING_NAME = '巴人谷食品';
+    const TEMPLATE_CODE = 'SMS_181555580';//快递发送短信 模板
     /**
      * 获取sms Key
      * @return array
@@ -34,10 +34,9 @@ class AlibabaSms{
 
     /**
      * 初始化 阿里云
-     * @return \AlibabaCloud\Client\Clients\AccessKeyClient
      * @throws ClientException
      */
-    public function init(){
+    public static function init(){
         $keys = self::getSmsKey();
         AlibabaCloud::accessKeyClient($keys['sms_key'], $keys['sms_secret'])
             ->regionId('cn-hangzhou')
@@ -47,14 +46,20 @@ class AlibabaSms{
     /**
      * 单条发送短信
      * @param $phoneNumber
-     * @param $SignName
-     * @param $TemplateCode
-     * @param $TemplateParam  json格式
+     * @param null $SignName
+     * @param null $TemplateCode
+     * @return array|bool
      * @throws ClientException
      */
-    public function SendSms($phoneNumber,$SignName,$TemplateCode){
-        self::init();
+    public static function SendSms($phoneNumber,$SignName = null,$TemplateCode = null){
 
+        if($SignName == null){
+            $SignName = self::SING_NAME;
+        }
+        if($TemplateCode == null){
+            $TemplateCode = self::TEMPLATE_CODE;
+        }
+        self::init();
         try {
             $result = AlibabaCloud::rpc()
                 ->product('Dysmsapi')
@@ -66,18 +71,18 @@ class AlibabaSms{
                 ->options([
                     'query' => [
                         'RegionId' => "cn-hangzhou",
-                        'PhoneNumbers' =>$phoneNumber,
-                        'SignName' =>$SignName,
-                        'TemplateCode' =>$TemplateCode,
-//                        'TemplateParam' =>$TemplateCode,//验证码或者 特定字段时候传
+                        'PhoneNumbers' => "$phoneNumber",
+                        'SignName' => "$SignName",
+                        'TemplateCode' => "$TemplateCode",
                     ],
                 ])
                 ->request();
-            print_r($result->toArray());
+
+            return $result->toArray();
         } catch (ClientException $e) {
-            echo $e->getErrorMessage() . PHP_EOL;
+            return false;
         } catch (ServerException $e) {
-            echo $e->getErrorMessage() . PHP_EOL;
+            return false;
         }
     }
 

@@ -29,6 +29,8 @@ class CreateConfig extends Migration
             $table->text('aboutUs')->comment('关于我们');
             $table->string('express_key')->comment('快递鸟的Key');
             $table->string('EBusinessID')->comment('快递鸟的商户ID');
+            $table->string('sms_key')->comment('阿里云api_key');
+            $table->string('sms_secret')->comment('阿里云api_secret');
             $table->comment = '配置表';
         });
 

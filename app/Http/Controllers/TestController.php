@@ -17,6 +17,7 @@ use App\Model\Goods;
 use App\Model\IncomeDetails;
 use App\Model\Order;
 use App\Model\User;
+use App\Services\AlibabaSms;
 use App\Services\CourierBirdService;
 use App\Services\MapServices;
 
@@ -55,6 +56,9 @@ class TestController extends Controller{
 //        return $this->response($response_json);
 
 
+        $phone = "15108448660";
+        $result = AlibabaSms::SendSms($phone);
+        dd($result);
         $lng = '39.984154';
         $lat = '116.307490';
        $result = MapServices::get_address($lng,$lat);
