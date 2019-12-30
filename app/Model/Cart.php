@@ -79,6 +79,11 @@ class Cart extends Model
         return $this->where(['id'=>$data['cart_id'],'user_id'=>$user_id])->update(['cart_num'=>$data['cart_num']]);
     }
 
+    public function updateCart($user_id,$goods_id,$cart_num){
+
+    }
+
+
     public function img(){
         return $this->hasOne(Goods::class,'goods_id','sku_id');
     }

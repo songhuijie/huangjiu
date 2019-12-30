@@ -13,6 +13,7 @@ use App\Libraries\Lib_config;
 use App\Libraries\Lib_const_status;
 use App\Model\Address;
 use App\Model\Agent;
+use App\Model\Cart;
 use App\Model\Config;
 use App\Model\Goods;
 use App\Model\Order;
@@ -32,8 +33,9 @@ class OrderController extends Controller{
     private $agent;
     private $config;
     private $user;
+    private $cart;
 
-    public function __construct(Order $order,Goods $goods,Address $address,Agent $agent,Config $config,User $user)
+    public function __construct(Order $order,Goods $goods,Address $address,Agent $agent,Config $config,User $user,Cart $cart)
     {
         $this->order = $order;
         $this->goods = $goods;
@@ -41,6 +43,7 @@ class OrderController extends Controller{
         $this->agent = $agent;
         $this->config = $config;
         $this->user = $user;
+        $this->cart = $cart;
 
     }
 
@@ -57,6 +60,7 @@ class OrderController extends Controller{
             'address_id'=>'required',
             'order_delivery'=>'required',
             'is_arrive'=>'in:1',
+            'is_shopping'=>'required:in:0,1',
         ],[
             'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
             'in'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
@@ -124,6 +128,9 @@ class OrderController extends Controller{
             $order_id =  "T".date('YmdHis') ."R".str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT)."U".$user_id;//订单号
             foreach($goods as $k=>$v){
 
+                if($all['is_shopping'] == 1){
+                    $this->cart->getCart();
+                }
 
                 $pay_goods = $this->goods->getGoodsBySkuId($k);
                 if(!$goods){

@@ -389,38 +389,47 @@ class AgentController extends Controller
         $user_id = $access_entity->user_id;
         $response_json = $this->initResponse();
 
-        $friend = $this->friend->GetFriend($user_id);
 
-        if($friend){
+        $agent = $this->agent->getByUserID($user_id,1);
+        if($agent){
+            $order = $this->order->getWhereByStatus($agent->id,$all['status']);
+            $response_json->status = Lib_const_status::SUCCESS;
+            $response_json->data = $order;
+        }else{
+            $friend = $this->friend->GetFriend($user_id);
 
-            if($friend->is_delivery == 1 || $friend->status != 0){
-                $agent_user_id = ($friend->best_id == 0) ? ($friend->parent_parent_id==0)?$friend->parent_id:$friend->parent_parent_id:$friend->best_id;
+            if($friend){
 
-                $agent = $this->agent->getByUserID($agent_user_id,1);
+                if($friend->is_delivery == 1 || $friend->status != 0){
+                    $agent_user_id = ($friend->best_id == 0) ? ($friend->parent_parent_id==0)?$friend->parent_id:$friend->parent_parent_id:$friend->best_id;
+
+                    $agent = $this->agent->getByUserID($agent_user_id,1);
+                    if($agent){
+                        $order = $this->order->getWhereByStatus($agent->id,$all['status']);
+                        $response_json->status = Lib_const_status::SUCCESS;
+                        $response_json->data = $order;
+                    }else{
+                        $response_json->status = Lib_const_status::USER_NOT_AGENT;
+                        $response_json->data = $agent_user_id;
+                        $response_json->data->friend = $friend;
+                    }
+
+                }else{
+                    $response_json->status = Lib_const_status::USER_CAN_NOT_DELIVER;
+                }
+
+            }else{
+                $agent = $this->agent->getByUserID($user_id,1);
                 if($agent){
                     $order = $this->order->getWhereByStatus($agent->id,$all['status']);
                     $response_json->status = Lib_const_status::SUCCESS;
                     $response_json->data = $order;
                 }else{
                     $response_json->status = Lib_const_status::USER_NOT_AGENT;
-                    $response_json->data = $agent_user_id;
-                    $response_json->data->friend = $friend;
                 }
-
-            }else{
-                $response_json->status = Lib_const_status::USER_CAN_NOT_DELIVER;
-            }
-
-        }else{
-            $agent = $this->agent->getByUserID($user_id,1);
-            if($agent){
-                $order = $this->order->getWhereByStatus($agent->id,$all['status']);
-                $response_json->status = Lib_const_status::SUCCESS;
-                $response_json->data = $order;
-            }else{
-                $response_json->status = Lib_const_status::USER_NOT_AGENT;
             }
         }
+
         return $this->response($response_json);
     }
 
