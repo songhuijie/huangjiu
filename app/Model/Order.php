@@ -34,6 +34,7 @@ class Order extends Model
         ''
     ];
 
+    protected $appends = ['is_comment'];
     /**
      * 插入订单并返回ID、
      * @param $data
@@ -43,6 +44,16 @@ class Order extends Model
         return $this->insertGetId($data);
     }
 
+    public function getIsCommentAttribute($value)
+    {
+        $reply = new Reply();
+        $result = $reply->getReplyByOrderID($this->attributes['id'],$this->attributes['user_id']);
+        if($result){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
 
     public function getGoodsDetailAttribute($value)
     {

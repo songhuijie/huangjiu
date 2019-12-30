@@ -63,6 +63,15 @@ class Reply extends Model
     }
 
     /**
+     * 根据订单ID 和用户ID 获取商品
+     * @param $order_id
+     * @param $user_id
+     * @return mixed
+     */
+    public function getReplyByOrderID($order_id,$user_id){
+        return $this->where(['order_id'=>$order_id,'user_id'=>$user_id])->first();
+    }
+    /**
      * user 表建立关系
      */
     public function user(){
