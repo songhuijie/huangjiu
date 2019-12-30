@@ -284,7 +284,7 @@ class OrderController extends Controller{
                                 $user = $this->user->find($friend->parent_id);
                                 if($user->phone_number){
                                     Log::channel('error')->info('有手机号:'.$user->phone_number);
-                                    AlibabaSms::SendSms($agent->iphone);
+                                    AlibabaSms::SendSms($user->phone_number);
                                 }
                             }
                         }else{
@@ -295,7 +295,7 @@ class OrderController extends Controller{
                                 $user = $this->user->find($friend->parent_id);
                                 if($user->phone_number){
                                     Log::channel('error')->info('有手机号:'.$user->phone_number);
-                                    AlibabaSms::SendSms($agent->iphone);
+                                    AlibabaSms::SendSms($user->phone_number);
                                 }
                             }
                         }
