@@ -86,5 +86,12 @@ class AlibabaSms{
         }
     }
 
+    /**
+     * 批量发送短信
+     */
+    public function SendBatchSms($phone_json){
+
+    }
+
 
 }

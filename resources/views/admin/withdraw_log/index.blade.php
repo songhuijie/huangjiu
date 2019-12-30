@@ -59,10 +59,16 @@
                     
                     <div id="test1"></div>
 
-                    {{--<script type="text/html" id="barDemo">--}}
-                      {{--<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>--}}
+                    <script type="text/html" id="barDemo">
+
+                      @verbatim
+                      {{#  if(d.status == 0){ }}
+                      <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                        {{#  } }}
+
+                        @endverbatim
                       {{--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>--}}
-                    {{--</script>--}}
+                    </script>
 
                     <script type="text/html" id="staDemo">
                          @verbatim
@@ -175,7 +181,7 @@
                 }
               }
               // ,{ title: '分类', width:80,align:'center', toolbar: '#staDemo'}
-              // ,{fixed: 'right',title:'操作', width: 165, align:'center', toolbar: '#barDemo'}
+              ,{fixed: 'right',title:'操作', width: 165, align:'center', toolbar: '#barDemo'}
             ]]
           });
 

@@ -36,9 +36,8 @@
                      <div class="layui-form-item">
                          <label class="layui-form-label">编辑状态</label>
                          <div class="layui-input-block">
-                             <input type="radio" name="status" value="0" title="审核中" @if(!empty($label)){{$label->status == 0 ? "checked":''}} @endif>
-                             <input type="radio" name="status" value="1" title="审核通过" @if(!empty($label)){{$label->status == 1 ? "checked":''}} @endif>
-                             <input type="radio" name="status" value="2" title="审核未通过" @if(!empty($label)){{$label->status == 2 ? "checked":''}} @endif>
+                             <input type="radio" name="status" value="1" title="允许" @if(!empty($label)){{$label->status == 0 ? "checked":''}} @endif>
+                             <input type="radio" name="status" value="2" title="拒绝" @if(!empty($label)){{$label->status == 1 ? "checked":''}} @endif>
                          </div>
                      </div>
 
@@ -135,7 +134,7 @@
             data:date,
             type:"post",
             datatype:"json",
-            url:"{{url('agent/detail')}}",
+            url:"{{url('withdraw/detail')}}",
             success:function(res){
                 console.log(res);
                 if(res.code==0){

@@ -112,31 +112,55 @@ class RoyaltyService{
             switch ($status){
                 //处理 1级情况
                 case 0:
-
                     $pattern = self::PATTERN[self::PATTERN_FOUR];
                     $parent_contribute_amount_new = bcmul($order_royalty_price,$pattern[0],2);
                     $agent_amount_new = bcmul($order_royalty_price,$pattern[1],2);
+                    $same = False;
                     if($best_id != 0){
+                        if($best_id == $agent_user_id){
+                            $pattern = self::PATTERN[self::PATTERN_FIRST];
+                            $same = True;
+                            $parent_contribute_amount_new = bcmul($order_royalty_price,$pattern[0],2);
+                        }
+
                         $parent_contribute_amount=0;
                         $parent_parent_contribute_amount=0;
                         $best_contribute_amount=$parent_contribute_amount_new;
                         $update_user_id = $best_id;
                     }elseif($parent_parent_id != 0){
+
+                        if($parent_parent_id == $agent_user_id){
+                            $pattern = self::PATTERN[self::PATTERN_FIRST];
+                            $same = True;
+                            $parent_contribute_amount_new = bcmul($order_royalty_price,$pattern[0],2);
+                        }
                         $parent_contribute_amount=0;
                         $parent_parent_contribute_amount=$parent_contribute_amount_new;
                         $best_contribute_amount=0;
                         $update_user_id = $parent_parent_id;
                     }else{
+                        if($parent_id == $agent_user_id){
+                            $pattern = self::PATTERN[self::PATTERN_FIRST];
+                            $same = True;
+                            $parent_contribute_amount_new = bcmul($order_royalty_price,$pattern[0],2);
+                        }
                         $parent_contribute_amount=$parent_contribute_amount_new;
                         $parent_parent_contribute_amount=0;
                         $best_contribute_amount=0;
                         $update_user_id = $parent_id;
                     }
+                    if($same == True){
+                        $asset_data = [
+                            ['user_id'=>$update_user_id,'royalty_balance'=>$parent_contribute_amount_new,'proportion'=>$pattern[0]],
+                        ];
+                    }else{
+                        $asset_data = [
+                            ['user_id'=>$update_user_id,'royalty_balance'=>$parent_contribute_amount_new,'proportion'=>$pattern[0]],
+                            ['user_id'=>$agent_user_id,'royalty_balance'=>$agent_amount_new,'proportion'=>$pattern[1]],
+                        ];
+                    }
 
-                    $asset_data = [
-                        ['user_id'=>$update_user_id,'royalty_balance'=>$parent_contribute_amount_new,'proportion'=>$pattern[0]],
-                        ['user_id'=>$agent_user_id,'royalty_balance'=>$agent_amount_new,'proportion'=>$pattern[1]],
-                    ];
+
                     $friend->updateContribution($user_id,$parent_contribute_amount,$parent_parent_contribute_amount,$best_contribute_amount);
                     break;
                 //处理当时2级用户
