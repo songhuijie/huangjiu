@@ -24,9 +24,10 @@ class AssetService{
      * @param $amount
      * @param $symbol
      * @param $type
+     * @param $proportion
      * @return int|mixed
      */
-    public static function HandleBalance($user_id,$amount,$symbol,$type){
+    public static function HandleBalance($user_id,$amount,$symbol,$type,$proportion = 0){
 
         $asset = new Asset();
         $income = new IncomeDetails();
@@ -51,6 +52,7 @@ class AssetService{
                 'user_id'=>$user_id,
                 'income_type'=>$type,
                 'amount'=>$amount,
+                'proportion'=>$proportion,
                 'income_time'=>$income_time,
             ];
             $income_data[] = $data;

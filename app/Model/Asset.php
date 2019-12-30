@@ -41,6 +41,7 @@ class Asset extends Model
      * 更新财产
      * @param $user_id
      * @param $balance
+     * @param $proportion
      * @param $type
      * @return mixed
      */

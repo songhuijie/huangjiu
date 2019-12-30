@@ -20,6 +20,7 @@ class CreateIncomeDetails extends Migration
             $table->integer('income_type')->default(1)->comment('收入类型 1获取 2转账');
             $table->decimal('amount')->comment('收入金额');
             $table->decimal('surplus_amount')->comment('当前剩余金额');
+            $table->string('proportion')->comment('当前收益占比');
             $table->integer('income_time')->comment('交易时间');
             $table->comment = '收入明细';
         });

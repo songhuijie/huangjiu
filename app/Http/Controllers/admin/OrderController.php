@@ -89,14 +89,14 @@ class OrderController extends Controller{
             if($data['type']=='edit'){
 
                 if(!empty($data['update'])){
-                    dd($data);
-                    $reust =1;
+                    $id = $data['id'];
+                    unset($data['update'],$data['type'],$data['id']);
+                    $reust = $this->order->where(['id'=>$id])->update($data);
                     if($reust){
                         return array("code"=>1,"msg"=>"修改成功","status"=>1);
                     }else{
                         return array("code"=>0,"msg"=>"修改失败","status"=>1);
                     }
-
                 }
                 $order_info =$this->order->find($data['id']);
                 $express_type = Lib_config::EXPRESS_TYPE;

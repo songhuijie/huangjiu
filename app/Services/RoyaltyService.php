@@ -75,7 +75,7 @@ class RoyaltyService{
             $pattern = self::PATTERN[self::PATTERN_FIRST];
             $parent_contribute_amount = bcmul($order_royalty_price,$pattern[0],2);
             $asset_data = [
-                ['user_id'=>$agent_user_id,'royalty_balance'=>$parent_contribute_amount,'agent'=>1],
+                ['user_id'=>$agent_user_id,'royalty_balance'=>$parent_contribute_amount,'proportion'=>$pattern[0],'agent'=>1],
             ];
         }
 
@@ -134,8 +134,8 @@ class RoyaltyService{
                     }
 
                     $asset_data = [
-                        ['user_id'=>$update_user_id,'royalty_balance'=>$parent_contribute_amount_new],
-                        ['user_id'=>$agent_user_id,'royalty_balance'=>$agent_amount_new],
+                        ['user_id'=>$update_user_id,'royalty_balance'=>$parent_contribute_amount_new,'proportion'=>$pattern[0]],
+                        ['user_id'=>$agent_user_id,'royalty_balance'=>$agent_amount_new,'proportion'=>$pattern[1]],
                     ];
                     $friend->updateContribution($user_id,$parent_contribute_amount,$parent_parent_contribute_amount,$best_contribute_amount);
                     break;
@@ -154,8 +154,8 @@ class RoyaltyService{
 
 
                     $asset_data = [
-                        ['user_id'=>$update_user_id,'royalty_balance'=>$parent_contribute_amount_new],
-                        ['user_id'=>$update_two_user_id,'royalty_balance'=>$parent_parent_contribute_amount_new],
+                        ['user_id'=>$update_user_id,'royalty_balance'=>$parent_contribute_amount_new,'proportion'=>$pattern[0]],
+                        ['user_id'=>$update_two_user_id,'royalty_balance'=>$parent_parent_contribute_amount_new,'proportion'=>$pattern[1]],
                     ];
 
                     $friend->updateContribution($user_id,$parent_contribute_amount,$parent_parent_contribute_amount,$best_contribute_amount);
@@ -167,9 +167,9 @@ class RoyaltyService{
                     $best_contribute_amount = bcmul($order_royalty_price,$pattern[2],2);
 
                     $asset_data = [
-                        ['user_id'=>$parent_id,'royalty_balance'=>$parent_contribute_amount],
-                        ['user_id'=>$parent_parent_id,'royalty_balance'=>$parent_parent_contribute_amount],
-                        ['user_id'=>$agent_user_id,'royalty_balance'=>$best_contribute_amount],
+                        ['user_id'=>$parent_id,'royalty_balance'=>$parent_contribute_amount,'proportion'=>$pattern[0]],
+                        ['user_id'=>$parent_parent_id,'royalty_balance'=>$parent_parent_contribute_amount,'proportion'=>$pattern[1]],
+                        ['user_id'=>$agent_user_id,'royalty_balance'=>$best_contribute_amount,'proportion'=>$pattern[2]],
                     ];
                     $best_contribute_amount = 0;
                     $friend->updateContribution($user_id,$parent_contribute_amount,$parent_parent_contribute_amount,$best_contribute_amount);
@@ -222,7 +222,7 @@ class RoyaltyService{
                 }
 
                 $asset_data = [
-                    ['user_id'=>$update_user_id,'royalty_balance'=>$parent_contribute_amount_new],
+                    ['user_id'=>$update_user_id,'royalty_balance'=>$parent_contribute_amount_new,'proportion'=>$pattern[0]],
                 ];
                 $friend->updateContribution($user_id,$parent_contribute_amount,$parent_parent_contribute_amount,$best_contribute_amount);
                 break;
@@ -248,8 +248,8 @@ class RoyaltyService{
 
 
                 $asset_data = [
-                    ['user_id'=>$update_user_id,'royalty_balance'=>$parent_contribute_amount_new],
-                    ['user_id'=>$update_two_user_id,'royalty_balance'=>$parent_parent_contribute_amount_new],
+                    ['user_id'=>$update_user_id,'royalty_balance'=>$parent_contribute_amount_new,'proportion'=>$pattern[0]],
+                    ['user_id'=>$update_two_user_id,'royalty_balance'=>$parent_parent_contribute_amount_new,'proportion'=>$pattern[1]],
                 ];
 
                 $friend->updateContribution($user_id,$parent_contribute_amount,$parent_parent_contribute_amount,$best_contribute_amount);
@@ -267,9 +267,9 @@ class RoyaltyService{
                     $parent_parent_contribute_amount = 0;
                 }
                 $asset_data = [
-                    ['user_id'=>$parent_id,'royalty_balance'=>$parent_contribute_amount],
-                    ['user_id'=>$parent_parent_id,'royalty_balance'=>$parent_parent_contribute_amount],
-                    ['user_id'=>$best_id,'royalty_balance'=>$best_contribute_amount],
+                    ['user_id'=>$parent_id,'royalty_balance'=>$parent_contribute_amount,'proportion'=>$pattern[0]],
+                    ['user_id'=>$parent_parent_id,'royalty_balance'=>$parent_parent_contribute_amount,'proportion'=>$pattern[1]],
+                    ['user_id'=>$best_id,'royalty_balance'=>$best_contribute_amount,'proportion'=>$pattern[2]],
                 ];
                 $friend->updateContribution($user_id,$parent_contribute_amount,$parent_parent_contribute_amount,$best_contribute_amount);
                 break;
@@ -292,7 +292,7 @@ class RoyaltyService{
         $symbol = Lib_config::ADD;
         foreach($asset_data as $v) {
             $type = isset($v['agent'])?2:1;
-            AssetService::HandleBalance($v['user_id'],$v['royalty_balance'],$symbol,$type);
+            AssetService::HandleBalance($v['user_id'],$v['royalty_balance'],$symbol,$type,$v['proportion']);
         }
     }
 }
