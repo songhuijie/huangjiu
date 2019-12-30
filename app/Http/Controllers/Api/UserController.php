@@ -209,6 +209,7 @@ class UserController extends Controller
         $all = $request->all();
         $fromErr = $this->validatorFrom([
             'phone'=>'required|mobile',
+            'user_id'=>'required',
         ],[
             'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
         ]);
@@ -220,7 +221,10 @@ class UserController extends Controller
         $user_id = $access_entity->user_id;
         $response_json = $this->initResponse();
 
-        $this->user->where('id',$user_id)->update(['phone_number'=>$all['phone']]);
+        if($this->user->find($all['user_id'])){
+            $this->user->where('id',$all['id'])->update(['phone_number'=>$all['phone']]);
+        }
+
         $response_json->status = Lib_const_status::SUCCESS;
         return $this->response($response_json);
     }

@@ -264,6 +264,11 @@ class OrderController extends Controller{
                 $uid = $attach['user_id'];
                 $order = $arr['out_trade_no'];
 
+
+
+
+                $this->order->updateStatusByOrderNumber($order,Lib_config::ORDER_STATUS_ONE);
+
                 $order = $this->order->getOrderByOrderID($order);
                 if($order){
                     if($order->agent_id != 0){
@@ -273,7 +278,8 @@ class OrderController extends Controller{
                         $friend = $this->friend->GetFriend($order->user_id);
 
                         if($friend){
-                            Log::channel('error')->info('进入关系'.$friend->user_id);
+                            Log::channel('error')->info('进入关系'.$friend->parent_id);
+                            Log::channel('error')->info('进入关系'.$friend->is_delivery);
                             if($friend->is_delivery == 1){
                                 $user = $this->user->find($friend->parent_id);
                                 if($user->phone_number){
@@ -296,8 +302,6 @@ class OrderController extends Controller{
 
                     }
                 }
-
-                $this->order->updateStatusByOrderNumber($order,Lib_config::ORDER_STATUS_ONE);
                 Log::info('更新成功');
                 // @$this->userController->record($money,$uid,$order);
                 return 'SUCCESS';
