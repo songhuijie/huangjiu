@@ -70,6 +70,7 @@ class OrderController extends Controller{
         }
         $response_json = $this->initResponse();
 
+
         $goods = json_decode($all['goods'],true);
 
         if(!$goods){
@@ -128,19 +129,23 @@ class OrderController extends Controller{
             $order_id =  "T".date('YmdHis') ."R".str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT)."U".$user_id;//订单号
             foreach($goods as $k=>$v){
 
-                if($all['is_shopping'] == 1){
-                    $this->cart->updateCartByPay($user_id,$k,$v);
-                }
+
 
                 $pay_goods = $this->goods->getGoodsBySkuId($k);
                 if(!$goods){
                     $response_json->status = Lib_const_status::GOODS_NOT_EXISTENT;
                     return $this->response($response_json);
                 }
+
+
+
                 $int = GoodsService::UpdateStock($k,Lib_config::GOODS_DEL,$v);
                 if($int == 0){
                     $response_json->status = Lib_const_status::GOODS_NOT_ENOUGH_STOCK;
                     return $this->response($response_json);
+                }
+                if($all['is_shopping'] == 1){
+                    $this->cart->updateCartByPay($user_id,$k,$v);
                 }
 
                 $good_detail = [
