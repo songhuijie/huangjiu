@@ -470,7 +470,13 @@ class AgentController extends Controller
             $this->order->updateStatusByAgent($all['order_id'],$agent->id,$all['status']);
             if($all['status'] == 3){
                 $phone = $agent->iphone;
-                $friend = $this->friend->GetFriendInit($order->user_id);
+                $friends = $this->friend->GetFriend($friend->parent_id);
+                if($friends){
+                    $friend = $friends;
+                }else{
+                    $friend = $this->friend->GetFriendInit($order->user_id);
+                    $friend = $this->friend->GetFriendInit($friend->parent_id);
+                }
                 $delivery_phone = null;
                 if($friend){
                     if($friend->is_delivery == 1){
