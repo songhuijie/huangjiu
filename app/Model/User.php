@@ -50,6 +50,10 @@ class User extends Model
     }
 
 
+    public function getCreatedAtAttribute($value){
+
+        return date('Y-m-d H:i:s',$value);
+    }
     /**
      * 根据用户授权token  获取用户过期时间
      * @param $access_token
