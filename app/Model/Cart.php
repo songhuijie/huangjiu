@@ -79,6 +79,17 @@ class Cart extends Model
         return $this->where(['id'=>$data['cart_id'],'user_id'=>$user_id])->update(['cart_num'=>$data['cart_num']]);
     }
 
+    public function updateCartByPay($user_id,$goods_id,$num){
+        $cart_num = $this->where(['user_id'=>$user_id,'goods_id'=>$goods_id])->value('cart_num');
+        if($cart_num){
+            if($num >= $cart_num){
+                $this->where(['user_id'=>$user_id,'goods_id'=>$goods_id])->delete();
+            }else{
+                $this->where(['user_id'=>$user_id,'goods_id'=>$goods_id])->update(['cart_num'=>DB::raw("cart_num - $num")]);
+            }
+        }
+
+    }
     public function updateCart($user_id,$goods_id,$cart_num){
 
     }
