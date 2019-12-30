@@ -16,6 +16,7 @@ use App\Services\MapServices;
 use App\Services\RoyaltyService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 
 class AgentController extends Controller
 {
@@ -469,35 +470,36 @@ class AgentController extends Controller
 
             $this->order->updateStatusByAgent($all['order_id'],$agent->id,$all['status']);
             if($all['status'] == 3){
-                $phone = $agent->iphone;
-                $friends = $this->friend->GetFriend($friend->parent_id);
-                if($friends){
-                    $friend = $friends;
-                }else{
-                    $friend = $this->friend->GetFriendInit($order->user_id);
-                    $friend = $this->friend->GetFriend($friend->parent_id);
-                }
-                $delivery_phone = null;
-                if($friend){
-                    if($friend->is_delivery == 1){
-                        $user = $this->user->find($friend->parent_id);
-                        if($user->phone_number){
-                            $delivery_phone = $user->phone_number;
-                            $phone_json = "[\"$phone\",\"$delivery_phone\"]";
-                        }else{
-                            $phone_json = "[\"$phone\"]";
-                        }
-                    }else{
-                        $phone_json = "[\"$phone\"]";
-                    }
-                }else{
-                    $phone_json = "[\"$phone\"]";
-                }
-
-                AlibabaSms::SendSms($phone);
-                if($delivery_phone){
-                    AlibabaSms::SendSms($delivery_phone);
-                }
+//                $phone = $agent->iphone;
+//                $friends = $this->friend->GetFriend($friend->parent_id);
+//                if($friends){
+//                    $friend = $friends;
+//                }else{
+//                    $friend = $this->friend->GetFriendInit($order->user_id);
+//                    $friend = $this->friend->GetFriend($friend->parent_id);
+//                }
+//                $delivery_phone = null;
+//                if($friend){
+//
+//                    if($friend->is_delivery == 1){
+//                        $user = $this->user->find($friend->parent_id);
+//                        if($user->phone_number){
+//                            $delivery_phone = $user->phone_number;
+//                            $phone_json = "[\"$phone\",\"$delivery_phone\"]";
+//                        }else{
+//                            $phone_json = "[\"$phone\"]";
+//                        }
+//                    }else{
+//                        $phone_json = "[\"$phone\"]";
+//                    }
+//                }else{
+//                    $phone_json = "[\"$phone\"]";
+//                }
+//
+//                AlibabaSms::SendSms($phone);
+//                if($delivery_phone){
+//                    AlibabaSms::SendSms($delivery_phone);
+//                }
 
             }
             if($all['status'] == 4){

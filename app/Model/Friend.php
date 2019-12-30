@@ -107,6 +107,7 @@ class Friend extends Model
     }
 
 
+
     /**
      * 获取好友关系
      * @param $user_id

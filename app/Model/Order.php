@@ -118,6 +118,9 @@ class Order extends Model
         }
     }
 
+    public function getOrderByOrderID($order_number){
+        return $this->where(['order_number'=>$order_number])->first();
+    }
     /**
      * 根据状态获取订单
      * @param $user_id

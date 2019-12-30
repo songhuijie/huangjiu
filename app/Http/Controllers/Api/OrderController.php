@@ -15,6 +15,7 @@ use App\Model\Address;
 use App\Model\Agent;
 use App\Model\Cart;
 use App\Model\Config;
+use App\Model\Friend;
 use App\Model\Goods;
 use App\Model\Order;
 use App\Model\User;
@@ -34,8 +35,9 @@ class OrderController extends Controller{
     private $config;
     private $user;
     private $cart;
+    private $friend;
 
-    public function __construct(Order $order,Goods $goods,Address $address,Agent $agent,Config $config,User $user,Cart $cart)
+    public function __construct(Order $order,Goods $goods,Address $address,Agent $agent,Config $config,User $user,Cart $cart,Friend $friend)
     {
         $this->order = $order;
         $this->goods = $goods;
@@ -44,6 +46,7 @@ class OrderController extends Controller{
         $this->config = $config;
         $this->user = $user;
         $this->cart = $cart;
+        $this->friend = $friend;
 
     }
 
@@ -259,6 +262,39 @@ class OrderController extends Controller{
                 $money = $arr['total_fee']/100;
                 $uid = $attach['user_id'];
                 $order = $arr['out_trade_no'];
+
+                $order = $this->order->getOrderByOrderID($order);
+                if($order){
+                    if($order->agent_id != 0){
+                        $agent = $this->agent->getAgent($order->agent_id);
+                        AlibabaSms::SendSms($agent->iphone);
+
+                        $friend = $this->friend->GetFriend($order->user_id);
+
+                        if($friend){
+                            Log::info('进入关系');
+                            if($friend->is_delivery == 1){
+                                $user = $this->user->find($friend->parent_id);
+                                if($user->phone_number){
+                                    Log::info('有手机号:'.$user->phone_number);
+                                    AlibabaSms::SendSms($agent->iphone);
+                                }
+                            }
+                        }else{
+                            $friend = $this->friend->GetFriendInit($friend->user_id);
+                            $friend = $this->friend->GetFriend($friend->parent_id);
+
+                            if($friend->is_delivery == 1){
+                                $user = $this->user->find($friend->parent_id);
+                                if($user->phone_number){
+                                    Log::info('有手机号:'.$user->phone_number);
+                                    AlibabaSms::SendSms($agent->iphone);
+                                }
+                            }
+                        }
+
+                    }
+                }
 
                 $this->order->updateStatusByOrderNumber($order,Lib_config::ORDER_STATUS_ONE);
                 Log::info('更新成功');
