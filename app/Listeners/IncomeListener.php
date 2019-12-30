@@ -38,6 +38,7 @@ class IncomeListener
             $data[$k]['surplus_amount'] = $amount;
         }
 
+
         $income->insertIncome($data);
 
     }
