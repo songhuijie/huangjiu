@@ -39,10 +39,12 @@ class TestController extends Controller{
 //        $response_json->data = $agents;
 //        return $this->response($response_json);
 
-
         $phone = "15108448660";
-//        $result = AlibabaSms::SendSms($phone);
-        dd($phone);
+        $phone = "[\"15108448660\",\"18080952663\"]";
+
+        $result = AlibabaSms::SendBatchSms($phone);
+
+        dd($result);
         $lng = '39.984154';
         $lat = '116.307490';
        $result = MapServices::get_address($lng,$lat);

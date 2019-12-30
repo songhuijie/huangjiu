@@ -11,6 +11,7 @@ use AlibabaCloud\Client\AlibabaCloud;
 use AlibabaCloud\Client\Exception\ClientException;
 use AlibabaCloud\Client\Exception\ServerException;
 use App\Model\Config;
+use Illuminate\Support\Facades\Log;
 
 class AlibabaSms{
 
@@ -88,8 +89,57 @@ class AlibabaSms{
 
     /**
      * 批量发送短信
+     * @param $phone_json
+     * @param null $SignName
+     * @param null $TemplateCode
+     * @return array|bool
+     * @throws ClientException
      */
-    public function SendBatchSms($phone_json){
+    public static function SendBatchSms($phone_json,$SignName = null,$TemplateCode = null){
+        $SignName_json= "[";
+        if($SignName == null){
+            $data = json_decode($phone_json,true);
+            $count = count($data);
+            $SignName = self::SING_NAME;
+
+            for($i=1;$i<=$count;$i++){
+                if($i==$count){
+                    $SignName_json .= "\"$SignName\"";
+                }else{
+                    $SignName_json .= "\"$SignName\"".',';
+                }
+            }
+            $SignName_json .= "]";
+        }
+        if($TemplateCode == null){
+            $TemplateCode = self::TEMPLATE_CODE;
+        }
+        self::init();
+
+        try {
+            $result = AlibabaCloud::rpc()
+                ->product('Dysmsapi')
+                // ->scheme('https') // https | http
+                ->version('2017-05-25')
+                ->action('SendBatchSms')
+                ->method('POST')
+                ->host('dysmsapi.aliyuncs.com')
+                ->options([
+                    'query' => [
+                        'RegionId' => "cn-hangzhou",
+                        'PhoneNumberJson' => $phone_json,
+                        'SignNameJson' => $SignName_json,
+                        'TemplateCode' => $TemplateCode,
+                    ],
+                ])
+                ->request();
+            Log::info(json_encode($result->toArray()));
+            return $result->toArray();
+        } catch (ClientException $e) {
+            return false;
+        } catch (ServerException $e) {
+            return false;
+        }
 
     }
 

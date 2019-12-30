@@ -11,6 +11,7 @@ use App\Model\Friend;
 use App\Model\Order;
 use App\Model\User;
 use App\Services\AccessEntity;
+use App\Services\AlibabaSms;
 use App\Services\MapServices;
 use App\Services\RoyaltyService;
 use Illuminate\Http\Request;
@@ -467,6 +468,32 @@ class AgentController extends Controller
         if($agent){
 
             $this->order->updateStatusByAgent($all['order_id'],$agent->id,$all['status']);
+            if($all['status'] == 3){
+                $phone = $agent->iphone;
+                $friend = $this->friend->GetFriendInit($order->user_id);
+                $delivery_phone = null;
+                if($friend){
+                    if($friend->is_delivery == 1){
+                        $user = $this->user->find($friend->parent_id);
+                        if($user->phone_number){
+                            $delivery_phone = $user->phone_number;
+                            $phone_json = "[\"$phone\",\"$delivery_phone\"]";
+                        }else{
+                            $phone_json = "[\"$phone\"]";
+                        }
+                    }else{
+                        $phone_json = "[\"$phone\"]";
+                    }
+                }else{
+                    $phone_json = "[\"$phone\"]";
+                }
+
+                AlibabaSms::SendSms($phone);
+                if($delivery_phone){
+                    AlibabaSms::SendSms($delivery_phone);
+                }
+
+            }
             if($all['status'] == 4){
                 //处理商品提成
                 RoyaltyService::HandleRoyalty($order->user_id,$order->order_royalty_price,$order->is_arrive,$order->agent_id);
