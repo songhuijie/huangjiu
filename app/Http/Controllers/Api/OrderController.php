@@ -272,22 +272,22 @@ class OrderController extends Controller{
                         $friend = $this->friend->GetFriend($order->user_id);
 
                         if($friend){
-                            Log::info('进入关系');
+                            Log::channel('error')->info('进入关系');
                             if($friend->is_delivery == 1){
                                 $user = $this->user->find($friend->parent_id);
                                 if($user->phone_number){
-                                    Log::info('有手机号:'.$user->phone_number);
+                                    Log::channel('error')->info('有手机号:'.$user->phone_number);
                                     AlibabaSms::SendSms($agent->iphone);
                                 }
                             }
                         }else{
                             $friend = $this->friend->GetFriendInit($friend->user_id);
                             $friend = $this->friend->GetFriend($friend->parent_id);
-                            Log::info('进入关系2');
+                            Log::channel('error')->info('进入关系2');
                             if($friend->is_delivery == 1){
                                 $user = $this->user->find($friend->parent_id);
                                 if($user->phone_number){
-                                    Log::info('有手机号:'.$user->phone_number);
+                                    Log::channel('error')->info('有手机号:'.$user->phone_number);
                                     AlibabaSms::SendSms($agent->iphone);
                                 }
                             }
