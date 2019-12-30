@@ -222,7 +222,7 @@ class UserController extends Controller
         $response_json = $this->initResponse();
 
         if($this->user->find($all['user_id'])){
-            $this->user->where('id',$all['id'])->update(['phone_number'=>$all['phone']]);
+            $this->user->where('id',$all['user_id'])->update(['phone_number'=>$all['phone']]);
         }
 
         $response_json->status = Lib_const_status::SUCCESS;
