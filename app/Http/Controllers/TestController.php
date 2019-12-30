@@ -23,22 +23,6 @@ use App\Services\MapServices;
 
 class TestController extends Controller{
 
-    /**
-     * 数组去重
-     */
-    public static function array_unset_tt($arr,$key){
-        //建立一个目标数组
-        $res = array();
-        foreach ($arr as $value) {
-            //查看有没有重复项
-            if(isset($res[$value[$key]])){
-                unset($value[$key]);  //有：销毁
-            }else{
-                $res[$value[$key]] = $value;
-            }
-        }
-        return $res;
-    }
 
     public function test(){
 //
@@ -57,8 +41,8 @@ class TestController extends Controller{
 
 
         $phone = "15108448660";
-        $result = AlibabaSms::SendSms($phone);
-        dd($result);
+//        $result = AlibabaSms::SendSms($phone);
+        dd($phone);
         $lng = '39.984154';
         $lat = '116.307490';
        $result = MapServices::get_address($lng,$lat);
