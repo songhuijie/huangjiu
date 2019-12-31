@@ -184,7 +184,7 @@ class AgentController extends Controller
 
         if($status != 0){
             $lower = $this->friend->LowerLevel($user_id);
-            $lower = array_values(self::array_unset_tt($lower,'parent_id'));
+            $lower = array_values(self::array_unset_tt($lower,'user_id'));
             foreach($lower as $k=>$v){
                 if($v['user_id'] == 0){
                     unset($lower[$k]);
