@@ -64,7 +64,7 @@ class WithdrawLog extends Model
             $query = $query->where('user_id',$user_id);
         }
         $data['data'] = $query->orderBy('id', 'asc')->offset(($page-1)*$limit)->limit($limit)->get();
-        $data['count'] = $query->orderBy('id', 'asc')->offset(($page-1)*$limit)->limit($limit)->count();
+        $data['count'] = $query->orderBy('id', 'asc')->count();
         return $data;
     }
 }
