@@ -13,25 +13,32 @@ class IndexController extends Controller
 {
 
 	public function index(Request $request){
-		//权限
-		$data=DB::table('jurisdiction')->where('status',1)->get()->map(function ($value) {return (array)$value;})->toArray();
-		$user=DB::table("admin")->where("username","=",Session::get("username"))->select("username","headimg","role")->first();
 
-		//角色
-        $role=DB::table("role")->where("id",$user->role)->select('jurisdictionid')->first();
 
-		$jurisdiction=explode(',',$role->jurisdictionid);
 
-	    foreach ($data as $key => $value) {
-	      foreach ($jurisdiction as $k => $v) {
-	         if($data[$key]['id']==$v){
-	            $value['ceshi']=1;
-	            $list[$key]=$value;
-	        }else{
-	          $list[$key]=$value;
-	        }
-	      }
-	    }
+        try{
+            //权限
+            $data=DB::table('jurisdiction')->where('status',1)->get()->map(function ($value) {return (array)$value;})->toArray();
+            $user=DB::table("admin")->where("username","=",Session::get("username"))->select("username","headimg","role")->first();
+
+            //角色
+            $role=DB::table("role")->where("id",$user->role)->select('jurisdictionid')->first();
+            $jurisdiction=explode(',',$role->jurisdictionid);
+
+            foreach ($data as $key => $value) {
+                foreach ($jurisdiction as $k => $v) {
+                    if($data[$key]['id']==$v){
+                        $value['ceshi']=1;
+                        $list[$key]=$value;
+                    }else{
+                        $list[$key]=$value;
+                    }
+                }
+            }
+        }catch (\Exception $e){
+            return redirect('/');
+        }
+
         $admin_menu=$this->list_to_tree($list, $pk='id', $pid = 'pid', $child = 'items', $root = 0);
 
         return view("admin/index/index")->with(['user'=>$user,'admin_menu'=>$admin_menu]);
