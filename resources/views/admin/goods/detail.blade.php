@@ -106,7 +106,7 @@
                      @if(!empty($label))
                          @foreach($label->rotation as $key)
                              <input type="text" value="{{$key}}" hidden name="img[]">
-                             <img  src="../{{$key}}"  src=""  width="20%">
+                             <img  src="../{{$key}}"    width="20%" title="点击删除">
                          @endforeach
                      @else
                      <!-- <input type="text" value="" hidden name="img[]"> -->
@@ -185,6 +185,12 @@
         $('#dataTables-example').DataTable({
             responsive: true
         });
+
+    });
+    //单击图片删除图片 【注册全局函数】
+    $('#img2').on('click','img',function(){
+        $(this).prev().remove();
+        $(this).remove();
     });
 
     layui.use(['util','form','laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element', 'slider','layedit'], function(){
@@ -202,9 +208,12 @@
             uploadImage: {
                 url: '/layer/upload' //接口url
                 ,type: 'post' //默认post
+                ,multiple: true
             }
         });
         var editIndex = layedit.build('qaContent'); // 建立编辑器
+
+
         //执行实例 多图上传
         upload.render({
             elem: '#test2'
@@ -218,8 +227,7 @@
                 }else{
                     layer.msg("上传成功",{icon:6});
                     img="../"+index.data;
-
-                    $("#img2").append('<img src="'+img+'" name="img[]" width="20%"><input type="text" value="'+index.data+'" hidden name="img[]">')
+                    $('#img2').append('<input type="text" value="'+index.data+'" hidden name="img[]"> <img src="'+ img +'"  name="img[]" width="20%">')
 
                 }
             }

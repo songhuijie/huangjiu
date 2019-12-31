@@ -32,14 +32,13 @@ class WithdrawController extends Controller
             $data=$request->all();
 
             if($data['type']=="select"){
-                
+
                 $withdraw = $this->withdraw_log->getWhere($data);
                 return array('code'=>0,'msg'=>'获取到数据','limit'=>$withdraw['limit'],'page'=>$withdraw['page'],'count'=>$withdraw['count'],'data'=>$withdraw['data']);
             }
 
             if($data['type']='edit'){
                 unset($data['type']);
-
 //                $label=DB::table("withdraw_log")->where("id","=",$data['id'])->first();
 //
 //
@@ -50,7 +49,6 @@ class WithdrawController extends Controller
 //                }else{
 //                    return array("code"=>0,"msg"=>"修改失败,请重试");
 //                }
-
             }
 
         }
