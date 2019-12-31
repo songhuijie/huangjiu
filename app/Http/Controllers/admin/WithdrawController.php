@@ -104,11 +104,17 @@ class WithdrawController extends Controller
                             $partner_trade_no = 'Z'.date('YmdHis').rand();
                             //企业给用户转账
                             $result = transferAccounts($appid,$mchid,$openid,$desc,$partner_trade_no,$amount,$mch_secret,$key_pem,$cert_pem);
-                            Log::channel('error')->info(json_encode($result));
-                            dd($result);
+
+                            if($result['result_code']=='success'){
+                                $reust=DB::table("withdraw_log")->where("id","=",$id)->update($update_data);
+                                return array("code"=>1,"msg"=>"已成功提现","status"=>1);
+                            }else{
+                                return array("code"=>0,"msg"=>$result['err_code_des'],"status"=>1);
+                            }
                         }
 
                     }
+
                     $reust=DB::table("withdraw_log")->where("id","=",$id)->update($update_data);
                     if($reust){
                         return array("code"=>1,"msg"=>"修改成功","status"=>1);exit();
