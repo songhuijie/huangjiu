@@ -117,6 +117,7 @@ class RoyaltyService{
                     $agent_amount_new = bcmul($order_royalty_price,$pattern[1],2);
                     $same = False;
                     if($best_id != 0){
+
                         if($best_id == $agent_user_id){
                             $pattern = self::PATTERN[self::PATTERN_FIRST];
                             $same = True;

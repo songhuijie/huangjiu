@@ -273,13 +273,15 @@ class OrderController extends Controller{
                 if($order){
                     if($order->agent_id != 0){
                         $agent = $this->agent->getAgent($order->agent_id);
+                        Log::channel('error')->info('给总代理发送短信:'.$agent->iphone);
                         AlibabaSms::SendSms($agent->iphone);
 
 
                         $friend = $this->friend->LowerLevelOne($agent->user_id);
                         if($friend){
                                 $user = $this->user->find($friend->parent_id);
-                                if($user->phone_number){
+                                if($user && !empty($user->phone_number)){
+                                    Log::channel('error')->info('给配送员发送短信:'.$user->phone_number);
                                     AlibabaSms::SendSms($user->phone_number);
                                 }
                         }
