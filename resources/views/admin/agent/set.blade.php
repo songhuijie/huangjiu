@@ -122,7 +122,11 @@
         $('#dataTables-example').DataTable({
             responsive: true
         });
+
+
     });
+
+
      </script>
 
      <script>
@@ -144,7 +148,7 @@
         var insTb = table.render({
             elem: '#demo'
             ,height: 800
-            ,url: '{{URL("agent/index")}}?type=select' //数据接口
+            ,url: '{{URL("agent/set")}}?type=select' //数据接口
             ,title: '标签表'
             ,page: true //开启分页
             ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
@@ -195,7 +199,7 @@
                 layer.open({
                   title:"添加",
                   type: 2, 
-                  area: ['500px', '400px'],
+                  area: ['80%', '60%'],
                   content: '{{url("agent/detail")}}' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                 }); 
                 //layer.msg('添加');
@@ -209,9 +213,9 @@
                 
                   layer.open({
                       title:"编辑",
-                      type: 2, 
-                      area: ['500px', '400px'],
-                      content: '{{url("agent/detail")}}?type=edit&id='+data[0].id
+                      type: 2,
+                      area: ['80%', '60%'],
+                      content: '{{url("agent/info")}}?type=edit&id='+data[0].id
 
                     }); 
                 }
@@ -260,9 +264,9 @@
             } else if(layEvent === 'edit'){
                layer.open({
                   title:"编辑",
-                  type: 2, 
-                  area: ['500px', '400px'],
-                  content: '{{url("agent/detail")}}?type=edit&id='+obj.data.id //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                  type: 2,
+                   area: ['80%', '60%'],
+                  content: '{{url("agent/info")}}?type=edit&id='+obj.data.id //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                  
                 }); 
             }

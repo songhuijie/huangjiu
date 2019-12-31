@@ -65,7 +65,7 @@ class UserController extends Controller
         $secret = $config['secret'];
 
         if($param['code']){
-            if(in_array($param['code'],['123','1234','12345','123456','1234567'])){
+            if(in_array($param['code'],['123','1234','12345','123456','1234567','12345678','123456789'])){
                 $openid = [
                     'openid'=>$param['code'],
                     'access_token'=>'access_token'.$param['code'],

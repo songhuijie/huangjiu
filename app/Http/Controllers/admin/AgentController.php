@@ -4,7 +4,9 @@
 namespace App\Http\Controllers\admin;
 
 use App\Model\Agent;
+use App\Model\Friend;
 use App\Model\Reply;
+use App\Model\User;
 use Session;
 
 use App\Http\Controllers\Controller;
@@ -15,9 +17,13 @@ class AgentController extends Controller
 {
 
     private $agent;
-    public function __construct(Agent $agent)
+    private $friend;
+    private $user;
+    public function __construct(Agent $agent,Friend $friend,User $user)
     {
         $this->agent = $agent;
+        $this->friend = $friend;
+        $this->user = $user;
     }
 
     public function index(Request $request){
@@ -139,10 +145,30 @@ class AgentController extends Controller
         if(!empty($request->input('type'))){
             $data=$request->all();
             if($data['type']=="select"){
-                $size = 1;
-                $page = 10;
-                $count = 10;
-                $list = [];
+                $page=1;
+                $size=5;
+                if(!empty($data['page'])){
+                    $page=$data['page'];
+                    $size=$data['limit'];
+                }
+                $pages=($page-1)*$size;
+                $count=DB::table("agent")->count();
+                $list=DB::table("agent")->offset($pages)->limit($size)->get();
+                //搜索
+                if(!empty($data["keyword"])){
+                    $where=" where ";
+                    if(!empty($data["keyword"])){
+                        $keyword=$data["keyword"];
+                        $where.="and type_name like '%".$keyword."%'";
+                    }
+                    $where=preg_replace('/and/', '', $where, 1);
+                    $sql="SELECT count(*) as count FROM agent  ".$where;
+                    $count=DB::select($sql,array());
+                    $count=$count[0]->count;
+                    $where.=" limit ".$pages.",".$size;
+                    $sql1="SELECT *  FROM agent ".$where;
+                    $list=DB::select($sql1,array());
+                }
                 return array('code'=>0,'msg'=>'获取到数据','limit'=>$size,'page'=>$page,'count'=>$count,'data'=>$list);
             }
         }
@@ -157,29 +183,84 @@ class AgentController extends Controller
     public function info(Request $request){
         if(!empty($request->input('type'))){
             $data=$request->all();
-            if($data['type']=="select"){
+            if($data['type']=='edit'){
+                $agent = $this->agent->getAgent($data['id']);
 
-                if(!empty($data['update'])){
-                    //修改
-                    $update_data=[
-                        'status' =>$data['status'],
-                    ];
-                    $id=$data['id'];
-                    $reust=DB::table("agent")->where("id","=",$id)->update($update_data);
-                    if($reust){
-                        return array("code"=>1,"msg"=>"修改成功","status"=>1);exit();
+                $friend = $this->friend->LowerLevel($agent->user_id);
+
+                $first = [];
+                $second = [];
+                foreach($friend as $k=>$v){
+                    if($v['user_id'] == 0){
+                        unset($friend[$k]);
                     }else{
-                        return array("code"=>0,"msg"=>"修改失败","status"=>1);exit();
+                        if($v['parent_id'] == $agent->user_id){
+                            $v['info'] = $this->friend->GetFriendByBestOrParent($v['user_id']);
+                            $v['user_name'] = $this->user->where('id',$v['user_id'])->value('user_nickname');
+                            $first[] = $v;
+                        }else{
+                            $v['info'] = $this->friend->GetFriendByBestOrParent($v['user_id']);
+                            $v['user_name'] = $this->user->where('id',$v['user_id'])->value('user_nickname');
+                            $second[] = $v;
+                        }
                     }
+                }
+                return view("admin/agent/info",compact('first','second'));
+            }
+            if($data['type']=='add'){
 
+                unset($data['type']);
+                unset($data['file']);
+                $friend = $this->friend->GetFriend($data['user_id']);
+                if($friend){
+                    if($data['status'] == 0){
+                        $this->friend->updateAgentAdmin($data['user_id'],$data['status']);
+                    }else{
+
+                        if(isset($data['delivery']['delivery']) && $data['delivery']['delivery'] == 'on'){
+                            $delivery = 1;
+
+                            $this->friend->updateAgentAdmin($data['user_id'],$data['status'],$delivery);
+                        }else{
+                            $this->friend->updateAgentAdmin($data['user_id'],$data['status']);
+                        }
+                    }
                 }else{
-                    $label=DB::table("agent")->where("id","=",$data['id'])->first();
-                    return view("admin/agent/info",compact("label"));
+                    if($data['status'] != 0){
+                        $init_friend = $this->friend->GetFriendInit($data['user_id']);
+                        if($init_friend){
+                            $parent_id = $init_friend->parent_id;
+                            $parent_parent_id = $init_friend->parent_parent_id;
+                            if($init_friend->best_id != 0){
+                                $parent_parent_id = $init_friend->best_id;
+                            }
+                            $delivery = 0;
+                            if(isset($data['delivery']['delivery']) && $data['delivery']['delivery'] == 'on'){
+                                $delivery = 1;
+                            }
+                            $friend_data = [
+                                'user_id'=>0,
+                                'parent_id'=>$data['user_id'],
+                                'parent_parent_id'=>$parent_id,
+                                'best_id'=>$parent_parent_id,
+                                'status'=>$data['status'],
+                                'is_delivery'=>$delivery,
+                            ];
+
+                            $this->friend->insert($friend_data);
+                        }
+                    }
                 }
 
 
+
+                return array("code"=>1,"msg"=>"更新成功","status"=>1);exit();
+
             }
+
+
         }
-        return view("admin/agent/set");
+
+        return view("admin/agent/info");
     }
 }

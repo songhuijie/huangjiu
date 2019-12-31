@@ -31,37 +31,87 @@
 
 <body>
     <div id="wrapper" style="margin-top:20px;">
-      <div id="page-wrapper">
-         <form class="layui-form" >
-                     <div class="layui-form-item">
-                         <label class="layui-form-label">编辑状态</label>
-                         <div class="layui-input-block">
-                             <input type="radio" name="status" value="1" title="审核通过" @if(!empty($label)){{$label->status == 1 ? "checked":''}} @endif>
-                             <input type="radio" name="status" value="2" title="审核未通过" @if(!empty($label)){{$label->status == 2 ? "checked":''}} @endif>
-                         </div>
-                     </div>
+        <div id="page-wrapper">
+
+                @if(!$first && !$second)
+                    <label>暂无下级</label>
+                @else
+                    <p style="text-align: center">点击取消 取消掉配送人员和代理信息</p><br>
+                    @if($first)
+                        <label>设置一级代理</label>
+                        @foreach($first as $v)
+                            <div class="layui-form-item">
+
+                                <label class="layui-form-label">{{$v['user_name']}}</label>
+                                <div class="layui-input-block">
+                                    <div class="layui-input-block">
+                                        @if($v['info'])
+                                            <form class="layui-form" >
+                                                <input type="radio" name="status"  value="2" title="设置一级代理" {{$v['info']->status ==2 ?"checked":'' }}>
+                                                <input type="checkbox" name="delivery[delivery]"  title="设置配送人员" {{$v['info']->is_delivery ==1 ?"checked":'' }}>
+                                                <input type="radio" name="status" data-id="{{$v['user_id']}}" value="0" title="取消">
+                                                <input type="hidden" name="user_id" value="{{$v['user_id']}}">
+                                                <button class="layui-btn" lay-submit="" lay-filter="formDemo">立即提交</button>
+                                            </form>
+                                        @else
+                                            <form class="layui-form" >
+                                                <input type="radio" name="status" value="2" title="设置一级代理" >
+                                                <input type="checkbox" name="delivery[delivery]" title="设置配送人员">
+                                                <input type="radio" name="status" value="0" title="取消">
+                                                <input type="hidden" name="user_id" value="{{$v['user_id']}}">
+                                                <button class="layui-btn" lay-submit="" lay-filter="formDemo">立即提交</button>
+                                            </form>
+                                        @endif
+
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    @endif
+
+                    @if($second)
+                            <label>设置一至二级代理</label>
+                        @foreach($second as $v)
+                            <div class="layui-form-item">
+
+                                <label class="layui-form-label">{{$v['user_name']}}</label>
+                                <div class="layui-input-block">
+                                    @if($v['info'])
+                                        <form class="layui-form" >
+                                            <input type="hidden" name="user_id" value="{{$v['user_id']}}">
+                                            <input type="radio" name="status"  value="2" title="设置一级代理" {{$v['info']->status ==2 ?"checked":'' }}>
+                                            <input type="radio" name="status"  value="3" title="设置二级代理" {{$v['info']->status ==3 ?"checked":'' }}>
+                                            <input type="checkbox" name="delivery[delivery]"  title="设置配送人员" {{$v['info']->is_delivery ==1 ?"checked":'' }}>
+                                            <input type="radio" name="status" data-id="{{$v['user_id']}}" value="0" title="取消">
+                                            <button class="layui-btn" lay-submit="" lay-filter="formDemo">立即提交</button>
+                                        </form>
+                                    @else
+                                        <form class="layui-form" >
+                                            <input type="hidden" name="user_id" value="{{$v['user_id']}}">
+                                            <input type="radio" name="status" value="2" title="设置一级代理" >
+                                            <input type="radio" name="status" value="3" title="设置二级代理" >
+                                            <input type="checkbox" name="delivery[delivery]" title="设置配送人员">
+                                            <input type="radio" name="status" value="0" title="取消">
+                                            <button class="layui-btn" lay-submit="" lay-filter="formDemo">立即提交</button>
+                                        </form>
+                                    @endif
+
+                                </div>
+                            </div>
+                        @endforeach
+                    @endif
+                @endif
 
 
-                      {{--<div class="layui-form-item">--}}
-                        {{--<label class="layui-form-label">状态</label>--}}
-                        {{--<div class="layui-input-block">--}}
-                          {{--<input type="radio" name="status" value="0" title="否" @if(!empty($label)) @if($label->status==0) checked  @endif @else checked @endif>--}}
-                          {{--<input type="radio" name="status" value="1" title="是" @if(!empty($label)) @if($label->status==1) checked  @endif @endif>--}}
-                        {{--</div>--}}
-                      {{--</div>--}}
-                      
-                      @if(!empty($label))
-                        <input type="text" id="mold" hidden  value="edit" >
-                        <input type="text" id="id" hidden value="{{$label->id}}" >
-                      @endif
+
 
                       <div class="layui-form-item">
                         <div class="layui-input-block">
-                          <button class="layui-btn" lay-submit="" lay-filter="formDemo">立即提交</button>
-                          <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                          {{--<button class="layui-btn" lay-submit="" lay-filter="formDemo">立即提交</button>--}}
+                          {{--<button type="reset" class="layui-btn layui-btn-primary">重置</button>--}}
                         </div>
                       </div>
-                </form>
+
 
 
       </div>
@@ -82,9 +132,26 @@
     <!-- <script src="{{asset('assets/libs/layui/layui.js')}}"></script> -->
 
     <script>
+
+
     $(document).ready(function() {
         $('#dataTables-example').DataTable({
             responsive: true
+        });
+        /**
+         * 监控 jq checkbox 点击
+         */
+        $("input[name=status]").each(function(){
+            $(this).click(function(){
+                var discount = $(this).val();
+                console.log(discount);
+                if(discount=="0"){
+                    $(".discount").css("display","none");
+                }
+                if(discount=="1"){
+                    $(".discount").css("display","inline");
+                }
+            });
         });
     });
 

@@ -53,6 +53,26 @@ class Friend extends Model
     }
 
     /**
+     * 后台  ---  更新代理状态或者发货状态
+     * @param $user_id
+     * @param $status
+     * @param $delivery
+     * @return mixed
+     */
+    public function updateAgentAdmin($user_id,$status,$delivery = null){
+        if($status == 0){
+            return $this->where('parent_id',$user_id)->update(['status'=>0,'is_delivery'=>0]);
+        }else{
+
+            if($delivery == null){
+                return $this->where('parent_id',$user_id)->update(['status'=>$status]);
+            }else{
+                return $this->where('parent_id',$user_id)->update(['status'=>$status,'is_delivery'=>1]);
+            }
+        }
+    }
+
+    /**
      * 更新代理状态或者发货状态
      * @param $id
      * @param $type
