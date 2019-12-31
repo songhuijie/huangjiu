@@ -38,6 +38,9 @@ class Lib_const_status{
     const USER_NOT_BECOME = 10009;
     //代理不在配送时间
     const AGENT_NO_END = 10010;
+    //用户不是团队成员
+    const USER_IS_NOT_TEAM = 10020;
+
 
     //用户已申请过代理
     const USER_AGENT_ALREADY_APPLY = 10011;

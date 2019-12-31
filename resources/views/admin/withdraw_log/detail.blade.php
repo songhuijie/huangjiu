@@ -40,8 +40,6 @@
                              <input type="radio" name="status" value="2" title="拒绝" @if(!empty($label)){{$label->status == 1 ? "checked":''}} @endif>
                          </div>
                      </div>
-
-
                       {{--<div class="layui-form-item">--}}
                         {{--<label class="layui-form-label">状态</label>--}}
                         {{--<div class="layui-input-block">--}}

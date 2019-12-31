@@ -98,6 +98,28 @@ class Friend extends Model
     }
 
     /**
+     * 普通好友
+     * 创建好友关系
+     * @param $user_id
+     * @param $parent_id
+     * @param $parent_parent_id
+     * @param $best_id
+     * @param $status
+     * @return mixed
+     */
+    public function InsertFriend($user_id,$parent_id,$parent_parent_id,$best_id,$status){
+        if($best_id != 0){
+            $parent_parent_id = $best_id;
+        }
+        if($status == 1){
+            return $this->insert(['user_id'=>0,'parent_id'=>$user_id,'parent_parent_id'=>$parent_id,'best_id'=>$parent_parent_id,'status'=>0,'is_delivery'=>1]);
+        }else{
+            return $this->insert(['user_id'=>0,'parent_id'=>$user_id,'parent_parent_id'=>$parent_id,'best_id'=>$parent_parent_id,'status'=>$status,'is_delivery'=>0]);
+        }
+    }
+
+
+    /**
      * 获取好友关系
      * @param $user_id
      * @return mixed
@@ -105,6 +127,7 @@ class Friend extends Model
     public function GetFriend($user_id){
         return $this->where(['parent_id'=>$user_id])->first();
     }
+
 
 
 
@@ -133,7 +156,7 @@ class Friend extends Model
      * @return mixed
      */
     public function LowerLevel($user_id){
-        return $this->select($this->select)->where(['parent_parent_id'=>$user_id])->orWhere(['best_id'=>$user_id])->get()->toArray();
+        return $this->select($this->select)->where(['parent_id'=>$user_id])->orWhere(['parent_parent_id'=>$user_id])->orWhere(['best_id'=>$user_id])->get()->toArray();
     }
 
     /**
@@ -158,12 +181,13 @@ class Friend extends Model
     /**
      * 计算贡献
      * @param $user_id
+     * @param $own_user_id
      * @return string
      */
-    public function Contribution($user_id){
-        $amount_one = $this->where(['parent_id'=>$user_id])->sum('parent_contribute_amount');
-        $amount_two = $this->where(['parent_parent_id'=>$user_id])->sum('parent_parent_contribute_amount');
-        $amount_three = $this->where(['best_id'=>$user_id])->sum('best_contribute_amount');
+    public function Contribution($user_id,$own_user_id){
+        $amount_one = $this->where(['user_id'=>$user_id,'parent_id'=>$own_user_id])->sum('parent_contribute_amount');
+        $amount_two = $this->where(['user_id'=>$user_id,'parent_parent_id'=>$own_user_id])->sum('parent_parent_contribute_amount');
+        $amount_three = $this->where(['user_id'=>$user_id,'best_id'=>$own_user_id])->sum('best_contribute_amount');
 
         return bcadd($amount_three,bcadd($amount_one,$amount_two,2),2);
     }

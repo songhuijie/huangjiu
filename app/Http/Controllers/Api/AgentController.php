@@ -171,44 +171,49 @@ class AgentController extends Controller
 
         $response_json = $this->initResponse();
         $agent = $this->agent->getByUserID($user_id);
-        if(!$agent){
-            $response_json->status = Lib_const_status::USER_NOT_AGENT;
-            return $this->response($response_json);
-        }
-        if($agent->status != 1){
-            $response_json->status = Lib_const_status::USER_AGENT_AUDIT_IN_PROGRESS_OR_FAILED;
-            return $this->response($response_json);
+        if($agent && $agent->status == 1){
+            $status = 1;
+        }else{
+            $init_friend = $this->friend->GetFriend($user_id);
+            if($init_friend && $init_friend->status != 0){
+                $status = 2;
+            }else{
+                $status = 0;
+            }
         }
 
-        $lower = $this->friend->LowerLevel($user_id);
-        $lower = array_values(self::array_unset_tt($lower,'parent_id'));
-        foreach($lower as $k=>$v){
-            $lower[$k]['user_info'] = $this->user->select($select)->find($v['parent_id']);
-            $lower[$k]['created_at'] = $lower[$k]['user_info']->created_at;
-            $lower[$k]['count'] = $this->friend->LowerCount($v['parent_id']);
-            $current = $this->friend->CurrentLevel($v['parent_id']);
-            $agent = $this->agent->getByUserID($v['user_id'],1);
-            if($agent){
-                $lower[$k]['user_status'] = 1;
-            }else{
-                $lower[$k]['user_status'] = isset($current['status'])?$current['status']:0;
+        if($status != 0){
+            $lower = $this->friend->LowerLevel($user_id);
+            $lower = array_values(self::array_unset_tt($lower,'parent_id'));
+            foreach($lower as $k=>$v){
+                if($v['user_id'] == 0){
+                    unset($lower[$k]);
+                }else{
+                    $lower[$k]['user_info'] = $this->user->select($select)->find($v['user_id']);
+                    $lower[$k]['created_at'] = $lower[$k]['user_info']->created_at;
+                    $lower[$k]['count'] = $this->friend->LowerCount($v['user_id']);
+                    $current = $this->friend->CurrentLevel($v['user_id']);
+                    $agent = $this->agent->getByUserID($v['user_id'],1);
+                    if($agent){
+                        $lower[$k]['user_status'] = 1;
+                    }else{
+                        $lower[$k]['user_status'] = isset($current['status'])?$current['status']:0;
+                    }
+                    $lower[$k]['is_delivery'] = isset($current['is_delivery'])?$current['is_delivery']:0;
+
+                    $lower[$k]['contribution_amount'] = $this->friend->Contribution($v['user_id'],$user_id);
+                }
             }
 
-            $lower[$k]['is_delivery'] = isset($current['is_delivery'])?$current['is_delivery']:0;
-            $lower[$k]['contribution_amount'] = $this->friend->Contribution($v['parent_id']);
-            $lower[$k]['user_id'] = $v['parent_id'];
+            $response_json->status = Lib_const_status::SUCCESS;
+            $response_json->data = $lower;
+        }else{
+            $response_json->status = Lib_const_status::USER_NOT_BECOME;
+            $response_json->data = 1;
         }
-//        $lower_lower = $this->friend->LowerLowerLevel($user_id,3);
-//        foreach($lower_lower as $k=>$v){
-//            $lower_lower[$k]->user_info = $this->user->select($select)->find($v->user_id);
-//            $lower_lower[$k]->count = $this->friend->LowerCount($v->parent_id);
-//            $lower_lower[$k]->user_status = $v->status;
-//            $lower_lower[$k]->contribution_amount = $this->friend->Contribution($v->parent_id);
-//        }
 
-//        $new_array = array_merge($lower->toArray(),$lower_lower->toArray());
-        $response_json->status = Lib_const_status::SUCCESS;
-        $response_json->data = $lower;
+
+
         return $this->response($response_json);
     }
 
@@ -260,7 +265,20 @@ class AgentController extends Controller
                 }
 
             }else{
-                $response_json->status = Lib_const_status::USER_NOT_BECOME;
+                $friend = $this->friend->GetFriendInit($set_user_id);
+                if($friend){
+                    if($friend->parent_id == $user_id || $friend->parent_parent_id == $user_id || $friend->best_id == $user_id){
+                        $this->friend->InsertFriend($set_user_id, $friend->parent_id,$friend->parent_parent_id,$friend->best_id, $type);
+                        $response_json->status = Lib_const_status::SUCCESS;
+
+                    }else{
+                        $response_json->status = Lib_const_status::USER_IS_NOT_TEAM;
+                    }
+
+                }else{
+                    $response_json->status = Lib_const_status::USER_NOT_EXISTENT;
+
+                }
             }
         }else{
             $response_json->status = Lib_const_status::USER_NOT_AGENT;

@@ -23,57 +23,71 @@ use App\Services\MapServices;
 
 class TestController extends Controller{
 
+    private $friend;
+    private $user;
+    private $agent;
+    public function __construct(Friend $friend,User $user,Agent $agent)
+    {
+        $this->friend = $friend;
+        $this->user = $user;
+        $this->agent = $agent;
+    }
+
+
+    /**
+     * 数组去重
+     */
+    public static function array_unset_tt($arr,$key){
+        //建立一个目标数组
+        $res = array();
+        foreach ($arr as $value) {
+            //查看有没有重复项
+            if(isset($res[$value[$key]])){
+                unset($value[$key]);  //有：销毁
+            }else{
+                $res[$value[$key]] = $value;
+            }
+        }
+        return $res;
+    }
 
     public function test(){
-//
-//        $address ='北京';
-//        $key = '76JBZ-55A6W-3YURV-RO4FM-D7HRE-JDFW6';
-//        $Secret_key = 'LGS1AUdf7Q7qB9fTBVF7Ofv1DiebARAr';
-//        $result = MapServices::get_lng_lat_tx($address,$key,$Secret_key);
-//        dd($result);
-//        $agent = new Agent();
-//        $agents = $agent->getAgent(1);
-//        $agents->user_Img = $agents->userImg->user_img;
-//        unset($agents->userImg);
-//        $response_json = new \StdClass();
-//        $response_json->data = $agents;
-//        return $this->response($response_json);
 
-        $phone = "15108448660";
-        $phone = "[\"15108448660\",\"18080952663\"]";
+        $select = ['user_nickname','user_img','sex','created_at'];
+        $user_id = 2;
+        $lower = $this->friend->LowerLevel($user_id);
 
-        $result = AlibabaSms::SendBatchSms($phone);
+        $lower = array_values(self::array_unset_tt($lower,'parent_id'));
 
-        dd($result);
+        foreach($lower as $k=>$v){
+            if($v['user_id'] == 0){
+                unset($lower[$k]);
+            }else{
+                $lower[$k]['user_info'] = $this->user->select($select)->find($v['user_id']);
+                $lower[$k]['created_at'] = $lower[$k]['user_info']->created_at;
+                $lower[$k]['count'] = $this->friend->LowerCount($v['user_id']);
+                $current = $this->friend->CurrentLevel($v['user_id']);
+                $agent = $this->agent->getByUserID($v['user_id'],1);
+                if($agent){
+                    $lower[$k]['user_status'] = 1;
+                }else{
+                    $lower[$k]['user_status'] = isset($current['status'])?$current['status']:0;
+                }
+                $lower[$k]['is_delivery'] = isset($current['is_delivery'])?$current['is_delivery']:0;
+
+                $lower[$k]['contribution_amount'] = $this->friend->Contribution($v['user_id'],$user_id);
+            }
+
+        }
+
+
+        dd($lower);
         $lng = '39.984154';
         $lat = '116.307490';
        $result = MapServices::get_address($lng,$lat);
        dd($result);
 
-        $friend = new Friend();
-        $user = new User();
-        $agent = new Agent();
-        $user_id = 1;
-        $lower = $friend->LowerLevel($user_id);
 
-        $lower = self::array_unset_tt($lower,'parent_id');
-        $select = ['user_nickname','user_img','sex','created_at'];
-        foreach($lower as $k=>$v){
-            $lower[$k]['user_info'] = $user->select($select)->find($v['parent_id']);
-            $lower[$k]['count'] = $friend->LowerCount($v['parent_id']);
-            $current = $friend->CurrentLevel($v['user_id']);
-            $agent = '';
-            if($agent){
-                $lower[$k]['user_status'] = 1;
-            }else{
-                $lower[$k]['user_status'] = isset($current['status'])?$current['status']:0;
-            }
-            $lower[$k]['is_delivery'] = isset($current['is_delivery'])?$current['is_delivery']:0;
-            $lower[$k]['contribution_amount'] = $friend->Contribution($v['parent_id']);
-            $lower[$k]['user_id'] = $v['parent_id'];
-        }
-
-        dd($lower);
 
         $a = "1,概况,home,index/default,0,statistics,0,1
 2,会员,set,member/index,0,member,0,1
