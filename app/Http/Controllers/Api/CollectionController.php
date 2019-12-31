@@ -75,6 +75,7 @@ class CollectionController extends Controller{
         }
 
         if($good){
+
             $int = $this->collection->InsertCollect($all);
             if($int){
                 $response_json->status = Lib_const_status::SUCCESS;

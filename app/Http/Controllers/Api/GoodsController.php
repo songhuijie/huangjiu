@@ -93,8 +93,14 @@ class GoodsController extends Controller
 
         $detail = $this->good->find($all['goods_id']);
 
-        $access_entity = AccessEntity::getInstance();
-        $user_id = $access_entity->user_id;
+
+        $user_id = 0;
+        $access_token = $request->header('accessToken');
+        $user = new User();
+        $token_array = $user->getByAccessToken($access_token);
+        if($token_array && $token_array->expires_in > time()){
+            $user_id = $token_array->id;
+        }
         $collect = $this->collect->getCollect($user_id);
         $collects = array_column($collect,'goods_id');
         $detail->is_collect = in_array($detail->id,$collects)?1:0;
