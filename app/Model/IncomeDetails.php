@@ -54,7 +54,7 @@ class IncomeDetails extends Model
      * 获取收益明细  按时间排序返回
      */
     public function incomeList($user_id){
-        return $this->where('user_id',$user_id)->orderBy('income_time','desc')->get();
+        return $this->where('user_id',$user_id)->where('income_type','!=',3)->orderBy('income_time','desc')->get();
     }
 
 
