@@ -42,7 +42,7 @@ class AssetService{
 
         if($symbol == '-'){
 
-            if((int)bcmul($surplus_amount,100) > (int)bcmul($amount,100)){
+            if((int)bcmul($surplus_amount,100) >= (int)bcmul($amount,100)){
                 $int = $asset->updateRoyaltyBalance($user_id,$amount,self::REDUCE);
             }else{
                 $int = Lib_const_status::USER_BALANCE_NOT_ENOUGH;
