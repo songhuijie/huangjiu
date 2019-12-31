@@ -35,16 +35,7 @@ class AssetService{
         $income = new IncomeDetails();
         $withdraw = new WithdrawLog();
 
-        $withdraw_time = time();
-        $withdraw_data = [
-            'user_id'=>$user_id,
-            'withdraw_type'=>1,
-            'amount'=>$amount,
-            'surplus_amount'=>0,
-            'withdraw_time'=>$withdraw_time,
-            'status'=>0,
-        ];
-        $withdraw->insert($withdraw_data);
+
 
         $balance = $asset->getBalance($user_id);
         $surplus_amount = $balance;
@@ -61,16 +52,32 @@ class AssetService{
                $int = $asset->updateRoyaltyBalance($user_id,$amount,self::ADD);
         }
 
-        $income_time = time();
-        $data = [
-            'user_id'=>$user_id,
-            'income_type'=>$type,
-            'amount'=>$amount,
-            'proportion'=>$proportion,
-            'income_time'=>$income_time,
-        ];
-        $income_data[] = $data;
-        event(new IncomeEvent($income_data,$income));
+
+        if($int == 1){
+            $withdraw_time = time();
+            $withdraw_data = [
+                'user_id'=>$user_id,
+                'withdraw_type'=>1,
+                'amount'=>$amount,
+                'surplus_amount'=>0,
+                'withdraw_time'=>$withdraw_time,
+                'status'=>0,
+            ];
+            $withdraw->insert($withdraw_data);
+
+            $income_time = time();
+            $data = [
+                'user_id'=>$user_id,
+                'income_type'=>$type,
+                'amount'=>$amount,
+                'proportion'=>$proportion,
+                'income_time'=>$income_time,
+            ];
+            $income_data[] = $data;
+            event(new IncomeEvent($income_data,$income));
+        }
+
+
 
 
 

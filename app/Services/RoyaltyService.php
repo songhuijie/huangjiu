@@ -112,16 +112,28 @@ class RoyaltyService{
             switch ($status){
                 //处理 1级情况
                 case 0:
+                    Log::info('处理等于0情况');
                     $pattern = self::PATTERN[self::PATTERN_FOUR];
                     $parent_contribute_amount_new = bcmul($order_royalty_price,$pattern[0],2);
                     $agent_amount_new = bcmul($order_royalty_price,$pattern[1],2);
                     $same = False;
                     if($best_id != 0){
 
+
                         if($best_id == $agent_user_id){
-                            $pattern = self::PATTERN[self::PATTERN_FIRST];
-                            $same = True;
-                            $parent_contribute_amount_new = bcmul($order_royalty_price,$pattern[0],2);
+
+                            $own_f = new Friend();
+                            $own_friend = $own_f->GetFriend($parent_parent_id);
+                            if($own_friend && $own_friend->status == 2){
+
+                                $pattern = self::PATTERN[self::PATTERN_SECOND];
+
+                            }else{
+                                $pattern = self::PATTERN[self::PATTERN_FIRST];
+                                $same = True;
+                                $parent_contribute_amount_new = bcmul($order_royalty_price,$pattern[0],2);
+                            }
+
                         }
 
                         $parent_contribute_amount=0;
