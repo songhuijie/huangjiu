@@ -1055,6 +1055,7 @@ function transferAccounts($appid,$mchid,$openid,$desc,$partner_trade_no,$amount,
     $url = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
     $xml = arrayToXml($data);
     $rest = httpCurlPost($url,$xml,$key_pem,$cert_pem);
+    dump($rest);
     $result = xmlToArray($rest);
     return $result;
 }
