@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Libraries\Lib_config;
 use App\Model\Config;
+use App\Model\User;
 use App\Model\WithdrawLog;
 use Illuminate\Support\Facades\Log;
 use Session;
@@ -17,10 +18,12 @@ class WithdrawController extends Controller
 {
     private $withdraw_log;
     private $config;
-    public function __construct(WithdrawLog $withdraw_log,Config $config)
+    private $user;
+    public function __construct(WithdrawLog $withdraw_log,Config $config,User $user)
     {
         $this->withdraw_log = $withdraw_log;
         $this->config = $config;
+        $this->user = $user;
     }
 
     public function index(Request $request){
