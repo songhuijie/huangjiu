@@ -53,6 +53,12 @@ class TestController extends Controller{
 
     public function test(){
 
+        $lng = '104.027267';
+        $lat = '30.658911';
+        $address = '';
+        $agent_id = MapServices::distance($lng,$lat);
+
+        dd($agent_id);
         $select = ['user_nickname','user_img','sex','created_at'];
         $user_id = 2;
         $lower = $this->friend->LowerLevel($user_id);
