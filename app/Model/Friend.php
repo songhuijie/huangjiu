@@ -171,6 +171,15 @@ class Friend extends Model
     }
 
     /**
+     * 获取一个用户下级
+     * @param $user_id
+     * @return mixed
+     */
+    public function LowerLevelOne($user_id){
+        return $this->select($this->select)->where(['parent_id'=>$user_id,'is_delivery'=>1])->orWhere(['parent_parent_id'=>$user_id,'is_delivery'=>1])->orWhere(['best_id'=>$user_id,'is_delivery'=>1])->first();
+    }
+
+    /**
      * 获取当前用户状态
      * @param $user_id
      * @return mixed

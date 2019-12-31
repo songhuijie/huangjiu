@@ -275,30 +275,15 @@ class OrderController extends Controller{
                         $agent = $this->agent->getAgent($order->agent_id);
                         AlibabaSms::SendSms($agent->iphone);
 
-                        $friend = $this->friend->GetFriend($order->user_id);
 
+                        $friend = $this->friend->LowerLevelOne($agent->user_id);
                         if($friend){
-                            Log::channel('error')->info('进入关系'.$friend->parent_id);
-                            Log::channel('error')->info('进入关系'.$friend->is_delivery);
-                            if($friend->is_delivery == 1){
                                 $user = $this->user->find($friend->parent_id);
                                 if($user->phone_number){
-                                    Log::channel('error')->info('有手机号:'.$user->phone_number);
                                     AlibabaSms::SendSms($user->phone_number);
                                 }
-                            }
-                        }else{
-                            $friend = $this->friend->GetFriendInit($friend->user_id);
-                            $friend = $this->friend->GetFriend($friend->parent_id);
-                            Log::channel('error')->info('进入关系2'.$friend->user_id);
-                            if($friend->is_delivery == 1){
-                                $user = $this->user->find($friend->parent_id);
-                                if($user->phone_number){
-                                    Log::channel('error')->info('有手机号:'.$user->phone_number);
-                                    AlibabaSms::SendSms($user->phone_number);
-                                }
-                            }
                         }
+
 
                     }
                 }
