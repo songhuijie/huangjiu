@@ -117,16 +117,19 @@ class RoyaltyService{
                     $parent_contribute_amount_new = bcmul($order_royalty_price,$pattern[0],2);
                     $agent_amount_new = bcmul($order_royalty_price,$pattern[1],2);
                     $same = False;
+
+                    $own_f = new Friend();
+                    $own_friend = $own_f->GetFriend($parent_parent_id);
                     if($best_id != 0){
 
-
+                        $parent_parent_contribute_amount_new = 0;
                         if($best_id == $agent_user_id){
 
-                            $own_f = new Friend();
-                            $own_friend = $own_f->GetFriend($parent_parent_id);
                             if($own_friend && $own_friend->status == 2){
-
                                 $pattern = self::PATTERN[self::PATTERN_SECOND];
+                                $parent_parent_contribute_amount_new = bcmul($order_royalty_price,$pattern[0],2);
+                                $parent_contribute_amount_new = 0;
+                                $agent_amount_new = bcmul($order_royalty_price,$pattern[1],2);
 
                             }else{
                                 $pattern = self::PATTERN[self::PATTERN_FIRST];
@@ -136,8 +139,15 @@ class RoyaltyService{
 
                         }
 
+
+                        if($own_friend && $own_friend->status == 2){
+                            $pattern = self::PATTERN[self::PATTERN_SECOND];
+                            $parent_parent_contribute_amount_new = bcmul($order_royalty_price,$pattern[0],2);
+                            $parent_contribute_amount_new = 0;
+                            $agent_amount_new = bcmul($order_royalty_price,$pattern[1],2);
+                        }
                         $parent_contribute_amount=0;
-                        $parent_parent_contribute_amount=0;
+                        $parent_parent_contribute_amount= $parent_parent_contribute_amount_new;
                         $best_contribute_amount=$parent_contribute_amount_new;
                         $update_user_id = $best_id;
                     }elseif($parent_parent_id != 0){

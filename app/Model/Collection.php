@@ -54,8 +54,8 @@ class Collection extends Model
 
     /**
      * 添加 收藏商品
-     * @param $user_id
-     * @param $goods_id
+     * @param $data
+     * @return bool
      */
     public function InsertCollect($data){
         $id = $this->where(['user_id'=>$data['user_id'],'goods_id'=>$data['goods_id']])->value('id');

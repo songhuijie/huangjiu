@@ -12,17 +12,20 @@ use App\Libraries\Lib_const_status;
 use App\Model\Collection;
 use App\Model\Goods;
 use App\Services\AccessEntity;
+use \App\Model\User;
 use Illuminate\Http\Request;
 
 class CollectionController extends Controller{
 
     private $collection;
     private $goods;
+    private $user;
 
-    public function __construct(Collection $collection,Goods $goods)
+    public function __construct(Collection $collection,Goods $goods, User $user)
     {
         $this->collection = $collection;
         $this->goods = $goods;
+        $this->user = $user;
     }
 
 
@@ -62,6 +65,15 @@ class CollectionController extends Controller{
         }
         $good  = $this->goods->find($all['goods_id']);
         $response_json = $this->initResponse();
+
+
+        $access_token = $request->header('accessToken');
+        $user = new User();
+        $token_array = $user->getByAccessToken($access_token);
+        if($token_array && $token_array->expires_in > time()){
+            $all['user_id'] = $token_array->id;
+        }
+
         if($good){
             $access_entity = AccessEntity::getInstance();
             $all['user_id'] = $access_entity->user_id;
