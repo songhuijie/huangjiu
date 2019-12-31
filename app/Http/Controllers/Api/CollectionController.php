@@ -75,8 +75,6 @@ class CollectionController extends Controller{
         }
 
         if($good){
-            $access_entity = AccessEntity::getInstance();
-            $all['user_id'] = $access_entity->user_id;
             $int = $this->collection->InsertCollect($all);
             if($int){
                 $response_json->status = Lib_const_status::SUCCESS;

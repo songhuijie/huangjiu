@@ -127,10 +127,9 @@ class RoyaltyService{
 
                             if($own_friend && $own_friend->status == 2){
                                 $pattern = self::PATTERN[self::PATTERN_SECOND];
-                                $parent_parent_contribute_amount_new = bcmul($order_royalty_price,$pattern[0],2);
-                                $parent_contribute_amount_new = 0;
+                                $parent_contribute_amount_new = bcmul($order_royalty_price,$pattern[0],2);
                                 $agent_amount_new = bcmul($order_royalty_price,$pattern[1],2);
-
+                                $best_id = $parent_parent_id;
                             }else{
                                 $pattern = self::PATTERN[self::PATTERN_FIRST];
                                 $same = True;
@@ -141,10 +140,7 @@ class RoyaltyService{
 
 
                         if($own_friend && $own_friend->status == 2){
-                            $pattern = self::PATTERN[self::PATTERN_SECOND];
-                            $parent_parent_contribute_amount_new = bcmul($order_royalty_price,$pattern[0],2);
-                            $parent_contribute_amount_new = 0;
-                            $agent_amount_new = bcmul($order_royalty_price,$pattern[1],2);
+                            $best_id = $parent_parent_id;
                         }
                         $parent_contribute_amount=0;
                         $parent_parent_contribute_amount= $parent_parent_contribute_amount_new;
