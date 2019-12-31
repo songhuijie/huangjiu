@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Libraries\Lib_config;
 use Illuminate\Database\Eloquent\Model;
 
 class WithdrawLog extends Model
@@ -53,9 +54,11 @@ class WithdrawLog extends Model
      * @return mixed
      */
     public function getWhere($param){
-        $limit = empty($param['limit'])?10:$param['limit'];
-        $page = empty($param['page'])?1:$param['page'];
+        $limit = empty($param['limit'])?Lib_config::LIMIT:$param['limit'];
+        $page = empty($param['page'])?Lib_config::PAGE:$param['page'];
         $user_id = empty($param['user_id'])?null:$param['user_id'];
+        $data['page'] = $page;
+        $data['limit'] = $limit;
         if($page>0){
             $page = ($page-1)*$limit;
         }
@@ -63,8 +66,9 @@ class WithdrawLog extends Model
         if($user_id){
             $query = $query->where('user_id',$user_id);
         }
-        $data['data'] = $query->orderBy('id', 'asc')->offset(($page-1)*$limit)->limit($limit)->get();
+        $data['data'] = $query->orderBy('id', 'asc')->offset($page)->limit($limit)->get();
         $data['count'] = $query->orderBy('id', 'asc')->count();
+
         return $data;
     }
 }
