@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Libraries\Lib_config;
+use App\Model\Config;
 use App\Model\WithdrawLog;
 use Illuminate\Support\Facades\Log;
 use Session;
@@ -15,9 +16,11 @@ use Illuminate\Support\Facades\DB;
 class WithdrawController extends Controller
 {
     private $withdraw_log;
-    public function __construct(WithdrawLog $withdraw_log)
+    private $config;
+    public function __construct(WithdrawLog $withdraw_log,Config $config)
     {
         $this->withdraw_log = $withdraw_log;
+        $this->config = $config;
     }
 
     public function index(Request $request){
@@ -82,6 +85,9 @@ class WithdrawController extends Controller
                     $id=$data['id'];
                     if($data['status'] == 1){
 
+                        //
+                        $config = $this->config->getConfig();
+//                        transferAccounts();
 //                        $user_id = 1;
 //                        $user = $this->user->find($user_id);
 //                        $openid = $user->user_openid;

@@ -169,7 +169,7 @@ class Order extends Model
      * @return mixed
      */
     public function getWhereByStatus($agent_id,$status,$page,$limit){
-        return $this->where(['agent_id'=>$agent_id,'order_status'=>$status,'order_delivery'=>4])->offset(($page-1)*$limit)->limit($limit)->get();
+        return $this->where(['agent_id'=>$agent_id,'order_status'=>$status,'order_delivery'=>4])->orderBy('created_at','desc')->offset(($page-1)*$limit)->limit($limit)->get();
     }
     /**
      * 删除订单
