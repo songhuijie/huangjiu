@@ -89,8 +89,19 @@ class Friend extends Model
         if(!$own){
             $friend = $this->where(['parent_id'=>$parent_id])->first();
             if($friend){
-                return $this->insert(['user_id'=>$user_id,'parent_id'=>$parent_id,'parent_parent_id'=>$friend->parent_parent_id,'best_id'=>$friend->best_id,'status'=>$friend->status,'is_delivery'=>$friend->is_delivery]);
+                if($friend->user_id == 0){
+                    return $this->where(['id'=>$friend->id])->update(['user_id'=>$user_id]);
+                }else{
+                    return $this->insert(['user_id'=>$user_id,'parent_id'=>$parent_id,'parent_parent_id'=>$friend->parent_parent_id,'best_id'=>$friend->best_id,'status'=>$friend->status,'is_delivery'=>$friend->is_delivery]);
+                }
             }else{
+                $friend = $this->where(['user_id'=>$parent_id])->first();
+                if($friend){
+                    if($friend->best_id != 0){
+                        $friend->parent_parent_id  = $friend->best_id;
+                    }
+                    return $this->insert(['user_id'=>$user_id,'parent_id'=>$parent_id,'parent_parent_id'=>$friend->parent_id,'best_id'=>$friend->parent_parent_id,'status'=>0,'is_delivery'=>0]);
+                }
                 return $this->insert(['user_id'=>$user_id,'parent_id'=>$parent_id]);
             }
         }
