@@ -37,6 +37,12 @@ Route::any('agent/index','admin\AgentController@index');
 Route::any('agent/status','admin\AgentController@status');
 Route::any('agent/detail','admin\AgentController@detail');
 
+/**
+ * 设置代理
+ */
+Route::any('agent/set','admin\AgentController@set');
+Route::any('agent/info','admin\AgentController@info');
+
 //提现记录
 Route::any('withdraw/index','admin\WithdrawController@index');
 Route::any('withdraw/status','admin\WithdrawController@status');

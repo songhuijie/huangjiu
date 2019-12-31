@@ -3,6 +3,8 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Model\Agent;
+use App\Model\Reply;
 use Session;
 
 use App\Http\Controllers\Controller;
@@ -11,6 +13,13 @@ use Illuminate\Support\Facades\DB;
 
 class AgentController extends Controller
 {
+
+    private $agent;
+    public function __construct(Agent $agent)
+    {
+        $this->agent = $agent;
+    }
+
     public function index(Request $request){
 
         if(!empty($request->input('type'))){
@@ -119,5 +128,58 @@ class AgentController extends Controller
         }
 
         return view("admin/agent/detail");
+    }
+
+    /**
+     * 设置代理
+     * @param Request $request
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function set(Request $request){
+        if(!empty($request->input('type'))){
+            $data=$request->all();
+            if($data['type']=="select"){
+                $size = 1;
+                $page = 10;
+                $count = 10;
+                $list = [];
+                return array('code'=>0,'msg'=>'获取到数据','limit'=>$size,'page'=>$page,'count'=>$count,'data'=>$list);
+            }
+        }
+        return view("admin/agent/set");
+    }
+
+    /**
+     * 设置代理信息
+     * @param Request $request
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function info(Request $request){
+        if(!empty($request->input('type'))){
+            $data=$request->all();
+            if($data['type']=="select"){
+
+                if(!empty($data['update'])){
+                    //修改
+                    $update_data=[
+                        'status' =>$data['status'],
+                    ];
+                    $id=$data['id'];
+                    $reust=DB::table("agent")->where("id","=",$id)->update($update_data);
+                    if($reust){
+                        return array("code"=>1,"msg"=>"修改成功","status"=>1);exit();
+                    }else{
+                        return array("code"=>0,"msg"=>"修改失败","status"=>1);exit();
+                    }
+
+                }else{
+                    $label=DB::table("agent")->where("id","=",$data['id'])->first();
+                    return view("admin/agent/info",compact("label"));
+                }
+
+
+            }
+        }
+        return view("admin/agent/set");
     }
 }

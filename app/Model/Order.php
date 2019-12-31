@@ -130,7 +130,8 @@ class Order extends Model
      * @return mixed
      */
     public function getOrder($user_id,$status,$page,$limit){
-        return $this->where(['order_status'=>$status,'user_id'=>$user_id])->orderBy('created_at','desc')->offset(($page-1)*$limit)->limit($limit)->get();
+        return $this->where(['order_status'=>$status,'user_id'=>$user_id])->orderBy('created_at','desc')->limit($limit)->get();
+//        return $this->where(['order_status'=>$status,'user_id'=>$user_id])->orderBy('created_at','desc')->offset(($page-1)*$limit)->limit($limit)->get();
     }
 
     /**
@@ -154,7 +155,8 @@ class Order extends Model
         if($order_status != null){
             $query = $query->where('order_status',$order_status);
         }
-        $data['data'] = $query->orderBy('id', 'asc')->orderBy('created_at','desc')->offset($page)->limit($limit)->get();
+        $data['data'] = $query->orderBy('id', 'asc')->orderBy('created_at','desc')->get();
+//        $data['data'] = $query->orderBy('id', 'asc')->orderBy('created_at','desc')->offset($page)->limit($limit)->get();
         $data['count'] = $query->orderBy('id', 'asc')->count();
         return $data;
     }
@@ -169,7 +171,8 @@ class Order extends Model
      * @return mixed
      */
     public function getWhereByStatus($agent_id,$status,$page,$limit){
-        return $this->where(['agent_id'=>$agent_id,'order_status'=>$status,'order_delivery'=>4])->orderBy('created_at','desc')->offset(($page-1)*$limit)->limit($limit)->get();
+//        return $this->where(['agent_id'=>$agent_id,'order_status'=>$status,'order_delivery'=>4])->orderBy('created_at','desc')->offset(($page-1)*$limit)->limit($limit)->get();
+        return $this->where(['agent_id'=>$agent_id,'order_status'=>$status,'order_delivery'=>4])->orderBy('created_at','desc')->get();
     }
     /**
      * 删除订单
