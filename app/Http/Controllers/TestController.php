@@ -58,7 +58,7 @@ class TestController extends Controller{
         $number = [];
         if($friend){
             foreach($friend as $k=>$v){
-                dump($v->parent_id,$v->is_delivery);
+                dump($v);
                 if($v->is_delivery == 1){
                     dump('给他发送');
                     $user = $this->user->find($v->parent_id);
