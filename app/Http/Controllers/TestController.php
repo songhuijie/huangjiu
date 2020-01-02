@@ -62,9 +62,15 @@ class TestController extends Controller{
                     $user = $this->user->find($v->parent_id);
                     if($user && !empty($user->phone_number)){
                         $number[] = $user->phone_number;
+
                     }
                 }
             }
+            if($number){
+                $new_number = array_unique($number);
+                dd($new_number);
+            }
+            
         }
         dd($number);
 
