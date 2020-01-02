@@ -53,6 +53,16 @@ class TestController extends Controller{
 
     public function test(){
 
+        $friend = $this->friend->LowerLevelOne(61);
+        if($friend){
+            $user = $this->user->find($friend->parent_id);
+            dump($user);
+            if($user && !empty($user->phone_number)){
+                dump($user->phone_number);
+            }
+        }
+        dd($friend);
+
         $select = ['user_nickname','user_img','sex','created_at'];
         $user_id = 2;
         $lower = $this->friend->LowerLevel($user_id);
