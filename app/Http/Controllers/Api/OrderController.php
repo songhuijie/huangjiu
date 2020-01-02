@@ -279,16 +279,25 @@ class OrderController extends Controller{
 
                         $friend = $this->friend->LowerLevelOne($agent->user_id);
 
+                        $number = [];
                         if($friend){
                             foreach($friend as $k=>$v){
                                 if($v->is_delivery == 1){
                                     $user = $this->user->find($v->parent_id);
                                     if($user && !empty($user->phone_number)){
-                                        Log::channel('error')->info('给配送员发送短信:'.$user->phone_number);
-                                        AlibabaSms::SendSms($user->phone_number);
+                                        $number[] = $user->phone_number;
+
                                     }
                                 }
                             }
+                            if($number){
+                                $new_number = array_unique($number);
+                                foreach($new_number as $v){
+                                    Log::channel('error')->info('给配送员发送短信:'.$v);
+                                    AlibabaSms::SendSms($v);
+                                }
+                            }
+
                         }
                     }
                 }

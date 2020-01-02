@@ -68,9 +68,9 @@ class TestController extends Controller{
             }
             if($number){
                 $new_number = array_unique($number);
-                dd($new_number);
+                dd(1,$new_number);
             }
-            
+
         }
         dd($number);
 
