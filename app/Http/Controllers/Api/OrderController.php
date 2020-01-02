@@ -278,15 +278,18 @@ class OrderController extends Controller{
 
 
                         $friend = $this->friend->LowerLevelOne($agent->user_id);
+
                         if($friend){
-                                $user = $this->user->find($friend->parent_id);
-                                if($user && !empty($user->phone_number)){
-                                    Log::channel('error')->info('给配送员发送短信:'.$user->phone_number);
-                                    AlibabaSms::SendSms($user->phone_number);
+                            foreach($friend as $k=>$v){
+                                if($v->is_delivery == 1){
+                                    $user = $this->user->find($v->parent_id);
+                                    if($user && !empty($user->phone_number)){
+                                        Log::channel('error')->info('给配送员发送短信:'.$user->phone_number);
+                                        AlibabaSms::SendSms($user->phone_number);
+                                    }
                                 }
+                            }
                         }
-
-
                     }
                 }
                 Log::info('更新成功');

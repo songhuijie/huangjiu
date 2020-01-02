@@ -53,12 +53,17 @@ class TestController extends Controller{
 
     public function test(){
 
-        $friend = $this->friend->LowerLevelOne(61);
+        $friend = $this->friend->LowerLevelOne(2);
+
+        $number = [];
         if($friend){
-            $user = $this->user->find($friend->parent_id);
-            dump($user);
-            if($user && !empty($user->phone_number)){
-                dump($user->phone_number);
+            foreach($friend as $k=>$v){
+                if($v->is_delivery == 1){
+                    $user = $this->user->find($v->parent_id);
+                    if($user && !empty($user->phone_number)){
+
+                    }
+                }
             }
         }
         dd($friend);

@@ -196,7 +196,7 @@ class Friend extends Model
      * @return mixed
      */
     public function LowerLevelOne($user_id){
-        return $this->select($this->select)->where(['parent_id'=>$user_id,'is_delivery'=>1])->orWhere(['parent_parent_id'=>$user_id,'is_delivery'=>1])->orWhere(['best_id'=>$user_id,'is_delivery'=>1])->first();
+        return $this->select($this->select)->where(['parent_id'=>$user_id,'is_delivery'=>1])->orWhere(['parent_parent_id'=>$user_id,'is_delivery'=>1])->orWhere(['best_id'=>$user_id,'is_delivery'=>1])->get();
     }
 
     /**
