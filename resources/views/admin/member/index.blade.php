@@ -85,7 +85,7 @@
                     {{--</script>--}}
                     <script type="text/html" id="headimg">
                          @verbatim
-                           <img src="{{d.headimg}}">
+                           <img src="{{d.user_img}}">
                         @endverbatim
                     </script>
 
@@ -141,7 +141,7 @@
             ,page: true //开启分页
             ,toolbar: true //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
             ,totalRow: true //开启合计行
-            ,limit : 5 //这里设置的是每页显示多少条
+            ,limit : 10 //这里设置的是每页显示多少条
             ,cols: [[ //表头
               {type: 'checkbox', fixed: 'left'}
               ,{field: 'id', title: 'ID', width:80, sort: true }

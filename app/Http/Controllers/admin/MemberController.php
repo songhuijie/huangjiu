@@ -24,7 +24,7 @@ class MemberController extends Controller
 			$data=$request->all();
 			if($data['type']=="select"){
 				$page=1;
-				$size=5;
+				$size=10;
 				if(!empty($data['page'])){
 					$page=$data['page'];
 					$size=$data['limit'];
