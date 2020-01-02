@@ -293,7 +293,6 @@ class OrderController extends Controller{
                             if($number){
                                 $new_number = array_unique($number);
                                 foreach($new_number as $v){
-                                    Log::channel('error')->info(json_encode($new_number));
                                     Log::channel('error')->info('给配送员发送短信:'.$v);
                                     AlibabaSms::SendSms($v);
                                 }
