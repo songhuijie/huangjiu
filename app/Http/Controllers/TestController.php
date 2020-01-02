@@ -58,7 +58,9 @@ class TestController extends Controller{
         $number = [];
         if($friend){
             foreach($friend as $k=>$v){
+                dump($v->parent_id,$v->is_delivery);
                 if($v->is_delivery == 1){
+                    dump('给他发送');
                     $user = $this->user->find($v->parent_id);
                     if($user && !empty($user->phone_number)){
                         $number[] = $user->phone_number;
@@ -68,7 +70,7 @@ class TestController extends Controller{
             }
             if($number){
                 $new_number = array_unique($number);
-                dd(1,$new_number);
+                dd($number,1,$new_number);
             }
 
         }
