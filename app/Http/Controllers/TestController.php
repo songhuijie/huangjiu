@@ -53,7 +53,7 @@ class TestController extends Controller{
 
     public function test(){
 
-        $friend = $this->friend->LowerLevelOne(2);
+        $friend = $this->friend->LowerLevelOne(61);
 
         $number = [];
         if($friend){
@@ -61,12 +61,12 @@ class TestController extends Controller{
                 if($v->is_delivery == 1){
                     $user = $this->user->find($v->parent_id);
                     if($user && !empty($user->phone_number)){
-
+                        $number[] = $user->phone_number;
                     }
                 }
             }
         }
-        dd($friend);
+        dd($number);
 
         $select = ['user_nickname','user_img','sex','created_at'];
         $user_id = 2;
