@@ -106,8 +106,8 @@ class WePushService{
 //                'character_string7'=>array('value'=>urlencode('123'),'color'=>'#FF0000'),
 //                'phrase4' =>array('value'=>urlencode('待发货'),'color'=>'#FF0000')
 
-                'thing1'=>array('value'=>urlencode("黄酒"),'color'=>"#FF0000"),
-                'thing2'=>array('value'=>urlencode("黄酒"),'color'=>"#FF0000"),
+                'thing1'=>array('value'=>urlencode("huangjiu"),'color'=>"#FF0000"),
+                'thing2'=>array('value'=>urlencode("huangjiu"),'color'=>"#FF0000"),
 //                'character_string1'=>array('value'=>urlencode("订单编号"),'color'=>"#FF0000"),
 //                'thing2'=>array('value'=>urlencode('商品名称'),'color'=>'#FF0000'),  //keyword需要与配置的模板消息对应
 //                'time3'=>array('value'=>urlencode(date("申通")),'color'=>'#FF0000'),
