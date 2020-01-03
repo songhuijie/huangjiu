@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Redis;
 class WePushService{
 
 //    const TENPALATE_ID = '_qN8WDbPIumSlNoLAqkzuZTbgbLPXqjye8--09eoOOk';
-    const TENPALATE_ID = 'dYtAugpKNoXx-DqGihyK1jIXr45ds27SbLUKkxQF1lQ';
+    const TENPALATE_ID = 'U5yQ29gVqpeiWZFpuyI26O1CwfR1y4IJ-jrTR1-E-ZQ';
     const UEL = '/pages/index/index';
-    const OPENID = 'oBNBp5DQrdMfePdUcJ8G6OtNxesw';
+    const OPENID = 'oBNBp5FXv5u8uf62ymn5W7pOiCQg';
 
     public static function getAccessToken(){
         $config = new Config();
