@@ -16,7 +16,7 @@ class WePushService{
 //    const TENPALATE_ID = '_qN8WDbPIumSlNoLAqkzuZTbgbLPXqjye8--09eoOOk';
     const TENPALATE_ID = 'JMVOF2RNdXR6_rtxCthQ8TlOhYqYnap4sv1e_LvRUIo';
     const UEL = '/pages/index/index';
-    const OPENID = 'oBNBp5L5SrWjJh6yBfc7q8yfwypg';
+    const OPENID = 'oBNBp5FXv5u8uf62ymn5W7pOiCQg';
 
     public static function getAccessToken(){
         $config = new Config();
