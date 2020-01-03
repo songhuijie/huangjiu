@@ -7,21 +7,36 @@
  */
 namespace App\Services;
 
+use App\Model\Config;
+use Illuminate\Support\Facades\Redis;
+
 class WePushService{
 
     public $tenpalate_id = 'GOk3_dOesStpuIxF6_xTIKjkjQ8HY25GYr9ZukiDoi8';
     public $uel = '/pages/index/index';
     const TENPALATE_ID = 'GOk3_dOesStpuIxF6_xTIKjkjQ8HY25GYr9ZukiDoi8';
     const UEL = '/pages/index/index';
+
+    public static function getAccessToken(){
+        $config = new Config();
+        $config = $config->getConfig();
+        $config_array = [
+            'appid'=>$config->appid,
+            'secret'=>$config->secret,
+        ];
+        return $config_array;
+    }
     /**
      * 发送模板消息
      */
     public static function send_notice(){
+
+        $access_token_array = self::getAccessToken();
         //获取access_token
         if ($_COOKIE['access_token']){
             $access_token2=$_COOKIE['access_token'];
         }else{
-            $json_token=self::curl_post("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid='.$appid.'&secret='.$appsecret.'");
+            $json_token=self::curl_post("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid='.{$access_token_array['appid']}.'&secret='.{$access_token_array['secret']}.'");
             $access_token1=json_decode($json_token,true);
             $access_token2=$access_token1['access_token'];
             setcookie('access_token',$access_token2,7200);
