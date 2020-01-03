@@ -57,7 +57,16 @@ class TestController extends Controller{
 
     public function push(Request $request){
         $id = $request->get('id',1);
-        $data = WePushService::send_notice($id);
+        $openID = '';
+        $message_data = [
+            'character_string1'=>'123456',
+            'thing2'=>'黄酒',
+            'thing6'=>'顺丰',
+            'character_string7'=>'123456',
+            'phrase4'=>'已发送',
+        ];
+        
+        $data = WePushService::send_notice($id,$message_data,$openID);
         dd($data);
     }
 

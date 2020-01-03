@@ -37,9 +37,11 @@ class WePushService{
     /**
      * 发送模板消息
      * @param $type
+     * @param $openId
+     * @param $message_data
      * @return string
      */
-    public static function send_notice($type){
+    public static function send_notice($type,$message_data,$openId = null){
 
         $access_token_array = self::getAccessToken();
         //获取access_token
@@ -60,20 +62,19 @@ class WePushService{
             Redis::setex('access_token',7200,$access_token2);
         }
 
-        $json_template = self::json_tempalte($type);
+        if($openId == null){
+            $openId = self::OPENID;
+        }
+        $json_template = self::json_tempalte($type,$message_data,$openId);
         //模板消息
 
         $url="https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=".$access_token2;
         $res=self::curl_post($url,urldecode($json_template));
 
-//     $url="https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?access_token=".$access_token2;
+//     $url="https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?access_token=".$access_token2;//查询模板
 //     $res = self::curl_get($url);
 
-
         Log::channel('wechat')->info('模板推送返回结果');
-        Log::channel('wechat')->info($res);
-
-
         $res = json_decode($res,true);
         dump($res);
         if ($res['errcode']==0){
@@ -110,17 +111,52 @@ class WePushService{
 
         switch ($type){
             case 1:
+                /*
+                 *
+                 * 例如
+                 * 订单编号 2019110100001
+                 * 商品名称 轻柔桃红葡萄酒/瓶
+                 * 物流公司 顺丰快递
+                 * 物流单号 2937282920
+                 * 发货状态 已发货
+                 */
+
                 $data =[
-                    'character_string1'=>['value'=>$message_data['character_string1']],//订单编号
-                    'thing2'=>$message_data['thing2'],//商品名称
-                    'thing6'=>$message_data['thing6'],//物流公司
-                    'character_string7'=>$message_data['character_string7'],//物流单号
-                    'phrase4'=>$message_data['phrase4'],//发货状态
+                    'character_string1'=>['value'=>$message_data['character_string1'],'color'=>"#FF0000"],//订单编号
+                    'thing2'=>['value'=>$message_data['thing2'],'color'=>"#FF0000"],//商品名称
+                    'thing6'=>['value'=>$message_data['thing6'],'color'=>"#FF0000"],//物流公司
+                    'character_string7'=>['value'=>$message_data['character_string7'],'color'=>"#FF0000"],//物流单号
+                    'phrase4'=>['value'=>$message_data['phrase4'],'color'=>"#FF0000"],//发货状态
                 ];
                 break;
             case 2:
+                /*
+                 * 例如
+                 * 订单编号 wx20191225123412129
+                 * 商品名称 葡萄酒 * 1箱
+                 * 签收时间 2019-12-25 12:25
+                 * 签收人 张三
+                 */
+
+                $data = [
+                    'character_string1'=>['value'=>$message_data['character_string1'],'color'=>"#FF0000"],//订单编号
+                    'thing2'=>['value'=>$message_data['thing2'],'color'=>"#FF0000"],//商品名称
+                    'time3'=>['value'=>$message_data['time3'],'color'=>"#FF0000"],//签收时间
+                    'name4'=>['value'=>$message_data['name4'],'color'=>"#FF0000"],//签收人
+                ];
                 break;
             case 3:
+                /*
+                 * 例如
+                 * 会员名称 张三
+                 * 会员状态 升级成功
+                 * 会员级别 VIP
+                 */
+                $data = [
+                    'name1'=>['value'=>$message_data['name1'],'color'=>"#FF0000"],//会员名称
+                    'phrase2'=>['value'=>$message_data['phrase2'],'color'=>"#FF0000"],//会员状态
+                    'thing3'=>['value'=>$message_data['thing3'],'color'=>"#FF0000"],//会员级别
+                ];
                 break;
             case 4:
                 break;
@@ -134,20 +170,6 @@ class WePushService{
             'url'=>$url, //点击模板消息会跳转的链接
             'topcolor'=>"#7B68EE",
             'data'=>$data,
-            'data'=>array(
-
-//                'character_string1'=>array('value'=>urlencode("123456"),'color'=>"#FF0000"),
-//                'thing2'=>array('value'=>urlencode('黄酒'),'color'=>'#FF0000'),  //keyword需要与配置的模板消息对应
-//                'thing6'=>array('value'=>urlencode(date("申通")),'color'=>'#FF0000'),
-//                'character_string7'=>array('value'=>urlencode('123'),'color'=>'#FF0000'),
-//                'phrase4' =>array('value'=>urlencode('待发货'),'color'=>'#FF0000')
-
-                'thing1'=>array('value'=>urlencode("huangjiu"),'color'=>"#FF0000"),
-                'thing2'=>array('value'=>urlencode("huangjiu"),'color'=>"#FF0000"),
-
-            )
-
-
         );
 
         $json_template=json_encode($template);
