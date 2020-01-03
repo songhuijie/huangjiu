@@ -13,10 +13,16 @@ use Illuminate\Support\Facades\Redis;
 
 class WePushService{
 
-//    const TENPALATE_ID = '_qN8WDbPIumSlNoLAqkzuZTbgbLPXqjye8--09eoOOk';
     const TENPALATE_ID = 'JMVOF2RNdXR6_rtxCthQ8TlOhYqYnap4sv1e_LvRUIo';
     const UEL = '/pages/index/index';
     const OPENID = 'oBNBp5LEwAZiU4IcCXlMbF4MLeS8';
+
+    const TENPALATE_TYPE = [
+        1=>'_qN8WDbPIumSlNoLAqkzuZTbgbLPXqjye8--09eoOOk',//订单发货提醒
+//        2=>'U5yQ29gVqpeiWZFpuyI26O1CwfR1y4IJ-jrTR1-E-ZQ',//好友下单成功通知
+        2=>'dYtAugpKNoXx-DqGihyK1jIXr45ds27SbLUKkxQF1lQ',//订单派送成功通知
+        3=>'5UOEEFf0Flbc9fpdEGH0tIQVP8pVRqcEBf41gCRBnMY',//代理提醒
+    ];
 
     public static function getAccessToken(){
         $config = new Config();
@@ -53,26 +59,16 @@ class WePushService{
             $access_token2=$access_token1['access_token'];
             Redis::setex('access_token',7200,$access_token2);
         }
+
+        $json_template = self::json_tempalte($type);
         //模板消息
-        switch ($type){
-            case 1:
-                $json_template = self::json_tempalte();
-                $url="https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=".$access_token2;
-                $res=self::curl_post($url,urldecode($json_template));
-                break;
-            case 2:
-                $url="https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?access_token=".$access_token2;
-                $res = self::curl_get($url);
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-            default:
-                break;
-        }
+
+        $url="https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=".$access_token2;
+        $res=self::curl_post($url,urldecode($json_template));
+
+//     $url="https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?access_token=".$access_token2;
+//     $res = self::curl_get($url);
+
 
         Log::channel('wechat')->info('模板推送返回结果');
         Log::channel('wechat')->info($res);
@@ -103,18 +99,41 @@ class WePushService{
 
     /**
      * 将模板消息json格式化
+     * @param $type
+     * @return string
      */
-    public static function json_tempalte(){
+    public static function json_tempalte($type,$open_id,$message_data){
         //模板消息
-        $toUser = self::OPENID;
-        $template_id = self::TENPALATE_ID;
+        $toUser = $open_id;
+        $template_id = isset(self::TENPALATE_TYPE[$type])?self::TENPALATE_TYPE[$type]:self::TENPALATE_TYPE[1];
         $url = self::UEL;
+
+        switch ($type){
+            case 1:
+                $data =[
+                    'character_string1'=>['value'=>$message_data['character_string1']],//订单编号
+                    'thing2'=>$message_data['thing2'],//商品名称
+                    'thing6'=>$message_data['thing6'],//物流公司
+                    'character_string7'=>$message_data['character_string7'],//物流单号
+                    'phrase4'=>$message_data['phrase4'],//发货状态
+                ];
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            default:
+                break;
+        }
 
         $template=array(
             'touser'=>$toUser,  //用户openid
             'template_id'=>$template_id, //在公众号下配置的模板id
             'url'=>$url, //点击模板消息会跳转的链接
             'topcolor'=>"#7B68EE",
+            'data'=>$data,
             'data'=>array(
 
 //                'character_string1'=>array('value'=>urlencode("123456"),'color'=>"#FF0000"),
@@ -125,16 +144,8 @@ class WePushService{
 
                 'thing1'=>array('value'=>urlencode("huangjiu"),'color'=>"#FF0000"),
                 'thing2'=>array('value'=>urlencode("huangjiu"),'color'=>"#FF0000"),
-//                'character_string1'=>array('value'=>urlencode("订单编号"),'color'=>"#FF0000"),
-//                'thing2'=>array('value'=>urlencode('商品名称'),'color'=>'#FF0000'),  //keyword需要与配置的模板消息对应
-//                'time3'=>array('value'=>urlencode(date("申通")),'color'=>'#FF0000'),
-//                'name4'=>array('value'=>urlencode('签收人'),'color'=>'#FF0000'),
+
             )
-
-//                'keyword1' =>array('value'=>urlencode('待发货'),'color'=>'#FF0000'),
-//                'keyword2' =>array('value'=>urlencode('待发货'),'color'=>'#FF0000'),
-//                'keyword3' =>array('value'=>urlencode('待发货'),'color'=>'#FF0000')),
-
 
 
         );
