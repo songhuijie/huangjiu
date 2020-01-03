@@ -200,6 +200,7 @@ class OrderController extends Controller{
             ];
             $order_ids[] = $this->order->insertOrder($order_data);
 
+
             $response_json->status = Lib_const_status::SUCCESS;
             $response_json->data = $order_ids;
             return $this->response($response_json);
