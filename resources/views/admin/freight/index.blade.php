@@ -157,7 +157,8 @@
 
                 ,{field: 'id', title: 'ID',  sort: true }
                 ,{field:'regions',title: '多地区',align:'center'}
-                ,{field:'price',title: '运费价格',align:'center'}
+                ,{field:'price',title: '初始重量运费',align:'center'}
+                ,{field:'over_price',title: '超过重量运费',align:'center'}
                 ,{field:'sort',title: '排序', align:'center'}
 
                 ,{fixed: 'right',title:'操作',  align:'center', toolbar: '#barDemo'}

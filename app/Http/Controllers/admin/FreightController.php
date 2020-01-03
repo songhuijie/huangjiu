@@ -91,6 +91,7 @@ class FreightController extends Controller
 
                     $update_data= [
                         'price'=>$data['price'],
+                        'over_price'=>$data['over_price'],
                         'sort'=>$data['sort'],
                         'regions'=>json_encode(array_keys($data['city'])),
                     ];
@@ -114,6 +115,7 @@ class FreightController extends Controller
 
                 $insert_data= [
                     'price'=>$data['price'],
+                    'over_price'=>$data['over_price'],
                     'sort'=>$data['sort'],
                     'regions'=>json_encode(array_keys($data['city'])),
                 ];

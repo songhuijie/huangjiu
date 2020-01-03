@@ -66,6 +66,7 @@ class OrderController extends Controller{
             'is_arrive'=>'in:1',
             'is_shopping'=>'required:in:0,1',
             'freight'=>'required',
+            'over_price'=>'required',
         ],[
             'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
             'in'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
@@ -131,6 +132,7 @@ class OrderController extends Controller{
             $goods_detail = [];
             $total_royalty_price =0;
             $order_total_price =0;
+            $order_total_weight =0;
             $order_id =  "T".date('YmdHis') ."R".str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT)."U".$user_id;//订单号
             foreach($goods as $k=>$v){
 
@@ -153,12 +155,14 @@ class OrderController extends Controller{
                     $this->cart->updateCartByPay($user_id,$k,$v);
                 }
 
+                bcmul($pay_goods->weight,$v);
                 $good_detail = [
                     'goods_id'=>$pay_goods->id,
                     'good_title'=>$pay_goods->good_title,
                     'good_dsc'=>$pay_goods->good_dsc,
                     'good_type'=>$pay_goods->good_type,
                     'goods_num'=>$v,
+                    'goods_weight'=>$pay_goods->weight,
                     'royalty_price'=>$pay_goods->royalty_price,
                     'old_price'=>$pay_goods->old_price,
                     'new_price'=>$pay_goods->new_price,
@@ -166,8 +170,18 @@ class OrderController extends Controller{
                 ];
                 $total_royalty_price += $pay_goods->royalty_price * $v;
                 $order_total_price += $pay_goods->new_price * $v;
+                $order_total_weight += bcadd($pay_goods->weight,$v);
                 $goods_detail[] = $good_detail;
             }
+            $total_weight = (int)$order_total_weight;
+            $over_total_price = 0;
+            if($total_weight > 2000){
+                $over = ceil((float)bcdiv(($total_weight-2000),1000,4));
+                $over_total_price = $all['over_price']*$over;
+            }
+
+            $order_total_price = (float)bcadd($order_total_price,$all['freight'],2);
+            $order_total_price = (float)bcadd($order_total_price,$over_total_price,2);
             $order_data = [
                 'user_id'=>$user_id,
                 'order_delivery'=>isset($all['order_delivery'])?$all['order_delivery']:0,//4  0快递配送 1自提,2配送到家,3配送到店,4送货上门'

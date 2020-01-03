@@ -86,6 +86,13 @@
                  </div>
              </div>
 
+            <div class="layui-form-item">
+                 <label class="layui-form-label">商品重量(g)</label>
+                 <div class="layui-input-block">
+                     <input type="text" name="weight" required  lay-verify="required" value="@if(!empty($label)){{$label->weight}} @endif" placeholder="请输入库存" autocomplete="off" class="layui-input">
+                 </div>
+             </div>
+
 
              <div class="layui-form-item">
                  <label class="layui-form-label">商品大图</label>

@@ -61,7 +61,17 @@ class TestController extends Controller{
     }
 
     public function test(){
+        $total_weight = 3501;
+        if($total_weight > 2000){
+            $int = ceil((float)bcdiv(($total_weight-2000),1000,4));
+            dd($int);
+        }
+        dd('未超过');
 
+
+        $v = 0;
+        $data = bcmul(0,$v);
+        dd($data);
         $order_total_price = "0.01";
         $freight = 0.02;
         $money = (float) bcadd($order_total_price,$freight,2);

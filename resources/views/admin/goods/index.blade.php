@@ -164,6 +164,7 @@
               ,{field: 'new_price', title: '新价格', width:100,align:'center'}
               ,{field: 'thumbs_num', title: '点赞次数', width:100,align:'center'}
               ,{field: 'stock', title: '库存', width:100,align:'center'}
+              ,{field: 'weight', title: '商品重量(g)', width:100,align:'center'}
               ,{field: 'browse_num', title: '浏览量', width:100,align:'center'}
               ,{field: 'sell_num', title: '销量', width:100,align:'center'}
               ,{ title: '商品图片', width:100,align:'center', toolbar: '#good_image'}
