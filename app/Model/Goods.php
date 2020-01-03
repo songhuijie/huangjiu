@@ -48,7 +48,7 @@ class Goods extends Model
 
     public function getGoodImageAttribute($value)
     {
-        return env('URL','').$value;
+        return env('URL','https://huangjiu.xcooteam.cn/').$value;
     }
 
     public function getRotationAttribute($value)
@@ -56,7 +56,7 @@ class Goods extends Model
         $data = json_decode($value);
         if($data){
             foreach($data as &$v){
-                $v = env('URL','').$v;
+                $v = env('URL','https://huangjiu.xcooteam.cn/').$v;
             }
         }
         return $data;

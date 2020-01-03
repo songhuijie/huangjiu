@@ -47,7 +47,7 @@ class Recommend extends Model
 
     public function getCoverAttribute($value)
     {
-        return env('URL').$value;
+        return env('URL','https://huangjiu.xcooteam.cn/').$value;
     }
 
 //    public function goods(){

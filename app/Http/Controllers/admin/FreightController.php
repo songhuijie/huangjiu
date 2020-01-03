@@ -6,6 +6,7 @@ namespace App\Http\Controllers\admin;
 use App\Libraries\Lib_config;
 use App\Model\Address;
 use App\Model\Freight;
+use App\Services\CityServices;
 use Session;
 
 use App\Http\Controllers\Controller;
@@ -111,6 +112,8 @@ class FreightController extends Controller
 
         }
 
+        $city = CityServices::AllCity();
+        CityServices::HIERARCHY();
 
         return view("admin/freight/detail");
     }

@@ -453,6 +453,11 @@ class CityServices{
         return self::CITY;
     }
 
+    public static function Hierarchy(){
+
+        return self::HIERARCHY;
+    }
+
     /**
      * 根据城市获取 是否有运费
      *

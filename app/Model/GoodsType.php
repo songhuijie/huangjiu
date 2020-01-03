@@ -54,7 +54,7 @@ class GoodsType extends Model
         $array = json_decode($value);
         if($array){
             foreach($array as $k=>&$v){
-                $v = env('URL').$v;
+                $v = env('URL','https://huangjiu.xcooteam.cn/').$v;
             }
         }
         return $array;
