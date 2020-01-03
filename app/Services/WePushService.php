@@ -56,10 +56,10 @@ class WePushService{
 
 
 
-//        $url="https://api.weixin.qq.com/cgi-bin/wxopen/template/list?access_token=".$access_token2;
+//        $url="https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?access_token=".$access_token2;
         $url="https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=".$access_token2;
-
-        $res=self::curl_post($url,urldecode($json_template));
+        $res = self::curl_get($url);
+//        $res=self::curl_post($url,urldecode($json_template));
 
         Log::channel('wechat')->info('模板推送返回结果');
         Log::channel('wechat')->info($res);
@@ -128,6 +128,23 @@ class WePushService{
         dump($template);
         Log::channel('wechat')->info($json_template);
         return $json_template;
+    }
+
+    /**
+     * get 请求
+     * @param $url
+     * @return mixed
+     */
+    public static function curl_get($url){
+
+        $ch = curl_init();//初始化curl
+        curl_setopt($ch, CURLOPT_URL,$url);//抓取指定网页
+        curl_setopt($ch, CURLOPT_HEADER, 0);//设置header
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//要求结果为字符串且输出到屏幕上
+
+        $output = curl_exec($ch);//运行curl
+        curl_close($ch);
+        return $output;
     }
 
     public static function curl_post($url , $data=array()){
