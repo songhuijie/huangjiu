@@ -13,9 +13,7 @@ use Illuminate\Support\Facades\Redis;
 
 class WePushService{
 
-    public $tenpalate_id = 'GOk3_dOesStpuIxF6_xTIKjkjQ8HY25GYr9ZukiDoi8';
-    public $uel = '/pages/index/index';
-    const TENPALATE_ID = 'GOk3_dOesStpuIxF6_xTIKjkjQ8HY25GYr9ZukiDoi8';
+    const TENPALATE_ID = '_qN8WDbPIumSlNoLAqkzuZTbgbLPXqjye8--09eoOOk';
     const UEL = '/pages/index/index';
     const OPENID = 'oBNBp5FXv5u8uf62ymn5W7pOiCQg';
 
@@ -73,12 +71,13 @@ class WePushService{
             'url'=>self::UEL, //点击模板消息会跳转的链接
             'topcolor'=>"#7B68EE",
             'data'=>array(
-                'first'=>array('value'=>urlencode("您的活动已通过"),'color'=>"#FF0000"),
-                'keyword1'=>array('value'=>urlencode('测试文章标题'),'color'=>'#FF0000'),  //keyword需要与配置的模板消息对应
-                'keyword2'=>array('value'=>urlencode(date("Y-m-d H:i:s")),'color'=>'#FF0000'),
-                'keyword3'=>array('value'=>urlencode('测试发布人'),'color'=>'#FF0000'),
-                'remark' =>array('value'=>urlencode('备注：这是测试'),'color'=>'#FF0000'), )
+                'character_string1'=>array('value'=>urlencode("123456"),'color'=>"#FF0000"),
+                'thing2'=>array('value'=>urlencode('黄酒'),'color'=>'#FF0000'),  //keyword需要与配置的模板消息对应
+                'thing6'=>array('value'=>urlencode(date("申通")),'color'=>'#FF0000'),
+                'character_string7'=>array('value'=>urlencode('123'),'color'=>'#FF0000'),
+                'phrase4' =>array('value'=>urlencode('待发货'),'color'=>'#FF0000'), )
         );
+
         $json_template=json_encode($template);
         return $json_template;
     }
