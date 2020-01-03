@@ -195,7 +195,7 @@ class OrderController extends Controller{
                 'user_phone'=>$address->phone,
                 'remarks'=>isset($all['remarks'])?$all['remarks']:'',
                 'order_number'=>$order_id,
-                'freight'=>$all['freight'],
+                'freight'=>bcadd($over_total_price,$all['freight'],2),
                 'created_at'=>time()
             ];
             $order_ids[] = $this->order->insertOrder($order_data);
