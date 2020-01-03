@@ -115,6 +115,7 @@ class OrderController extends Controller{
                             'time3'=>date('Y-m-d H:i:s'),
                             'name4'=>$user_name,
                         ];
+                        
                         WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_SECOND,$message_data);
                     }
 
