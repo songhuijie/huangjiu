@@ -52,7 +52,8 @@ class WePushService{
         //模板消息
         $json_template = self::json_tempalte();
 
-        $url="https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=".$access_token2;
+//        $url="https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=".$access_token2;
+        $url="https://api.weixin.qq.com/cgi-bin/wxopen/template/list?access_token=".$access_token2;
         $res=self::curl_post($url,urldecode($json_template));
         Log::channel('wechat')->info('模板推送返回结果');
         Log::channel('wechat')->info($res);
@@ -63,6 +64,13 @@ class WePushService{
         }
     }
 
+
+    /**
+     * 获取模板列表
+     */
+    public static function json_Tempalte_list(){
+
+    }
 
     /**
      * 将模板消息json格式化

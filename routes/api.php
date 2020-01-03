@@ -94,6 +94,9 @@ $api->version('v1', function ($api) {
             //更改代理订单状态
             $api->post('/agent/changeOrder','AgentController@changeOrder');
 
+            //根据城市获取运费
+            $api->post('/agent/freight','AgentController@getFreight');
+
             //获取下级
             $api->post('/user/lower','AgentController@SubordinateUser');
 

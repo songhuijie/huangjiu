@@ -45,12 +45,11 @@ class Freight extends Model
     }
 
     /**
-     * 获取当前用户 所有地址
-     * @param $user_id
+     * 获取所有有运费的
      * @return mixed
      */
-    public function getAll($user_id){
-        return $this->where(['user_id'=>$user_id])->get();
+    public function getAll(){
+        return $this->orderBy('sort','desc')->get();
     }
 
     /**

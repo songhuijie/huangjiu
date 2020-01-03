@@ -18,6 +18,7 @@ use App\Model\IncomeDetails;
 use App\Model\Order;
 use App\Model\User;
 use App\Services\AlibabaSms;
+use App\Services\CityServices;
 use App\Services\CourierBirdService;
 use App\Services\MapServices;
 use App\Services\WePushService;
@@ -61,6 +62,10 @@ class TestController extends Controller{
 
     public function test(){
 
+
+        $city = CityServices::getCity('其他地区');
+
+        dd($city);
         $array = [
             0=>"北京市",
             1=>"天津市",
@@ -147,7 +152,8 @@ class TestController extends Controller{
                 $html .= $count.',';
                 $count++;
             }
-            echo $k.'=>['.$html.']';
+            $html= substr($html, 0, -1);
+            echo $k.'=>['.$html.'],';
             echo "<br/>";
 
         }

@@ -12,6 +12,7 @@ use App\Model\Order;
 use App\Model\User;
 use App\Services\AccessEntity;
 use App\Services\AlibabaSms;
+use App\Services\CityServices;
 use App\Services\MapServices;
 use App\Services\RoyaltyService;
 use Illuminate\Http\Request;
@@ -562,4 +563,31 @@ class AgentController extends Controller
         return $this->response($response_json);
     }
 
+
+    /**
+     * 根据城市获取运费
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getFreight(Request $request){
+
+        $all = $request->all();
+        $fromErr = $this->validatorFrom([
+            'city'=>'required',
+        ],[
+            'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
+        ]);
+        if($fromErr){//输出表单验证错误信息
+            return $this->response($fromErr);
+        }
+        $price = CityServices::getCity($all['city']);
+        if($price === false){
+            $price = 0;
+        }
+        $response_json = $this->initResponse();
+        $response_json->status = Lib_const_status::SUCCESS;
+        $response_json->data->freigh = (int) $price;
+        return $this->response($response_json);
+
+    }
 }
