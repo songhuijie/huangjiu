@@ -74,9 +74,9 @@ class WePushService{
         $url = self::UEL;
 
         $template=array(
-            'touser'=>"$toUser",  //用户openid
-            'template_id'=>"$template_id", //在公众号下配置的模板id
-            'url'=>"$url", //点击模板消息会跳转的链接
+            'touser'=>$toUser,  //用户openid
+            'template_id'=>$template_id, //在公众号下配置的模板id
+            'url'=>$url, //点击模板消息会跳转的链接
             'topcolor'=>"#7B68EE",
             'data'=>array(
 
