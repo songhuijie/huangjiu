@@ -231,7 +231,7 @@ class OrderController extends Controller{
             }
 
             $openid = $this->user->find($user_id);
-            $money = $order->order_total_price;
+            $money = (float) bcadd($order->order_total_price,$order->freight,2);
             $order_number =  $order->order_number;
             $openid = $openid->user_openid;
             $appid       = $config->appid;

@@ -62,7 +62,10 @@ class TestController extends Controller{
 
     public function test(){
 
-
+        $order_total_price = "0.01";
+        $freight = 0.02;
+        $money = (float) bcadd($order_total_price,$freight,2);
+        dd($money);
 //        $city = CityServices::getCity('其他地区');
 //
 //        dd($city);
