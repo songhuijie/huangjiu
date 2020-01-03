@@ -159,7 +159,6 @@
               ,{field: 'good_title', title: '标题', width:100,align:'center'}
               ,{field: 'good_dsc', title: '副标题', width:100,align:'center'}
               ,{field: 'goods_name', title: '商品分类', width:100,align:'center'}
-              ,{field: 'royalty_price', title: '提成价格', width:100,align:'center'}
               ,{field: 'old_price', title: '原价格', width:100,align:'center'}
               ,{field: 'new_price', title: '新价格', width:100,align:'center'}
               ,{field: 'thumbs_num', title: '点赞次数', width:100,align:'center'}

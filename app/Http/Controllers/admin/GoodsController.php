@@ -105,6 +105,7 @@ class GoodsController extends Controller
                     unset($data['img']);
                     unset($data['update']);
                     unset($data['id']);
+                    $data['royalty_price']= $data['new_price'];
 					$reust=DB::table("goods")->where("id","=",$id)->update($data);
 					if($reust){
 						return array("code"=>1,"msg"=>"修改成功","status"=>1);exit();
@@ -126,6 +127,7 @@ class GoodsController extends Controller
 				unset($data['file']);
 				unset($data['type']);
 				unset($data['img']);
+                $data['royalty_price']= $data['new_price'];
 				$reust=DB::table("goods")->insert($data);
 				if($reust){
 					return array("code"=>1,"msg"=>"添加成功","status"=>1);exit();
