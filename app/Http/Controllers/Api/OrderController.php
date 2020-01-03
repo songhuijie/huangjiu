@@ -174,7 +174,7 @@ class OrderController extends Controller{
                 'address_detail'=>json_encode($address),
                 'goods_detail'=>json_encode($goods_detail),
                 'order_royalty_price'=>$total_royalty_price,
-                'order_total_price'=>$order_total_price,
+                'order_total_price'=>(float)bcadd($order_total_price,$all['freight'],2),
                 'is_arrive'=>$is_arrive,
                 'arrive_time'=>$arrive_time,
                 'agent_id'=>$agent_id,
