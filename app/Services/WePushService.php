@@ -13,7 +13,8 @@ use Illuminate\Support\Facades\Redis;
 
 class WePushService{
 
-    const TENPALATE_ID = '_qN8WDbPIumSlNoLAqkzuZTbgbLPXqjye8--09eoOOk';
+//    const TENPALATE_ID = '_qN8WDbPIumSlNoLAqkzuZTbgbLPXqjye8--09eoOOk';
+    const TENPALATE_ID = 'GOk3_dOesStpuIxF6_xTIKjkjQ8HY25GYr9ZukiDoi8';
     const UEL = '/pages/index/index';
     const OPENID = 'oBNBp5DQrdMfePdUcJ8G6OtNxesw';
 
@@ -72,11 +73,14 @@ class WePushService{
             'url'=>self::UEL, //点击模板消息会跳转的链接
             'topcolor'=>"#7B68EE",
             'data'=>array(
-                'character_string1'=>array('value'=>urlencode("123456"),'color'=>"#FF0000"),
-                'thing2'=>array('value'=>urlencode('黄酒'),'color'=>'#FF0000'),  //keyword需要与配置的模板消息对应
-                'thing6'=>array('value'=>urlencode(date("申通")),'color'=>'#FF0000'),
-                'character_string7'=>array('value'=>urlencode('123'),'color'=>'#FF0000'),
-                'phrase4' =>array('value'=>urlencode('待发货'),'color'=>'#FF0000'), )
+//                'character_string1'=>array('value'=>urlencode("123456"),'color'=>"#FF0000"),
+//                'thing2'=>array('value'=>urlencode('黄酒'),'color'=>'#FF0000'),  //keyword需要与配置的模板消息对应
+//                'thing6'=>array('value'=>urlencode(date("申通")),'color'=>'#FF0000'),
+//                'character_string7'=>array('value'=>urlencode('123'),'color'=>'#FF0000'),
+//                'phrase4' =>array('value'=>urlencode('待发货'),'color'=>'#FF0000') )
+                'keyword1' =>array('value'=>urlencode('待发货'),'color'=>'#FF0000'),
+                'keyword2' =>array('value'=>urlencode('待发货'),'color'=>'#FF0000'),
+                'keyword3' =>array('value'=>urlencode('待发货'),'color'=>'#FF0000'))
         );
 
         $json_template=json_encode($template);
