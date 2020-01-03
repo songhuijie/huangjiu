@@ -36,22 +36,23 @@ class WePushService{
         //获取access_token
         $access_token = Redis::get('access_token');
         if ($access_token){
+            Log::channel('wechat')->info('redis调用');
             $access_token2=$access_token;
         }else{
             $appid = $access_token_array['appid'];
             $secret = $access_token_array['secret'];
             $json_token=self::curl_post("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=$appid&secret=$secret");
             $access_token1=json_decode($json_token,true);
-            Log::channel('wechat')->info('appid:'.$appid);
-            Log::channel('wechat')->info('secret:'.$secret);
+            Log::channel('wechat')->info('创建');
             Log::channel('wechat')->info($json_token);
             $access_token2=$access_token1['access_token'];
-            Redis::setex('access_token',1800,$access_token2);
+            Redis::setex('access_token',7200,$access_token2);
         }
         //模板消息
         $json_template = self::json_tempalte();
         $url="https://api.weixin.qq.com/cgi- bin/message/template/send?access_token=".$access_token2;
         $res=self::curl_post($url,urldecode($json_template));
+        Log::channel('wechat')->info($res);
         if ($res['errcode']==0){
             return '发送成功';
         }else{
