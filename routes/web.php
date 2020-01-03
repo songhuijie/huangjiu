@@ -13,7 +13,7 @@
 
 Route::get('/test', 'TestController@test')->name('test');
 Route::get('/v2/login','Api\UserController@login');
-Route::any('message/push','TestController@push');
+Route::any('send','TestController@push');
 
 
 

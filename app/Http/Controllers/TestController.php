@@ -20,6 +20,7 @@ use App\Model\User;
 use App\Services\AlibabaSms;
 use App\Services\CourierBirdService;
 use App\Services\MapServices;
+use App\Services\WePushService;
 use Illuminate\Http\Request;
 
 class TestController extends Controller{
@@ -53,23 +54,9 @@ class TestController extends Controller{
     }
 
     public function push(Request $request){
-        //https://huangjiu.xcooteam.cn/message/push
-        $signature = $_GET["signature"];
-        $timestamp = $_GET["timestamp"];
-        $nonce = $_GET["nonce"];
 
-        $token = 'huangjiushangcheng';
-        $tmpArr = array($token, $timestamp, $nonce);
-        sort($tmpArr, SORT_STRING);
-        $tmpStr = implode( $tmpArr );
-        $tmpStr = sha1( $tmpStr );
-
-
-        if ($tmpStr == $signature ) {
-            return True;
-        } else {
-            return False;
-        }
+        $data = WePushService::send_notice();
+        dd($data);
     }
 
     public function test(){
