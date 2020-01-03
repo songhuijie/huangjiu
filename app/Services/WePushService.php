@@ -58,8 +58,11 @@ class WePushService{
         $url="https://api.weixin.qq.com/cgi-bin/wxopen/template/list?access_token=".$access_token2;
 //        $url="https://api.weixin.qq.com/cgi-bin/wxopen/template/list?access_token=".$access_token2;
         $res=self::curl_post($url,urldecode($json_template));
+
         Log::channel('wechat')->info('模板推送返回结果');
         Log::channel('wechat')->info($res);
+        $res = json_decode($res,true);
+        dump($res);
         if ($res['errcode']==0){
             return '发送成功';
         }else{
@@ -120,6 +123,7 @@ class WePushService{
         );
 
         $json_template=json_encode($template);
+        dump($template);
         Log::channel('wechat')->info($json_template);
         return $json_template;
     }
