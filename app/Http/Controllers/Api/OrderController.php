@@ -155,7 +155,6 @@ class OrderController extends Controller{
                     $this->cart->updateCartByPay($user_id,$k,$v);
                 }
 
-                bcmul($pay_goods->weight,$v);
                 $good_detail = [
                     'goods_id'=>$pay_goods->id,
                     'good_title'=>$pay_goods->good_title,
@@ -170,7 +169,7 @@ class OrderController extends Controller{
                 ];
                 $total_royalty_price += $pay_goods->royalty_price * $v;
                 $order_total_price += $pay_goods->new_price * $v;
-                $order_total_weight += bcadd($pay_goods->weight,$v);
+                $order_total_weight += bcmul($pay_goods->weight,$v);
                 $goods_detail[] = $good_detail;
             }
             $total_weight = (int)$order_total_weight;
@@ -188,7 +187,7 @@ class OrderController extends Controller{
                 'address_detail'=>json_encode($address),
                 'goods_detail'=>json_encode($goods_detail),
                 'order_royalty_price'=>$total_royalty_price,
-                'order_total_price'=>(float)bcadd($order_total_price,$all['freight'],2),
+                'order_total_price'=>$order_total_price,
                 'is_arrive'=>$is_arrive,
                 'arrive_time'=>$arrive_time,
                 'agent_id'=>$agent_id,
