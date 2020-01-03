@@ -116,7 +116,7 @@ class AgentController extends Controller
                             $message_data = [
                                 'name1'=>$user->user_nickname,
                                 'phrase2'=>'审核通过',
-                                'thing3'=>'VIP',
+                                'thing3'=>'总代理',
                             ];
                            $open_id=$user->user_openid;
                             WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_THIRD,$message_data,$open_id);
