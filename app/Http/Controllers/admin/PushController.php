@@ -25,9 +25,9 @@ class PushController extends Controller
 
 
         if ($tmpStr == $signature ) {
-            return true;
+            return True;
         } else {
-            return false;
+            return False;
         }
     }
 
