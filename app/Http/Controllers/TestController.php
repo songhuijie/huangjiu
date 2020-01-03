@@ -76,7 +76,7 @@ class TestController extends Controller{
         }else{
             $message_data = [
                 'name1'=>'张三',
-                'phrase2'=>'代理审核通过',
+                'phrase2'=>'审核通过',
                 'thing3'=>'VIP',
             ];
         }
