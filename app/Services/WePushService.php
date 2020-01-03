@@ -33,7 +33,7 @@ class WePushService{
 
         $access_token_array = self::getAccessToken();
         //获取access_token
-        if ($_COOKIE['access_token']){
+        if (isset($_COOKIE['access_token'])){
             $access_token2=$_COOKIE['access_token'];
         }else{
             $json_token=self::curl_post("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid='.{$access_token_array['appid']}.'&secret='.{$access_token_array['secret']}.'");
