@@ -27,10 +27,13 @@ class WePushService{
         ];
         return $config_array;
     }
+
     /**
      * 发送模板消息
+     * @param $type
+     * @return string
      */
-    public static function send_notice(){
+    public static function send_notice($type){
 
         $access_token_array = self::getAccessToken();
         //获取access_token
@@ -51,18 +54,30 @@ class WePushService{
             Redis::setex('access_token',7200,$access_token2);
         }
         //模板消息
-        $json_template = self::json_tempalte();
-//        $json_template = self::getTemplateList();
-
-
-
-//        $url="https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?access_token=".$access_token2;
-        $url="https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=".$access_token2;
-        $res = self::curl_get($url);
-//        $res=self::curl_post($url,urldecode($json_template));
+        switch ($type){
+            case 1:
+                $json_template = self::json_tempalte();
+                $url="https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=".$access_token2;
+                $res=self::curl_post($url,urldecode($json_template));
+                break;
+            case 2:
+                $url="https://api.weixin.qq.com/wxaapi/newtmpl/gettemplate?access_token=".$access_token2;
+                $res = self::curl_get($url);
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            default:
+                break;
+        }
 
         Log::channel('wechat')->info('模板推送返回结果');
         Log::channel('wechat')->info($res);
+
+
         $res = json_decode($res,true);
         dump($res);
         if ($res['errcode']==0){

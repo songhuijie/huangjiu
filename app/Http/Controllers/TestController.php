@@ -23,6 +23,7 @@ use App\Services\CourierBirdService;
 use App\Services\MapServices;
 use App\Services\WePushService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 
 class TestController extends Controller{
 
@@ -55,18 +56,14 @@ class TestController extends Controller{
     }
 
     public function push(Request $request){
-
-        $data = WePushService::send_notice();
+        $id = $request->get('id',1);
+        $data = WePushService::send_notice($id);
         dd($data);
     }
 
     public function test(){
-        $total_weight = 3501;
-        if($total_weight > 2000){
-            $int = ceil((float)bcdiv(($total_weight-2000),1000,4));
-            dd($int);
-        }
-        dd('未超过');
+        Redis::get('access_token');
+        dd('删除 access_token');
 
 
         $v = 0;
