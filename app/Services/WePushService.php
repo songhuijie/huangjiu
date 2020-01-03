@@ -17,6 +17,7 @@ class WePushService{
     public $uel = '/pages/index/index';
     const TENPALATE_ID = 'GOk3_dOesStpuIxF6_xTIKjkjQ8HY25GYr9ZukiDoi8';
     const UEL = '/pages/index/index';
+    const OPENID = 'oBNBp5FXv5u8uf62ymn5W7pOiCQg';
 
     public static function getAccessToken(){
         $config = new Config();
@@ -67,7 +68,7 @@ class WePushService{
     public static function json_tempalte(){
         //模板消息
         $template=array(
-            'touser'=>'.$openid.',  //用户openid
+            'touser'=>self::OPENID,  //用户openid
             'template_id'=>self::TENPALATE_ID, //在公众号下配置的模板id
             'url'=>self::UEL, //点击模板消息会跳转的链接
             'topcolor'=>"#7B68EE",
