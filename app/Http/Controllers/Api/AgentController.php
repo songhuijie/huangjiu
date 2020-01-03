@@ -583,10 +583,12 @@ class AgentController extends Controller
         $price = CityServices::getCity($all['city']);
         if($price === false){
             $price = 0;
+            $over_price=0;
         }
         $response_json = $this->initResponse();
         $response_json->status = Lib_const_status::SUCCESS;
-        $response_json->data->freight = (float) $price;
+        $response_json->data->freight = (float) $price['price'];
+        $response_json->data->over_price = (float) $price['over_price'];
         return $this->response($response_json);
 
     }

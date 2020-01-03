@@ -475,7 +475,7 @@ class CityServices{
                 foreach($all_friend as $v){
                     $regios = json_decode($v->regions);
                     if(in_array($int,$regios)){
-                        return $v->price;
+                        return ['price'=>$v->price,'over_price'=>$v->over_price];
                     }
                 }
                 return false;
