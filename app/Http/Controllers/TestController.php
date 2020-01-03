@@ -57,15 +57,30 @@ class TestController extends Controller{
 
     public function push(Request $request){
         $id = $request->get('id',1);
-        $openID = '';
-        $message_data = [
-            'character_string1'=>'123456',
-            'thing2'=>'黄酒',
-            'thing6'=>'顺丰',
-            'character_string7'=>'123456',
-            'phrase4'=>'已发送',
-        ];
-        
+        $openID = 'oBNBp5L5SrWjJh6yBfc7q8yfwypg';
+        if($id == 1){
+            $message_data = [
+                'character_string1'=>'123456',
+                'thing2'=>'黄酒',
+                'thing6'=>'顺丰',
+                'character_string7'=>'123456',
+                'phrase4'=>'已发送',
+            ];
+        }elseif($id == 2){
+            $message_data = [
+                'character_string1'=>'123456',
+                'thing2'=>'黄酒 * 1',
+                'time3'=>'2020-1-3',
+                'name4'=>'龙腾兄',
+            ];
+        }else{
+            $message_data = [
+                'name1'=>'张三',
+                'phrase2'=>'代理审核通过',
+                'thing3'=>'VIP',
+            ];
+        }
+
         $data = WePushService::send_notice($id,$message_data,$openID);
         dd($data);
     }
