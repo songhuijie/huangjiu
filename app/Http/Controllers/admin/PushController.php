@@ -22,7 +22,7 @@ class PushController extends Controller
         sort($tmpArr, SORT_STRING);
         $tmpStr = implode( $tmpArr );
         $tmpStr = sha1( $tmpStr );
-        dd($tmpStr);
+
 
         if ($tmpStr == $signature ) {
             return true;
