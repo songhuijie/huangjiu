@@ -144,10 +144,10 @@ class TestController extends Controller{
             unset($a[0]);
             $html = '';
             foreach($a as $key=>$value){
-                $html;
+                $html .= $count.',';
                 $count++;
             }
-
+            echo $k.'=>['.$html.']';
             echo "<br/>";
 
         }

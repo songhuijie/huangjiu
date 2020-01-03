@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Redis;
 class WePushService{
 
 //    const TENPALATE_ID = '_qN8WDbPIumSlNoLAqkzuZTbgbLPXqjye8--09eoOOk';
-    const TENPALATE_ID = 'U5yQ29gVqpeiWZFpuyI26O1CwfR1y4IJ-jrTR1-E-ZQ';
+    const TENPALATE_ID = 'JMVOF2RNdXR6_rtxCthQ8TlOhYqYnap4sv1e_LvRUIo';
     const UEL = '/pages/index/index';
     const OPENID = 'oBNBp5FXv5u8uf62ymn5W7pOiCQg';
 
@@ -86,10 +86,12 @@ class WePushService{
 //                'character_string7'=>array('value'=>urlencode('123'),'color'=>'#FF0000'),
 //                'phrase4' =>array('value'=>urlencode('待发货'),'color'=>'#FF0000')
 
-                'character_string1'=>array('value'=>urlencode("订单编号"),'color'=>"#FF0000"),
-                'thing2'=>array('value'=>urlencode('商品名称'),'color'=>'#FF0000'),  //keyword需要与配置的模板消息对应
-                'time3'=>array('value'=>urlencode(date("申通")),'color'=>'#FF0000'),
-                'name4'=>array('value'=>urlencode('签收人'),'color'=>'#FF0000'),
+                'thing1'=>array('value'=>urlencode("黄酒"),'color'=>"#FF0000"),
+                'thing2'=>array('value'=>urlencode("黄酒"),'color'=>"#FF0000"),
+//                'character_string1'=>array('value'=>urlencode("订单编号"),'color'=>"#FF0000"),
+//                'thing2'=>array('value'=>urlencode('商品名称'),'color'=>'#FF0000'),  //keyword需要与配置的模板消息对应
+//                'time3'=>array('value'=>urlencode(date("申通")),'color'=>'#FF0000'),
+//                'name4'=>array('value'=>urlencode('签收人'),'color'=>'#FF0000'),
             )
 
 //                'keyword1' =>array('value'=>urlencode('待发货'),'color'=>'#FF0000'),
