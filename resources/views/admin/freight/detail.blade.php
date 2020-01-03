@@ -61,7 +61,7 @@
              </div>
 
              <div class="layui-form-item">
-                 <label class="layui-form-label">超过2000克(g) 每公斤_运费</label>
+                 <label class="layui-form-label">超过1000克(g) 每公斤_运费</label>
                  <div class="layui-input-block">
                      <input type="text" name="over_price" required  lay-verify="required" value="@if(!empty($freight)){{$freight->over_price}} @endif" placeholder="请输入运费" autocomplete="off" class="layui-input">
                  </div>

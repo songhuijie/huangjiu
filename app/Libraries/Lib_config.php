@@ -42,6 +42,7 @@ class Lib_config{
     const REDUCE = '-';
     const WITHDRAW = 3;
 
+    const INIT_WEIGHT = 1000;
     //顺丰速运	SF
     //百世快递	HTKY
     //中通快递	ZTO

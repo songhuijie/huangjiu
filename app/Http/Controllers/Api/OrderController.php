@@ -174,8 +174,8 @@ class OrderController extends Controller{
             }
             $total_weight = (int)$order_total_weight;
             $over_total_price = 0;
-            if($total_weight > 2000){
-                $over = ceil((float)bcdiv(($total_weight-2000),1000,4));
+            if($total_weight > Lib_config::INIT_WEIGHT){
+                $over = ceil((float)bcdiv(($total_weight-Lib_config::INIT_WEIGHT),1000,4));
                 $over_total_price = $all['over_price']*$over;
             }
 
