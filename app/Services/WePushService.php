@@ -51,12 +51,12 @@ class WePushService{
             Redis::setex('access_token',7200,$access_token2);
         }
         //模板消息
-//        $json_template = self::json_tempalte();
-        $json_template = self::getTemplateList();
+        $json_template = self::json_tempalte();
+//        $json_template = self::getTemplateList();
 
 
-//        $url="https://api.weixin.qq.com/cgi-bin/wxopen/template/list?access_token=".$access_token2;
         $url="https://api.weixin.qq.com/cgi-bin/wxopen/template/list?access_token=".$access_token2;
+//        $url="https://api.weixin.qq.com/cgi-bin/wxopen/template/list?access_token=".$access_token2;
         $res=self::curl_post($url,urldecode($json_template));
         Log::channel('wechat')->info('模板推送返回结果');
         Log::channel('wechat')->info($res);
