@@ -33,40 +33,7 @@
     <div id="wrapper" style="margin-top:20px;">
       <div id="page-wrapper">
          <form class="layui-form" >
-                     <div class="layui-form-item">
-                        {{--<label class="layui-form-label">标签类型</label>--}}
-                        {{--<div class="layui-input-block">--}}
-                            {{--<select name="types" lay-verify="">--}}
-                                {{--@if(!empty($label))--}}
-                                    {{--@if($label->type==1)--}}
-                                        {{--<option value="1">会员标签</option>--}}
-                                        {{--<option value="2">技师标签</option>--}}
-                                        {{--<option value="3">评论标签</option>--}}
-                                    {{--@elseif($label->type==2)--}}
-                                        {{--<option value="2">技师标签</option>--}}
-                                        {{--<option value="1">会员标签</option>--}}
-                                        {{--<option value="3">评论标签</option>--}}
-                                    {{--@else--}}
-                                        {{--<option value="3">评论标签</option>--}}
-                                        {{--<option value="2">技师标签</option>--}}
-                                        {{--<option value="1">会员标签</option>--}}
-                                    {{--@endif--}}
-                                {{--@else--}}
-                                    {{--<option value="">请选择一个类型</option>--}}
-                                    {{--<option value="1">会员标签</option>--}}
-                                    {{--<option value="2">技师标签</option>--}}
-                                    {{--<option value="3">评论标签</option>--}}
-                                {{--@endif--}}
-                            {{--</select>  --}}
-                        {{--</div>--}}
-                      {{--</div>--}}
 
-                      {{--<div class="layui-form-item">--}}
-                        {{--<label class="layui-form-label">活动标签</label>--}}
-                        {{--<div class="layui-input-block">--}}
-                          {{--<input type="text" name="label" required  lay-verify="required" value="@if(!empty($label)){{$label->label}} @endif" placeholder="请输入活动标签" autocomplete="off" class="layui-input">--}}
-                        {{--</div>--}}
-                      {{--</div>--}}
 
                      <div class="layui-form-item">
                          <label class="layui-form-label">分类名称</label>
@@ -109,7 +76,7 @@
                           {{--<input type="radio" name="status" value="1" title="是" @if(!empty($label)) @if($label->status==1) checked  @endif @endif>--}}
                         {{--</div>--}}
                       {{--</div>--}}
-                      
+
                       @if(!empty($label))
                         <input type="text" id="mold" hidden  value="edit" >
                         <input type="text" id="id" hidden value="{{$label->id}}" >
@@ -125,7 +92,7 @@
 
 
       </div>
-        
+
 
     </div>
     

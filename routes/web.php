@@ -21,6 +21,9 @@ Route::get('/', function () {
     return view('admin/index/login');
 });
 
+
+Route::get('/message/push','admin\PushController@push');
+
 Route::get('admin/admin','admin\AdminController@admin');
 Route::any('admin/detail','admin\AdminController@detail');
 Route::get('index/index', 'admin\IndexController@index');
