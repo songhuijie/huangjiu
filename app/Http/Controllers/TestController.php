@@ -63,9 +63,9 @@ class TestController extends Controller{
     public function test(){
 
 
-        $city = CityServices::getCity('其他地区');
-
-        dd($city);
+//        $city = CityServices::getCity('其他地区');
+//
+//        dd($city);
         $array = [
             0=>"北京市",
             1=>"天津市",
@@ -108,7 +108,7 @@ class TestController extends Controller{
             1=>"天津市 天津辖区 天津辖县",
             2=>"河北省 石家庄市 唐山市 秦皇岛市 邯郸市 邢台市 保定市 张家口市 承德市 沧州市 廊坊市 衡水市",
             3=>"山西省 太原市 大同市 阳泉市 长治市 晋城市 朔州市 晋中市 运城市 忻州市 临汾市 吕梁市",
-            4=>"内蒙古自治区 呼和浩特市 包头市 乌海市 赤峰市 通辽市 鄂尔多斯市 呼伦贝尔市 巴彦淖尔市 乌兰察布市 兴安盟锡林郭勒盟阿拉善盟",
+            4=>"内蒙古自治区 呼和浩特市 包头市 乌海市 赤峰市 通辽市 鄂尔多斯市 呼伦贝尔市 巴彦淖尔市 乌兰察布市 兴安盟 锡林郭勒盟 阿拉善盟",
             5=>"辽宁省 沈阳市 大连市 鞍山市 抚顺市 本溪市 丹东市 锦州市 营口市 阜新市 辽阳市 盘锦市 铁岭市 朝阳市 葫芦岛市",
             6=>"吉林省 长春市 吉林市 四平市 辽源市 通化市 白山市 松原市 白城市 延边自治州",
             7=>"黑龙江省 哈尔滨市 齐齐哈尔市 鸡西市 鹤岗市 双鸭山市 大庆市 伊春市 佳木斯市 七台河市 牡丹江市 黑河市 绥化市 大兴安岭地区",
@@ -147,14 +147,19 @@ class TestController extends Controller{
         foreach($array as $k=>$v){
             $a = explode(' ',$v);
             unset($a[0]);
-            $html = '';
+//            $html = '';
+//            foreach($a as $key=>$value){
+//                $html .= $count.',';
+//                $count++;
+//            }
             foreach($a as $key=>$value){
-                $html .= $count.',';
+                echo $count .'=>"'.$value.'",';
+                echo "</br>";
                 $count++;
             }
-            $html= substr($html, 0, -1);
-            echo $k.'=>['.$html.'],';
-            echo "<br/>";
+//            $html= substr($html, 0, -1);
+//            echo $k.'=>['.$html.'],';
+//            echo "<br/>";
 
         }
         dd(1);

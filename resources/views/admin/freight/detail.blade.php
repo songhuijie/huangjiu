@@ -34,11 +34,29 @@
       <div id="page-wrapper">
          <form class="layui-form" >
 
+             <div class="layui-form-item">
+                 <label class="">选择城市</label>
+                 <p></p>
+            @foreach($hierarchy as $k=>$v)
+
+                     <div class="layui-input-block">
+                     <p class="">{{$city[$k]}}</p>
+                     @foreach($v as $key=>$val)
+
+                         <input type="checkbox" name="city[{{$val}}]" title="{{$city[$val]}}" @if(!empty($regions)){{isset($regions[$val])?'checked':$val}} @endif>
+
+                     @endforeach
+                     </div>
+                    <br/>
+
+            @endforeach
+            </div>
+
 
              <div class="layui-form-item">
                  <label class="layui-form-label">运费</label>
                  <div class="layui-input-block">
-                     <input type="text" name="new_price" required  lay-verify="required" value="@if(!empty($label)){{$label->new_price}} @endif" placeholder="请输入运费" autocomplete="off" class="layui-input">
+                     <input type="text" name="price" required  lay-verify="required" value="@if(!empty($freight)){{$freight->price}} @endif" placeholder="请输入运费" autocomplete="off" class="layui-input">
                  </div>
              </div>
 
@@ -47,13 +65,13 @@
              <div class="layui-form-item">
                  <label class="layui-form-label">排序(0-99 如果多个地区设置了不同运费 则按照排序取出最大的)</label>
                  <div class="layui-input-block">
-                     <input type="text" name="new_price" required  lay-verify="required" value="@if(!empty($label)){{$label->new_price}} @endif" placeholder="请输排序" autocomplete="off" class="layui-input">
+                     <input type="text" name="sort" required  lay-verify="required" value="@if(!empty($freight)){{$freight->sort}} @endif" placeholder="请输排序" autocomplete="off" class="layui-input">
                  </div>
              </div>
 
-              @if(!empty($label))
+              @if(!empty($freight))
                 <input type="text" id="mold" hidden  value="edit" >
-                <input type="text" id="id" hidden value="{{$label->id}}" >
+                <input type="text" id="id" hidden value="{{$freight->id}}" >
               @endif
 
               <div class="layui-form-item">
@@ -162,18 +180,9 @@
         
         var date=data.field;
         
-        if(date.good_title=="" || date.good_type=="" || date.royalty_price=="" || date.old_price=="" || date.new_price=="" || date.stock=="" || date.good_image==""  || date.detail=="" || date.freight=="" || date.goods_status==""){
+        if(date.good_title=="" || date.good_type=="" ){
             console.log(date.good_title);
             console.log(date.good_type);
-            console.log(date.royalty_price);
-            console.log(date.old_price);
-            console.log(date.new_price);
-            console.log(date.stock);
-            console.log(date.good_image);
-            console.log(date.rotation);
-            console.log(date.detail);
-            console.log(date.freight);
-            console.log(date.goods_status);
             layer.msg("不能为空,请填写完整",{icon:5});return false;
         }
         date.type="add";
@@ -187,7 +196,7 @@
             data:date,
             type:"post",
             datatype:"json",
-            url:"{{url('goods/detail')}}",
+            url:"{{url('freight/detail')}}",
             success:function(res){
                 console.log(res);
                 if(res.code==0){

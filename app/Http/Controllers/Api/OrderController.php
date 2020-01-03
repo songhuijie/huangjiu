@@ -65,6 +65,7 @@ class OrderController extends Controller{
             'order_delivery'=>'required',
             'is_arrive'=>'in:1',
             'is_shopping'=>'required:in:0,1',
+            'freight'=>'required',
         ],[
             'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
             'in'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
@@ -181,6 +182,7 @@ class OrderController extends Controller{
                 'user_phone'=>$address->phone,
                 'remarks'=>isset($all['remarks'])?$all['remarks']:'',
                 'order_number'=>$order_id,
+                'freight'=>$all['freight'],
                 'created_at'=>time()
             ];
             $order_ids[] = $this->order->insertOrder($order_data);

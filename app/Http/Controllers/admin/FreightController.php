@@ -33,6 +33,15 @@ class FreightController extends Controller
                     $size=$data['limit'];
                 }
                 $address = $this->freight->getWhere($data);
+                $city = CityServices::AllCity();
+                foreach($address['data'] as $k=>&$v ){
+                    $regions = json_decode($v->regions,true);
+                    $html = '';
+                    foreach($regions as $key=>$val){
+                        $html .= $city[$val].'、';
+                    }
+                    $v->regions = $html;
+                }
                 return array('code'=>0,'msg'=>'获取到数据','limit'=>$size,'page'=>$page,'count'=>$address['count'],'data'=>$address['data']);
             }
 
@@ -79,10 +88,14 @@ class FreightController extends Controller
             if($data['type']=='edit'){
                 if(!empty($data['update'])){
                     //修改
-                    $data['rotation'] = json_encode($data['img']);
-                    $id = $data['id'];
 
-                    $reust=DB::table("goods")->where("id","=",$id)->update($data);
+                    $update_data= [
+                        'price'=>$data['price'],
+                        'sort'=>$data['sort'],
+                        'regions'=>json_encode(array_keys($data['city'])),
+                    ];
+                    $reust=$this->freight->where('id',$data['id'])->update($update_data);
+
                     if($reust){
                         return array("code"=>1,"msg"=>"修改成功","status"=>1);exit();
                     }else{
@@ -91,30 +104,31 @@ class FreightController extends Controller
 
                 }
                 $freight = $this->freight->where("id","=",$data['id'])->first();
+                $regions = array_flip(json_decode($freight->regions,true));
+                $city = CityServices::AllCity();
+                $hierarchy = CityServices::HIERARCHY();
 
-                return view("admin/freight/detail",['label'=>$freight]);
+                return view("admin/freight/detail",['freight'=>$freight,'regions'=>$regions,'city'=>$city,'hierarchy'=>$hierarchy]);
             }
             if($data['type']=='add'){
 
-
-                $data['rotation'] = json_encode($data['img']);
-                unset($data['file']);
-                unset($data['type']);
-                unset($data['img']);
-                $reust=DB::table("goods")->insert($data);
+                $insert_data= [
+                    'price'=>$data['price'],
+                    'sort'=>$data['sort'],
+                    'regions'=>json_encode(array_keys($data['city'])),
+                ];
+                $reust=$this->freight->insert($insert_data);
                 if($reust){
                     return array("code"=>1,"msg"=>"添加成功","status"=>1);exit();
                 }else{
                     return array("code"=>0,"msg"=>"添加失败","status"=>1);exit();
                 }
             }
-
-
         }
 
         $city = CityServices::AllCity();
-        CityServices::HIERARCHY();
+        $hierarchy = CityServices::HIERARCHY();
 
-        return view("admin/freight/detail");
+        return view("admin/freight/detail",['city'=>$city,'hierarchy'=>$hierarchy]);
     }
 }

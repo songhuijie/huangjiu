@@ -182,7 +182,7 @@
                     layer.open({
                         title:"添加",
                         type: 2,
-                        area: ['80%', '80%'],
+                        area: ['90%', '90%'],
                         content: '{{url("freight/detail")}}' //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                     });
                     //layer.msg('添加');
