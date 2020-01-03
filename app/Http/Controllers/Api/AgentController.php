@@ -586,7 +586,7 @@ class AgentController extends Controller
         }
         $response_json = $this->initResponse();
         $response_json->status = Lib_const_status::SUCCESS;
-        $response_json->data->freigh = (float) $price;
+        $response_json->data->freight = (float) $price;
         return $this->response($response_json);
 
     }
