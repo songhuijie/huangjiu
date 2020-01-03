@@ -15,7 +15,7 @@ class WePushService{
 
     const TENPALATE_ID = '_qN8WDbPIumSlNoLAqkzuZTbgbLPXqjye8--09eoOOk';
     const UEL = '/pages/index/index';
-    const OPENID = 'oBNBp5FXv5u8uf62ymn5W7pOiCQg';
+    const OPENID = 'oBNBp5LEwAZiU4IcCXlMbF4MLeS8';
 
     public static function getAccessToken(){
         $config = new Config();
