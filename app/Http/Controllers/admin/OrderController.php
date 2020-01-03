@@ -10,9 +10,11 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Libraries\Lib_config;
 use App\Model\Order;
+use App\Model\User;
 use App\Services\GoodsService;
 use App\Services\GoodTypeService;
 use App\Services\RoyaltyService;
+use App\Services\WePushService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -28,9 +30,11 @@ class OrderController extends Controller{
         6=>'取消',
     ];
     private $order;
-    public function __construct(Order $order)
+    private $user;
+    public function __construct(Order $order,User $user)
     {
         $this->order = $order;
+        $this->user = $user;
     }
 
     public function index(Request $request){
@@ -96,7 +100,49 @@ class OrderController extends Controller{
                     if($data['order_status'] == Lib_config::ORDER_STATUS_FOUR){
                         //处理商品提成
                         RoyaltyService::HandleRoyalty($order->user_id,$order->order_royalty_price,$order->is_arrive,$order->agent_id);
+
+                        //签收订单后  推送指定用户
+                        $thing2 = '';
+                        foreach($order->goods_detail as $v){
+                            $thing2 .= $v['good_title'].' * '.$v['goods_num'].'/';
+                        }
+                        $thing2 = substr($thing2, 0, -1);
+                        $user = $this->user->find($order->user_id);
+                        $user_name = isset($user->user_nickname)?$user->user_nickname:'张三';
+                        $message_data = [
+                            'character_string1'=>$order->order_number,
+                            'thing2'=>$thing2,
+                            'time3'=>date('Y-m-d H:i:s'),
+                            'name4'=>$user_name,
+                        ];
+                        WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_SECOND,$message_data);
                     }
+
+                    if($data['order_status'] == Lib_config::ORDER_STATUS_TWO){
+
+
+                        //开始配送订单时  推送指定用户
+                        $thing2 = '';
+                        foreach($order->goods_detail as $v){
+                            $thing2 .= $v['good_title'].'/';
+                        }
+                        $thing2 = substr($thing2, 0, -1);
+                        $express_type = Lib_config::EXPRESS_TYPE;
+
+                        $express = $data['express'];
+                        $express_t = isset($express_type[$data['express_type']])?$express_type[$data['express_type']]:$express_type[1];
+
+                        $message_data = [
+                            'character_string1'=>$order->order_number,
+                            'thing2'=>$thing2,
+                            'thing6'=>$express_t,
+                            'character_string7'=>$express,
+                            'phrase4'=>'已配送',
+                        ];
+                        WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_FIRST,$message_data);
+
+                    }
+
                     $reust = $this->order->where(['id'=>$id])->update($data);
                     if($reust){
                         return array("code"=>1,"msg"=>"修改成功","status"=>1);

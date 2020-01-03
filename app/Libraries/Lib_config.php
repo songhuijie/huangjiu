@@ -71,4 +71,8 @@ class Lib_config{
         12=>'德邦快递',
         13=>'宅急送',
     ];
+
+    const WE_PUSH_TEMPLATE_FIRST  = 1;
+    const WE_PUSH_TEMPLATE_SECOND = 2;
+    const WE_PUSH_TEMPLATE_THIRD  = 3;
 }

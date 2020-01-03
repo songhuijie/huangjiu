@@ -35,12 +35,12 @@
              <form class="layui-form" >
 
                          @switch($order->order_status)
-                             @case(0)
+                             @case(1)
                              <div class="layui-form-item">
                                  <label class="layui-form-label">订单状态</label>
                                      <div class="layui-input-block">
                                          <select name="order_status" lay-verify="">
-                                                 <option value="1">支付成功待发货</option>
+                                                 <option value="2">配送</option>
                                                  <option value="5">退款</option>
                                          </select>
                                      </div>
@@ -65,23 +65,12 @@
                                  </div>
                              </div>
                                 @break
-                             @case(1)
-                                 <div class="layui-form-item">
-                                     <label class="layui-form-label">订单状态</label>
-                                     <div class="layui-input-block">
-                                         <select name="order_status" lay-verify="">
-                                             <option value="2">待配送</option>
-                                             <option value="5">退款</option>
-                                         </select>
-                                     </div>
-                                 </div>
-                                @break
                              @case(2)
                                  <div class="layui-form-item">
                                      <label class="layui-form-label">订单状态</label>
                                      <div class="layui-input-block">
                                          <select name="order_status" lay-verify="">
-                                             <option value="3">已发货</option>
+                                             <option value="3">发货</option>
                                              <option value="5">退款</option>
                                          </select>
                                      </div>
@@ -103,6 +92,7 @@
                                      <label class="layui-form-label">订单状态</label>
                                      <div class="layui-input-block">
                                          <select name="order_status" lay-verify="">
+                                             <option value="6">取消</option>
                                              <option value="5">退款</option>
                                          </select>
                                      </div>

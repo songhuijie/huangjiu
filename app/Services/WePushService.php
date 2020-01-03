@@ -111,8 +111,8 @@ class WePushService{
 
         switch ($type){
             case 1:
+
                 /*
-                 *
                  * 例如
                  * 订单编号 2019110100001
                  * 商品名称 轻柔桃红葡萄酒/瓶

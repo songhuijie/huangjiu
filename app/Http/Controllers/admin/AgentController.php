@@ -3,10 +3,12 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Libraries\Lib_config;
 use App\Model\Agent;
 use App\Model\Friend;
 use App\Model\Reply;
 use App\Model\User;
+use App\Services\WePushService;
 use Session;
 
 use App\Http\Controllers\Controller;
@@ -105,6 +107,21 @@ class AgentController extends Controller
                         'status' =>$data['status'],
                     ];
                     $id=$data['id'];
+                    if($data['status'] == 1){
+
+                        //审核通过 需要这个用户开启权限 给当前代理 推送审核通过信息
+                        $agent = $this->agent->find($id);
+                        if($agent){
+                           $user =  $this->user->find($agent->user_id);
+                            $message_data = [
+                                'name1'=>$user->user_nickname,
+                                'phrase2'=>'审核通过',
+                                'thing3'=>'VIP',
+                            ];
+                           $open_id=$user->user_openid;
+                            WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_THIRD,$message_data,$open_id);
+                        }
+                    }
                     $reust=DB::table("agent")->where("id","=",$id)->update($update_data);
                     if($reust){
                         return array("code"=>1,"msg"=>"修改成功","status"=>1);exit();
