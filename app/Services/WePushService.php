@@ -103,7 +103,7 @@ class WePushService{
      * @param $type
      * @return string
      */
-    public static function json_tempalte($type,$open_id,$message_data){
+    public static function json_tempalte($type,$message_data,$open_id){
         //模板消息
         $toUser = $open_id;
         $template_id = isset(self::TENPALATE_TYPE[$type])?self::TENPALATE_TYPE[$type]:self::TENPALATE_TYPE[1];
