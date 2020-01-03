@@ -49,7 +49,7 @@ class WePushService{
         }
         //模板消息
         $json_template = self::json_tempalte();
-        $url="https://api.weixin.qq.com/cgi- bin/message/template/send?access_token=".$access_token2;
+        $url="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=".$access_token2;
         $res=self::curl_post($url,urldecode($json_template));
         Log::channel('wechat')->info($res);
         if ($res['errcode']==0){
