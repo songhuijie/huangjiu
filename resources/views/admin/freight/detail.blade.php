@@ -34,121 +34,23 @@
       <div id="page-wrapper">
          <form class="layui-form" >
 
-             <div class="layui-form-item">
-                 <label class="layui-form-label">标题</label>
-                 <div class="layui-input-block">
-                     <input type="text" name="good_title" required  lay-verify="required" value="@if(!empty($label)){{$label->good_title}} @endif" placeholder="请输入标题" autocomplete="off" class="layui-input">
-                 </div>
-             </div>
-             <div class="layui-form-item">
-                 <label class="layui-form-label">副标题</label>
-                 <div class="layui-input-block">
-                     <input type="text" name="good_dsc" required  lay-verify="required" value="@if(!empty($label)){{$label->good_dsc}} @endif" placeholder="请输入副标题" autocomplete="off" class="layui-input">
-                 </div>
-             </div>
-
-             <div class="layui-form-item">
-                <label class="layui-form-label">商品类型</label>
-                <div class="layui-input-block">
-                    <select name="good_type" lay-verify="">
-                        @foreach($goods_type as $k=>$v)
-                            <option value="{{$k}}" @if(!empty($label) && $label->good_type == $k) selected @endif>{{$v}}</option>
-                        @endforeach
-                    </select>
-                </div>
-             </div>
-
-             <div class="layui-form-item">
-                 <label class="layui-form-label">提成价格</label>
-                 <div class="layui-input-block">
-                     <input type="text" name="royalty_price" required  lay-verify="required" value="@if(!empty($label)){{$label->royalty_price}} @endif" placeholder="请输入提成价格" autocomplete="off" class="layui-input">
-                 </div>
-             </div>
-
-             <div class="layui-form-item">
-                 <label class="layui-form-label">原价格</label>
-                 <div class="layui-input-block">
-                     <input type="text" name="old_price" required  lay-verify="required" value="@if(!empty($label)){{$label->old_price}} @endif" placeholder="请输入原价格" autocomplete="off" class="layui-input">
-                 </div>
-             </div>
-
-             <div class="layui-form-item">
-                 <label class="layui-form-label">新价格</label>
-                 <div class="layui-input-block">
-                     <input type="text" name="new_price" required  lay-verify="required" value="@if(!empty($label)){{$label->new_price}} @endif" placeholder="请输入新价格" autocomplete="off" class="layui-input">
-                 </div>
-             </div>
-
-             <div class="layui-form-item">
-                 <label class="layui-form-label">库存</label>
-                 <div class="layui-input-block">
-                     <input type="text" name="stock" required  lay-verify="required" value="@if(!empty($label)){{$label->stock}} @endif" placeholder="请输入库存" autocomplete="off" class="layui-input">
-                 </div>
-             </div>
-
-
-             <div class="layui-form-item">
-                 <label class="layui-form-label">商品大图</label>
-                 <button type="button" class="layui-btn" id="test1">
-                     <i class="layui-icon">&#xe67c;</i>上传图片
-                 </button>
-                 <img @if(!empty($label)) src="../{{$label->good_image}}" @else src="" @endif name="headimg" id="img1" width="20%">
-                 <input type="text" name="good_image" id="good_image" hidden value="@if(!empty($label)){{$label->good_image}} @endif" >
-             </div>
-
-
-             <div class="layui-form-item">
-                 <label class="layui-form-label">轮播图json格式</label>
-                 <button type="button" class="layui-btn" id="test2">
-                     <i class="layui-icon">&#xe67c;</i>上传图片
-                 </button>
-                 <div id="img2">
-                     @if(!empty($label))
-                         @foreach($label->rotation as $key)
-                             <input type="text" value="{{$key}}" hidden name="img[]">
-                             <img  src="../{{$key}}"    width="20%" title="点击删除">
-                         @endforeach
-                     @else
-                     <!-- <input type="text" value="" hidden name="img[]"> -->
-                         <img   src=""  >
-                     @endif
-                 </div>
-             </div>
-
-
-
-
-             <div class="layui-form-item layui-form-text">
-                 <label class="layui-form-label">详情:</label>
-                 <div class="layui-input-block">
-                     <textarea name="detail" id="qaContent" lay-verify="content">@if(!empty($label)){{$label->detail}} @endif</textarea>
-                 </div>
-             </div>
-
 
              <div class="layui-form-item">
                  <label class="layui-form-label">运费</label>
                  <div class="layui-input-block">
-                     <input type="radio" name="freight" value="0" title="包邮" checked>
-                     <input type="radio" name="freight" value="1" title="不包邮" >
+                     <input type="text" name="new_price" required  lay-verify="required" value="@if(!empty($label)){{$label->new_price}} @endif" placeholder="请输入运费" autocomplete="off" class="layui-input">
                  </div>
              </div>
+
+
 
              <div class="layui-form-item">
-                 <label class="layui-form-label">状态</label>
+                 <label class="layui-form-label">排序(0-99 如果多个地区设置了不同运费 则按照排序取出最大的)</label>
                  <div class="layui-input-block">
-                     <input type="radio" name="goods_status" value="1" title="出售中" checked>
-                     <input type="radio" name="goods_status" value="2" title="下架" >
+                     <input type="text" name="new_price" required  lay-verify="required" value="@if(!empty($label)){{$label->new_price}} @endif" placeholder="请输排序" autocomplete="off" class="layui-input">
                  </div>
              </div>
 
-
-
-
-
-
-
-                      
               @if(!empty($label))
                 <input type="text" id="mold" hidden  value="edit" >
                 <input type="text" id="id" hidden value="{{$label->id}}" >

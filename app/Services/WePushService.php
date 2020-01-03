@@ -41,6 +41,7 @@ class WePushService{
         }else{
             $appid = $access_token_array['appid'];
             $secret = $access_token_array['secret'];
+
             $json_token=self::curl_post("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=$appid&secret=$secret");
             $access_token1=json_decode($json_token,true);
             Log::channel('wechat')->info('创建');
@@ -50,7 +51,8 @@ class WePushService{
         }
         //模板消息
         $json_template = self::json_tempalte();
-        $url="https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=".$access_token2;
+        
+        $url="https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=".$access_token2;
         $res=self::curl_post($url,urldecode($json_template));
         Log::channel('wechat')->info('模板推送返回结果');
         Log::channel('wechat')->info($res);

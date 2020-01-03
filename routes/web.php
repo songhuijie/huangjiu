@@ -68,6 +68,10 @@ Route::any('recommend/detail','admin\RecommendController@detail');
 
 //地址
 Route::any('address/index','admin\AddressController@index');
+//运费
+Route::any('freight/index','admin\FreightController@index');
+Route::any('freight/status','admin\FreightController@status');
+Route::any('freight/detail','admin\FreightController@detail');
 
 //用户
 Route::any('member/index','admin\MemberController@index');
