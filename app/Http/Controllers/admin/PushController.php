@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class PushController extends Controller
 {
-    public function index(Request $request){
+    public function push(Request $request){
         //https://huangjiu.xcooteam.cn/message/push
         $signature = $_GET["signature"];
         $timestamp = $_GET["timestamp"];
