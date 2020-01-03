@@ -55,8 +55,10 @@ class WePushService{
 //        $json_template = self::getTemplateList();
 
 
-        $url="https://api.weixin.qq.com/cgi-bin/wxopen/template/list?access_token=".$access_token2;
+
 //        $url="https://api.weixin.qq.com/cgi-bin/wxopen/template/list?access_token=".$access_token2;
+        $url="https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=".$access_token2;
+
         $res=self::curl_post($url,urldecode($json_template));
 
         Log::channel('wechat')->info('模板推送返回结果');
