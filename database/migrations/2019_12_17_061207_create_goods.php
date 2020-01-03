@@ -30,6 +30,7 @@ class CreateGoods extends Migration
             $table->text('rotation')->comment('轮播图json格式');
             $table->text('detail')->comment('详情');
             $table->float('freight')->comment('运费0包邮');
+            $table->integer('weight')->comment('商品重量');
             $table->integer('goods_status')->comment('1为出售中 2为下架');
 //            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
 //            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
