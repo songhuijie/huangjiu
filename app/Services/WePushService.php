@@ -8,6 +8,7 @@
 namespace App\Services;
 
 use App\Model\Config;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 
 class WePushService{
@@ -33,13 +34,19 @@ class WePushService{
 
         $access_token_array = self::getAccessToken();
         //获取access_token
-        if (isset($_COOKIE['access_token'])){
-            $access_token2=$_COOKIE['access_token'];
+        $access_token = Redis::get('access_token');
+        if ($access_token){
+            $access_token2=$access_token;
         }else{
-            $json_token=self::curl_post("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid='.{$access_token_array['appid']}.'&secret='.{$access_token_array['secret']}.'");
+            $appid = $access_token_array['appid'];
+            $secret = $access_token_array['secret'];
+            $json_token=self::curl_post("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=$appid&secret=$secret");
             $access_token1=json_decode($json_token,true);
+            Log::channel('wechat')->info('appid:'.$appid);
+            Log::channel('wechat')->info('secret:'.$secret);
+            Log::channel('wechat')->info($json_token);
             $access_token2=$access_token1['access_token'];
-            setcookie('access_token',$access_token2,7200);
+            Redis::setex('access_token',1800,$access_token2);
         }
         //模板消息
         $json_template = self::json_tempalte();
