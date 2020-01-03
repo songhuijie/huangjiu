@@ -67,13 +67,17 @@ class WePushService{
      */
     public static function json_tempalte(){
         //模板消息
+        $toUser = self::OPENID;
+        $template_id = self::TENPALATE_ID;
+        $url = self::UEL;
+
         $template=array(
-            'touser'=>self::OPENID,  //用户openid
-            'template_id'=>self::TENPALATE_ID, //在公众号下配置的模板id
-            'url'=>self::UEL, //点击模板消息会跳转的链接
+            'touser'=>"$toUser",  //用户openid
+            'template_id'=>"$template_id", //在公众号下配置的模板id
+            'url'=>"$url", //点击模板消息会跳转的链接
             'topcolor'=>"#7B68EE",
             'data'=>array(
-               
+
                 'character_string1'=>array('value'=>urlencode("123456"),'color'=>"#FF0000"),
                 'thing2'=>array('value'=>urlencode('黄酒'),'color'=>'#FF0000'),  //keyword需要与配置的模板消息对应
                 'thing6'=>array('value'=>urlencode(date("申通")),'color'=>'#FF0000'),
