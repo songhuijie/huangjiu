@@ -22,7 +22,7 @@ Route::get('/', function () {
 });
 
 
-Route::get('message/push','admin\PushController@push');
+Route::any('message/push','admin\PushController@push');
 
 Route::get('admin/admin','admin\AdminController@admin');
 Route::any('admin/detail','admin\AdminController@detail');
