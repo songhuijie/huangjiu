@@ -298,6 +298,11 @@ class OrderController extends Controller{
                     $order = $this->order->getOrderByOrderID($order);
                     if($order){
                         if($order->agent_id != 0){
+
+                            //开始配送订单时  推送指定用户
+                            //开始配送订单时  推送指定用户
+                            $this->order->updateStatusByOrderNumber($order,Lib_config::ORDER_STATUS_TWO);
+
                             $agent = $this->agent->getAgent($order->agent_id);
                             Log::channel('error')->info('给总代理发送短信:'.$agent->iphone);
                             AlibabaSms::SendSms($agent->iphone);
@@ -326,6 +331,8 @@ class OrderController extends Controller{
 
                             }
 
+
+
                             //开始配送订单时  推送指定用户
                             //开始配送订单时  推送指定用户
                             $thing2 = '';
@@ -350,9 +357,7 @@ class OrderController extends Controller{
                             $open_id=$user->user_openid;
 
                             WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_FIRST,$message_data,$open_id);
-                            //开始配送订单时  推送指定用户
-                            //开始配送订单时  推送指定用户
-                            $this->order->updateStatusByOrderNumber($order,Lib_config::ORDER_STATUS_TWO);
+
 
                         }else{
                             $this->order->updateStatusByOrderNumber($order,Lib_config::ORDER_STATUS_ONE);
