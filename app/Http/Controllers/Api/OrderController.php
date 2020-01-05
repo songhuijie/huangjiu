@@ -282,7 +282,6 @@ class OrderController extends Controller{
         if (!empty($value)) {
             $arr = xmlToArray($value);
             Log::channel('order')->info('支付成功回调成功');
-            Log::channel('order')->info(json_encode($arr));
             try{
 
                 if($arr['result_code'] == 'SUCCESS' && $arr['return_code'] == 'SUCCESS'){
@@ -290,20 +289,20 @@ class OrderController extends Controller{
                     Log::info($arr['attach']);
                     $money = $arr['total_fee']/100;
                     $uid = $attach['user_id'];
-                    $order = $arr['out_trade_no'];
+                    $order_number = $arr['out_trade_no'];
 
 
 
 
                     Log::channel('order')->info('支付成功回调成功');
 
-                    $order = $this->order->getOrderByOrderID($order);
+                    $order = $this->order->getOrderByOrderID($order_number);
                     if($order){
                         if($order->agent_id != 0){
 
                             //开始配送订单时  推送指定用户
                             //开始配送订单时  推送指定用户
-                            $int = $this->order->updateStatusByOrderNumber($order,Lib_config::ORDER_STATUS_TWO);
+                            $int = $this->order->updateStatusByOrderNumber($order_number,Lib_config::ORDER_STATUS_TWO);
                             Log::channel('order')->info($int);
                             Log::channel('order')->info('有代理商结算');
                             $agent = $this->agent->getAgent($order->agent_id);
@@ -364,7 +363,7 @@ class OrderController extends Controller{
 
                         }else{
                             Log::channel('order')->info('没有代理商结算');
-                            $this->order->updateStatusByOrderNumber($order,Lib_config::ORDER_STATUS_ONE);
+                            $this->order->updateStatusByOrderNumber($order_number,Lib_config::ORDER_STATUS_ONE);
                         }
                     }
                     Log::info('更新成功');
