@@ -109,13 +109,7 @@ class Order extends Model
      * @return mixed
      */
     public function updateStatusByOrderNumber($order_number,$status){
-        $agent_id = $this->where(['order_number'=>$order_number])->value('agent_id');
-        if($agent_id != 0){
-
-            return $this->where(['order_number'=>$order_number])->update(['order_status'=>Lib_config::ORDER_STATUS_TWO]);
-        }else{
-            return $this->where(['order_number'=>$order_number])->update(['order_status'=>$status]);
-        }
+        return $this->where(['order_number'=>$order_number])->update(['order_status'=>$status]);
     }
 
     public function getOrderByOrderID($order_number){

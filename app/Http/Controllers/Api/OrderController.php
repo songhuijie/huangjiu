@@ -24,6 +24,7 @@ use App\Services\AlibabaSms;
 use App\Services\CourierBirdService;
 use App\Services\GoodsService;
 use App\Services\RoyaltyService;
+use App\Services\WePushService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -99,6 +100,8 @@ class OrderController extends Controller{
 
 
 
+            $express = '';
+            $express_type = 0;
             if($agent_id != 0){
 
 
@@ -127,6 +130,9 @@ class OrderController extends Controller{
                     $response_json->status = Lib_const_status::AGENT_NO_END;
                     return $this->response($response_json);
                 }
+
+                $express = $agent->iphone;
+                $express_type = 20;//快递发货状态  代表代理商发货
             }
 
             $goods_detail = [];
@@ -196,6 +202,8 @@ class OrderController extends Controller{
                 'remarks'=>isset($all['remarks'])?$all['remarks']:'',
                 'order_number'=>$order_id,
                 'freight'=>bcadd($over_total_price,$all['freight'],2),
+                'express'=>$express,
+                'express_type'=>$express_type,
                 'created_at'=>time()
             ];
             $order_ids[] = $this->order->insertOrder($order_data);
@@ -283,7 +291,7 @@ class OrderController extends Controller{
 
 
 
-                $this->order->updateStatusByOrderNumber($order,Lib_config::ORDER_STATUS_ONE);
+
 
                 $order = $this->order->getOrderByOrderID($order);
                 if($order){
@@ -315,6 +323,72 @@ class OrderController extends Controller{
                             }
 
                         }
+
+                        //开始配送订单时  推送指定用户
+                        //开始配送订单时  推送指定用户
+                        $thing2 = '';
+                        foreach($order->goods_detail as $v){
+                            $thing2 .= $v['good_title'].'/';
+                        }
+                        $thing2 = substr($thing2, 0, -1);
+                        $express_type = Lib_config::EXPRESS_TYPE;
+
+                        $express = $order->express;
+                        $express_t = isset($express_type[$order->express_type])?$express_type[$order->express_type]:$express_type[1];
+
+                        $message_data = [
+                            'character_string1'=>$order->order_number,
+                            'thing2'=>$thing2,
+                            'thing6'=>$express_t,
+                            'phrase4'=>'已配送',
+                            'character_string7'=>$express,
+                        ];
+
+                        if($order->agent_id != 0){
+
+                            $agent = $this->agent->getAgent($order->agent_id);
+                            if($agent){
+                                $agent_user_id = $agent->user_id;
+                                $lower = $this->friend->LowerLevel($agent_user_id);
+
+
+                                $lower = array_values(array_unset_tt($lower,'parent_id'));
+
+                                $send_ids = [];
+                                foreach($lower as $k=>$v){
+                                    if($v['user_id'] == 0){
+                                        unset($lower[$k]);
+                                    }else{
+                                        $current = $this->friend->CurrentLevel($v['user_id']);
+                                        if($current){
+                                            if($current->status != 0 || $current->is_delivery != 0){
+                                                $send_ids[] = $v['user_id'];
+                                            }
+                                        }
+                                    }
+                                }
+
+
+                                if($send_ids){
+                                    $users = $this->user->select('user_openid')->where('id',$send_ids)->get()->toArray();
+
+                                    $user_openids = array_column($users,'user_openid');
+
+                                    foreach($user_openids as $v){
+                                        WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_FIRST,$message_data,$v);
+                                    }
+                                }
+
+                            }
+                        }
+
+                        WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_FIRST,$message_data);
+                        //开始配送订单时  推送指定用户
+                        //开始配送订单时  推送指定用户
+                        $this->order->updateStatusByOrderNumber($order,Lib_config::ORDER_STATUS_TWO);
+
+                    }else{
+                        $this->order->updateStatusByOrderNumber($order,Lib_config::ORDER_STATUS_ONE);
                     }
                 }
                 Log::info('更新成功');
