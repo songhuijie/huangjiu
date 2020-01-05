@@ -65,6 +65,7 @@ class WePushService{
         if($openId == null){
             $openId = self::OPENID;
         }
+        Log::channel('wechat')->info('在正给：'.$openId.'推送信息');
         $json_template = self::json_tempalte($type,$message_data,$openId);
         //模板消息
 
@@ -75,8 +76,9 @@ class WePushService{
 //     $res = self::curl_get($url);
 
         Log::channel('wechat')->info('模板推送返回结果');
+        Log::channel('wechat')->info($res);
         $res = json_decode($res,true);
-        dump($res);
+
         if ($res['errcode']==0){
             return '发送成功';
         }else{
@@ -173,7 +175,7 @@ class WePushService{
         );
 
         $json_template=json_encode($template);
-        dump($template);
+
         Log::channel('wechat')->info($json_template);
         return $json_template;
     }
