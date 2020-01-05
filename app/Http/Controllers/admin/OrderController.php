@@ -157,7 +157,7 @@ class OrderController extends Controller{
                                     $user_openids = array_column($users,'user_openid');
 
                                     foreach($user_openids as $v){
-                                        WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_FIRST,$message_data,$v);
+                                        WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_SECOND,$message_data,$v);
                                     }
                                 }
 
@@ -186,8 +186,8 @@ class OrderController extends Controller{
                             'character_string1'=>$order->order_number,
                             'thing2'=>$thing2,
                             'thing6'=>$express_t,
-                            'character_string7'=>$express,
                             'phrase4'=>'已配送',
+                            'character_string7'=>$express,
                         ];
 
                         if($order->agent_id != 0){
