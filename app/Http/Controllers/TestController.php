@@ -88,9 +88,11 @@ class TestController extends Controller{
 
     public function test(){
 
-        Log::channel('order')->info('测试');
-        dd('s');
-        Redis::get('access_token');
+
+        $key =  Redis::del('access_token');
+        $key =  Redis::get('access_token');
+//        $key = Redis::setex('access_token',1800,'1');
+        dd($key);
         dd('删除 access_token');
 
 
