@@ -105,6 +105,12 @@ return [
             'level' => 'debug',
             'days' => 14,
         ],
+        'order' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/order.log'),
+            'level' => 'debug',
+            'days' => 14,
+        ],
     ],
 
 ];

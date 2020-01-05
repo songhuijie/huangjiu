@@ -293,7 +293,7 @@ class OrderController extends Controller{
 
 
 
-
+                    Log::channel('order')->info('支付成功回调成功');
 
                     $order = $this->order->getOrderByOrderID($order);
                     if($order){
@@ -301,8 +301,9 @@ class OrderController extends Controller{
 
                             //开始配送订单时  推送指定用户
                             //开始配送订单时  推送指定用户
-                            $this->order->updateStatusByOrderNumber($order,Lib_config::ORDER_STATUS_TWO);
-
+                            $int = $this->order->updateStatusByOrderNumber($order,Lib_config::ORDER_STATUS_TWO);
+                            Log::channel('order')->info($int);
+                            Log::channel('order')->info('有代理商结算');
                             $agent = $this->agent->getAgent($order->agent_id);
                             Log::channel('error')->info('给总代理发送短信:'.$agent->iphone);
                             AlibabaSms::SendSms($agent->iphone);
@@ -360,6 +361,7 @@ class OrderController extends Controller{
 
 
                         }else{
+                            Log::channel('order')->info('没有代理商结算');
                             $this->order->updateStatusByOrderNumber($order,Lib_config::ORDER_STATUS_ONE);
                         }
                     }
