@@ -23,6 +23,7 @@ use App\Services\CourierBirdService;
 use App\Services\MapServices;
 use App\Services\WePushService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 
 class TestController extends Controller{
@@ -86,6 +87,9 @@ class TestController extends Controller{
     }
 
     public function test(){
+
+        Log::channel('order')->info('测试');
+        dd('s');
         Redis::get('access_token');
         dd('删除 access_token');
 
