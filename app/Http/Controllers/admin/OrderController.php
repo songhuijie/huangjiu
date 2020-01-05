@@ -179,7 +179,7 @@ class OrderController extends Controller{
 
                                 dump($send_ids);
                                 if($send_ids){
-                                    $users = $this->user->select('user_openid')->where('id',$send_ids)->get->toArray();
+                                    $users = $this->user->select('user_openid')->where('id',$send_ids)->get()->toArray();
 
                                     $user_openids = array_column($users,'user_openid');
                                     dd($user_openids);
