@@ -247,12 +247,18 @@ class AgentController extends Controller
         if($agent){
             $friend = $this->friend->GetFriend($set_user_id);
 
+            $thing3 = '';
             if($friend){
                 switch ($type){
                     case 1:
+                        $this->friend->updateAgent($set_user_id,$type,$type);
+                        $response_json->status = Lib_const_status::SUCCESS;
+                        $thing3 = '发货人员';
+                        break;
                     case 2:
                         $this->friend->updateAgent($set_user_id,$type,$type);
                         $response_json->status = Lib_const_status::SUCCESS;
+                        $thing3 = '一级代理';
                         break;
                     case 3:
                         if($friend->best_id == $user_id){
@@ -261,6 +267,7 @@ class AgentController extends Controller
                         }else{
                             $response_json->status = Lib_const_status::USER_CAN_NOT_BECOME_THIRD;
                         }
+                        $thing3 = '二级代理';
                         break;
                     default:
                         break;
@@ -282,6 +289,19 @@ class AgentController extends Controller
 
                 }
             }
+
+            //审核通过 需要这个用户开启权限 给当前代理 推送审核通过信息
+            $send_user =  $this->user->find($set_user_id);
+
+            $message_data = [
+                'name1'=>$send_user->user_nickname,
+                'phrase2'=>'审核通过',
+                'thing3'=>$thing3,
+            ];
+            $open_id=$send_user->user_openid;
+            WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_THIRD,$message_data,$open_id);
+
+
         }else{
             $response_json->status = Lib_const_status::USER_NOT_AGENT;
         }
@@ -530,6 +550,63 @@ class AgentController extends Controller
 
 
                 //签收订单后  推送指定用户
+//                $thing2 = '';
+//                foreach($order->goods_detail as $v){
+//                    $thing2 .= $v['good_title'].' * '.$v['goods_num'].'/';
+//                }
+//                $thing2 = substr($thing2, 0, -1);
+//
+//
+//
+//
+//                $user = $this->user->find($order->user_id);
+//                $user_name = isset($user->user_nickname)?$user->user_nickname:'张三';
+//                $message_data = [
+//                    'character_string1'=>$order->order_number,
+//                    'thing2'=>$thing2,
+//                    'time3'=>date('Y-m-d H:i:s'),
+//                    'name4'=>$user_name,
+//                ];
+//
+//                if($order->agent_id != 0){
+//
+//                    $agent = $this->agent->getAgent($order->agent_id);
+//                    if($agent){
+//                        $agent_user_id = $agent->user_id;
+//                        $lower = $this->friend->LowerLevel($agent_user_id);
+//
+//
+//                        $lower = array_values(array_unset_tt($lower,'parent_id'));
+//
+//                        $send_ids = [];
+//                        foreach($lower as $k=>$v){
+//                            if($v['user_id'] == 0){
+//                                unset($lower[$k]);
+//                            }else{
+//                                $current = $this->friend->CurrentLevel($v['user_id']);
+//                                if($current){
+//                                    if($current->status != 0 || $current->is_delivery != 0){
+//                                        $send_ids[] = $v['user_id'];
+//                                    }
+//                                }
+//                            }
+//                        }
+//
+//
+//                        if($send_ids){
+//                            $users = $this->user->select('user_openid')->where('id',$send_ids)->get()->toArray();
+//
+//                            $user_openids = array_column($users,'user_openid');
+//
+//                            foreach($user_openids as $v){
+//                                WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_SECOND,$message_data,$v);
+//                            }
+//                        }
+//
+//                    }
+//                }
+
+
                 $thing2 = '';
                 foreach($order->goods_detail as $v){
                     $thing2 .= $v['good_title'].' * '.$v['goods_num'].'/';
@@ -547,47 +624,8 @@ class AgentController extends Controller
                     'time3'=>date('Y-m-d H:i:s'),
                     'name4'=>$user_name,
                 ];
-
-                if($order->agent_id != 0){
-
-                    $agent = $this->agent->getAgent($order->agent_id);
-                    if($agent){
-                        $agent_user_id = $agent->user_id;
-                        $lower = $this->friend->LowerLevel($agent_user_id);
-
-
-                        $lower = array_values(array_unset_tt($lower,'parent_id'));
-
-                        $send_ids = [];
-                        foreach($lower as $k=>$v){
-                            if($v['user_id'] == 0){
-                                unset($lower[$k]);
-                            }else{
-                                $current = $this->friend->CurrentLevel($v['user_id']);
-                                if($current){
-                                    if($current->status != 0 || $current->is_delivery != 0){
-                                        $send_ids[] = $v['user_id'];
-                                    }
-                                }
-                            }
-                        }
-
-
-                        if($send_ids){
-                            $users = $this->user->select('user_openid')->where('id',$send_ids)->get()->toArray();
-
-                            $user_openids = array_column($users,'user_openid');
-
-                            foreach($user_openids as $v){
-                                WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_SECOND,$message_data,$v);
-                            }
-                        }
-
-                    }
-                }
-
-
-                WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_SECOND,$message_data);
+                $open_id=$user->user_openid;
+                WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_SECOND,$message_data,$open_id);
 
                 //签收订单后  推送指定用户
             }

@@ -281,119 +281,89 @@ class OrderController extends Controller{
         $value = file_get_contents("php://input"); //接收微信参数
         if (!empty($value)) {
             $arr = xmlToArray($value);
-            if($arr['result_code'] == 'SUCCESS' && $arr['return_code'] == 'SUCCESS'){
-                $attach = json_decode($arr['attach'], true);
-                Log::info($arr['attach']);
-                $money = $arr['total_fee']/100;
-                $uid = $attach['user_id'];
-                $order = $arr['out_trade_no'];
+            try{
+
+                if($arr['result_code'] == 'SUCCESS' && $arr['return_code'] == 'SUCCESS'){
+                    $attach = json_decode($arr['attach'], true);
+                    Log::info($arr['attach']);
+                    $money = $arr['total_fee']/100;
+                    $uid = $attach['user_id'];
+                    $order = $arr['out_trade_no'];
 
 
 
 
 
 
-                $order = $this->order->getOrderByOrderID($order);
-                if($order){
-                    if($order->agent_id != 0){
-                        $agent = $this->agent->getAgent($order->agent_id);
-                        Log::channel('error')->info('给总代理发送短信:'.$agent->iphone);
-                        AlibabaSms::SendSms($agent->iphone);
-
-
-                        $friend = $this->friend->LowerLevelOne($agent->user_id);
-
-                        $number = [];
-                        if($friend){
-                            foreach($friend as $k=>$v){
-                                if($v->is_delivery == 1){
-                                    $user = $this->user->find($v->parent_id);
-                                    if($user && !empty($user->phone_number)){
-                                        $number[] = $user->phone_number;
-
-                                    }
-                                }
-                            }
-                            if($number){
-                                $new_number = array_unique($number);
-                                foreach($new_number as $v){
-                                    Log::channel('error')->info('给配送员发送短信:'.$v);
-                                    AlibabaSms::SendSms($v);
-                                }
-                            }
-
-                        }
-
-                        //开始配送订单时  推送指定用户
-                        //开始配送订单时  推送指定用户
-                        $thing2 = '';
-                        foreach($order->goods_detail as $v){
-                            $thing2 .= $v['good_title'].'/';
-                        }
-                        $thing2 = substr($thing2, 0, -1);
-                        $express_type = Lib_config::EXPRESS_TYPE;
-
-                        $express = $order->express;
-                        $express_t = isset($express_type[$order->express_type])?$express_type[$order->express_type]:$express_type[1];
-
-                        $message_data = [
-                            'character_string1'=>$order->order_number,
-                            'thing2'=>$thing2,
-                            'thing6'=>$express_t,
-                            'phrase4'=>'已配送',
-                            'character_string7'=>$express,
-                        ];
-
+                    $order = $this->order->getOrderByOrderID($order);
+                    if($order){
                         if($order->agent_id != 0){
-
                             $agent = $this->agent->getAgent($order->agent_id);
-                            if($agent){
-                                $agent_user_id = $agent->user_id;
-                                $lower = $this->friend->LowerLevel($agent_user_id);
+                            Log::channel('error')->info('给总代理发送短信:'.$agent->iphone);
+                            AlibabaSms::SendSms($agent->iphone);
 
 
-                                $lower = array_values(array_unset_tt($lower,'parent_id'));
+                            $friend = $this->friend->LowerLevelOne($agent->user_id);
 
-                                $send_ids = [];
-                                foreach($lower as $k=>$v){
-                                    if($v['user_id'] == 0){
-                                        unset($lower[$k]);
-                                    }else{
-                                        $current = $this->friend->CurrentLevel($v['user_id']);
-                                        if($current){
-                                            if($current->status != 0 || $current->is_delivery != 0){
-                                                $send_ids[] = $v['user_id'];
-                                            }
+                            $number = [];
+                            if($friend){
+                                foreach($friend as $k=>$v){
+                                    if($v->is_delivery == 1){
+                                        $user = $this->user->find($v->parent_id);
+                                        if($user && !empty($user->phone_number)){
+                                            $number[] = $user->phone_number;
+
                                         }
                                     }
                                 }
-
-
-                                if($send_ids){
-                                    $users = $this->user->select('user_openid')->where('id',$send_ids)->get()->toArray();
-
-                                    $user_openids = array_column($users,'user_openid');
-
-                                    foreach($user_openids as $v){
-                                        WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_FIRST,$message_data,$v);
+                                if($number){
+                                    $new_number = array_unique($number);
+                                    foreach($new_number as $v){
+                                        Log::channel('error')->info('给配送员发送短信:'.$v);
+                                        AlibabaSms::SendSms($v);
                                     }
                                 }
 
                             }
+
+                            //开始配送订单时  推送指定用户
+                            //开始配送订单时  推送指定用户
+                            $thing2 = '';
+                            foreach($order->goods_detail as $v){
+                                $thing2 .= $v['good_title'].'/';
+                            }
+                            $thing2 = substr($thing2, 0, -1);
+                            $express_type = Lib_config::EXPRESS_TYPE;
+
+                            $express = $order->express;
+                            $express_t = isset($express_type[$order->express_type])?$express_type[$order->express_type]:$express_type[1];
+
+                            $message_data = [
+                                'character_string1'=>$order->order_number,
+                                'thing2'=>$thing2,
+                                'thing6'=>$express_t,
+                                'phrase4'=>'已配送',
+                                'character_string7'=>$express,
+                            ];
+
+                            $user = $this->user->find($order->user_id);
+                            $open_id=$user->user_openid;
+
+                            WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_FIRST,$message_data,$open_id);
+                            //开始配送订单时  推送指定用户
+                            //开始配送订单时  推送指定用户
+                            $this->order->updateStatusByOrderNumber($order,Lib_config::ORDER_STATUS_TWO);
+
+                        }else{
+                            $this->order->updateStatusByOrderNumber($order,Lib_config::ORDER_STATUS_ONE);
                         }
-
-                        WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_FIRST,$message_data);
-                        //开始配送订单时  推送指定用户
-                        //开始配送订单时  推送指定用户
-                        $this->order->updateStatusByOrderNumber($order,Lib_config::ORDER_STATUS_TWO);
-
-                    }else{
-                        $this->order->updateStatusByOrderNumber($order,Lib_config::ORDER_STATUS_ONE);
                     }
+                    Log::info('更新成功');
+                    // @$this->userController->record($money,$uid,$order);
+                    return 'SUCCESS';
                 }
-                Log::info('更新成功');
-                // @$this->userController->record($money,$uid,$order);
-                return 'SUCCESS';
+            }catch (\Exception $e){
+                Log::channel('error')->info($e->getMessage());
             }
         }
     }

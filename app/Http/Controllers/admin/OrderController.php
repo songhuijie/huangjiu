@@ -126,46 +126,47 @@ class OrderController extends Controller{
                             'name4'=>$user_name,
                         ];
 
-                        if($order->agent_id != 0){
+                        $open_id=$user->user_openid;
+//                        if($order->agent_id != 0){
+//
+//                            $agent = $this->agent->getAgent($order->agent_id);
+//                            if($agent){
+//                                $agent_user_id = $agent->user_id;
+//                                $lower = $this->friend->LowerLevel($agent_user_id);
+//
+//
+//                                $lower = array_values(array_unset_tt($lower,'parent_id'));
+//
+//                                $send_ids = [];
+//                                foreach($lower as $k=>$v){
+//                                    if($v['user_id'] == 0){
+//                                        unset($lower[$k]);
+//                                    }else{
+//                                        $current = $this->friend->CurrentLevel($v['user_id']);
+//                                        if($current){
+//                                            if($current->status != 0 || $current->is_delivery != 0){
+//                                                $send_ids[] = $v['user_id'];
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//
+//
+//                                if($send_ids){
+//                                    $users = $this->user->select('user_openid')->where('id',$send_ids)->get()->toArray();
+//
+//                                    $user_openids = array_column($users,'user_openid');
+//
+//                                    foreach($user_openids as $v){
+//                                        WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_SECOND,$message_data,$v);
+//                                    }
+//                                }
+//
+//                            }
+//                        }
 
-                            $agent = $this->agent->getAgent($order->agent_id);
-                            if($agent){
-                                $agent_user_id = $agent->user_id;
-                                $lower = $this->friend->LowerLevel($agent_user_id);
 
-
-                                $lower = array_values(array_unset_tt($lower,'parent_id'));
-
-                                $send_ids = [];
-                                foreach($lower as $k=>$v){
-                                    if($v['user_id'] == 0){
-                                        unset($lower[$k]);
-                                    }else{
-                                        $current = $this->friend->CurrentLevel($v['user_id']);
-                                        if($current){
-                                            if($current->status != 0 || $current->is_delivery != 0){
-                                                $send_ids[] = $v['user_id'];
-                                            }
-                                        }
-                                    }
-                                }
-
-
-                                if($send_ids){
-                                    $users = $this->user->select('user_openid')->where('id',$send_ids)->get()->toArray();
-
-                                    $user_openids = array_column($users,'user_openid');
-
-                                    foreach($user_openids as $v){
-                                        WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_SECOND,$message_data,$v);
-                                    }
-                                }
-
-                            }
-                        }
-
-
-                        WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_SECOND,$message_data);
+                        WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_SECOND,$message_data,$open_id);
                     }
 
                     if($data['order_status'] == Lib_config::ORDER_STATUS_TWO){
@@ -190,45 +191,46 @@ class OrderController extends Controller{
                             'character_string7'=>$express,
                         ];
 
-                        if($order->agent_id != 0){
-
-                            $agent = $this->agent->getAgent($order->agent_id);
-                            if($agent){
-                                $agent_user_id = $agent->user_id;
-                                $lower = $this->friend->LowerLevel($agent_user_id);
-
-
-                                $lower = array_values(array_unset_tt($lower,'parent_id'));
-
-                                $send_ids = [];
-                                foreach($lower as $k=>$v){
-                                    if($v['user_id'] == 0){
-                                        unset($lower[$k]);
-                                    }else{
-                                        $current = $this->friend->CurrentLevel($v['user_id']);
-                                        if($current){
-                                            if($current->status != 0 || $current->is_delivery != 0){
-                                                $send_ids[] = $v['user_id'];
-                                            }
-                                        }
-                                    }
-                                }
-
-
-                                if($send_ids){
-                                    $users = $this->user->select('user_openid')->where('id',$send_ids)->get()->toArray();
-
-                                    $user_openids = array_column($users,'user_openid');
-
-                                    foreach($user_openids as $v){
-                                        WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_FIRST,$message_data,$v);
-                                    }
-                                }
-
-                            }
-                        }
-
-                        WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_FIRST,$message_data);
+//                        if($order->agent_id != 0){
+//
+//                            $agent = $this->agent->getAgent($order->agent_id);
+//                            if($agent){
+//                                $agent_user_id = $agent->user_id;
+//                                $lower = $this->friend->LowerLevel($agent_user_id);
+//
+//
+//                                $lower = array_values(array_unset_tt($lower,'parent_id'));
+//
+//                                $send_ids = [];
+//                                foreach($lower as $k=>$v){
+//                                    if($v['user_id'] == 0){
+//                                        unset($lower[$k]);
+//                                    }else{
+//                                        $current = $this->friend->CurrentLevel($v['user_id']);
+//                                        if($current){
+//                                            if($current->status != 0 || $current->is_delivery != 0){
+//                                                $send_ids[] = $v['user_id'];
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//
+//
+//                                if($send_ids){
+//                                    $users = $this->user->select('user_openid')->where('id',$send_ids)->get()->toArray();
+//
+//                                    $user_openids = array_column($users,'user_openid');
+//
+//                                    foreach($user_openids as $v){
+//                                        WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_FIRST,$message_data,$v);
+//                                    }
+//                                }
+//
+//                            }
+//                        }
+                        $user = $this->user->find($order->user_id);
+                        $open_id=$user->user_openid;
+                        WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_FIRST,$message_data,$open_id);
 
                     }
 
