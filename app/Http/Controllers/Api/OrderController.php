@@ -281,6 +281,8 @@ class OrderController extends Controller{
         $value = file_get_contents("php://input"); //接收微信参数
         if (!empty($value)) {
             $arr = xmlToArray($value);
+            Log::channel('order')->info('支付成功回调成功');
+            Log::channel('order')->info(json_encode($arr));
             try{
 
                 if($arr['result_code'] == 'SUCCESS' && $arr['return_code'] == 'SUCCESS'){
