@@ -115,6 +115,12 @@
         });
     });
 
+    //单击图片删除图片 【注册全局函数】
+    $('#img2').on('click','img',function(){
+        $(this).prev().remove();
+        $(this).remove();
+    });
+
     layui.use(['util','form','laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element', 'slider'], function(){
         var laydate = layui.laydate //日期
         ,laypage = layui.laypage //分页
