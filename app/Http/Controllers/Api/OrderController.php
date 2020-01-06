@@ -279,6 +279,8 @@ class OrderController extends Controller{
      */
     public function notify(){
         $value = file_get_contents("php://input"); //接收微信参数
+        Log::channel('order')->info($value);
+        
         if (!empty($value)) {
             $arr = xmlToArray($value);
             Log::channel('order')->info('支付成功回调成功');
@@ -385,6 +387,9 @@ class OrderController extends Controller{
                     event(new RoyaltyEvent($user_id,$order->order_royalty_price,$order->is_arrive,$order->agent_id));
                     $this->order->updateStatus($all['order_id'],$user_id,Lib_config::ORDER_STATUS_FOUR);
 
+
+                    //推送信息
+                    //推送信息
                     $thing2 = '';
                     foreach($order->goods_detail as $v){
                         $thing2 .= $v['good_title'].' * '.$v['goods_num'].'/';

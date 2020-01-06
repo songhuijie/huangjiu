@@ -631,7 +631,7 @@ class AgentController extends Controller
 //                    }
 //                }
 
-
+                //签收订单后  推送指定用户
                 $thing2 = '';
                 foreach($order->goods_detail as $v){
                     $thing2 .= $v['good_title'].' * '.$v['goods_num'].'/';

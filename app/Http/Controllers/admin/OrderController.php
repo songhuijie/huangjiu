@@ -119,6 +119,7 @@ class OrderController extends Controller{
 
 
 
+                        //签收订单后  推送指定用户
                         $user = $this->user->find($order->user_id);
                         $user_name = isset($user->user_nickname)?$user->user_nickname:'张三';
                         $message_data = [
