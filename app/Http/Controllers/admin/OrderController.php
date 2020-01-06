@@ -103,6 +103,8 @@ class OrderController extends Controller{
                     $id = $data['id'];
                     unset($data['update'],$data['type'],$data['id']);
                     $order = $this->order->find($id);
+
+
                     if($data['order_status'] == Lib_config::ORDER_STATUS_FOUR){
                         //处理商品提成
                         RoyaltyService::HandleRoyalty($order->user_id,$order->order_royalty_price,$order->is_arrive,$order->agent_id);
@@ -180,8 +182,8 @@ class OrderController extends Controller{
                         $thing2 = substr($thing2, 0, -1);
                         $express_type = Lib_config::EXPRESS_TYPE;
 
-                        $express = $data['express'];
-                        $express_t = isset($express_type[$data['express_type']])?$express_type[$data['express_type']]:$express_type[1];
+                        $express = $order->express;
+                        $express_t = isset($express_type[$order->express_type])?$express_type[$order->express_type]:$express_type[1];
 
                         $message_data = [
                             'character_string1'=>$order->order_number,
