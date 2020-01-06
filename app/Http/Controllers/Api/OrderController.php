@@ -384,6 +384,23 @@ class OrderController extends Controller{
                     $response_json->status = Lib_const_status::SUCCESS;
                     event(new RoyaltyEvent($user_id,$order->order_royalty_price,$order->is_arrive,$order->agent_id));
                     $this->order->updateStatus($all['order_id'],$user_id,Lib_config::ORDER_STATUS_FOUR);
+
+                    $thing2 = '';
+                    foreach($order->goods_detail as $v){
+                        $thing2 .= $v['good_title'].' * '.$v['goods_num'].'/';
+                    }
+                    $thing2 = substr($thing2, 0, -1);
+
+                    $user = $this->user->find($order->user_id);
+                    $user_name = isset($user->user_nickname)?$user->user_nickname:'张三';
+                    $message_data = [
+                        'character_string1'=>$order->order_number,
+                        'thing2'=>$thing2,
+                        'time3'=>date('Y-m-d H:i:s'),
+                        'name4'=>$user_name,
+                    ];
+                    $open_id=$user->user_openid;
+                    WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_SECOND,$message_data,$open_id);
                     break;
                 case 4:
                     $response_json->status = Lib_const_status::ORDER_RECEIVED_GOODS;
