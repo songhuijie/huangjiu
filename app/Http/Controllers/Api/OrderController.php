@@ -278,9 +278,10 @@ class OrderController extends Controller{
      * 支付回调通知
      */
     public function notify(){
+        dd(1);
         $value = file_get_contents("php://input"); //接收微信参数
         Log::channel('order')->info($value);
-        
+
         if (!empty($value)) {
             $arr = xmlToArray($value);
             Log::channel('order')->info('支付成功回调成功');
