@@ -70,6 +70,7 @@ class Lib_config{
         11=>'优速快递',
         12=>'德邦快递',
         13=>'宅急送',
+        20=>'代理商发货'
     ];
 
     const WE_PUSH_TEMPLATE_FIRST  = 1;
