@@ -54,7 +54,7 @@
 
 
              <div class="layui-form-item">
-                 <label class="layui-form-label">(初始2000克(g) 内价格)运费</label>
+                 <label class="layui-form-label">(初始1000克(g) 内价格)运费</label>
                  <div class="layui-input-block">
                      <input type="text" name="price" required  lay-verify="required" value="@if(!empty($freight)){{$freight->price}} @endif" placeholder="请输入运费" autocomplete="off" class="layui-input">
                  </div>
