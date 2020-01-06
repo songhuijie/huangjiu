@@ -169,7 +169,7 @@ class OrderController extends Controller{
                         WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_SECOND,$message_data,$open_id);
                     }
 
-                    if($data['order_status'] == Lib_config::ORDER_STATUS_TWO){
+                    if($data['order_status'] == Lib_config::ORDER_STATUS_THREE){
 
 
                         //开始配送订单时  推送指定用户

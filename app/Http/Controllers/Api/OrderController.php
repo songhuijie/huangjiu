@@ -333,34 +333,6 @@ class OrderController extends Controller{
 
                             }
 
-
-
-                            //开始配送订单时  推送指定用户
-                            //开始配送订单时  推送指定用户
-                            $thing2 = '';
-                            foreach($order->goods_detail as $v){
-                                $thing2 .= $v['good_title'].'/';
-                            }
-                            $thing2 = substr($thing2, 0, -1);
-                            $express_type = Lib_config::EXPRESS_TYPE;
-
-                            $express = $order->express;
-                            $express_t = isset($express_type[$order->express_type])?$express_type[$order->express_type]:$express_type[1];
-
-                            $message_data = [
-                                'character_string1'=>$order->order_number,
-                                'thing2'=>$thing2,
-                                'thing6'=>$express_t,
-                                'phrase4'=>'已配送',
-                                'character_string7'=>$express,
-                            ];
-
-                            $user = $this->user->find($order->user_id);
-                            $open_id=$user->user_openid;
-
-                            WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_FIRST,$message_data,$open_id);
-
-
                         }else{
                             Log::channel('order')->info('没有代理商结算');
                             $this->order->updateStatusByOrderNumber($order_number,Lib_config::ORDER_STATUS_ONE);
