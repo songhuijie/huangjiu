@@ -164,12 +164,14 @@ class RoyaltyService{
                         if($parent_id != 0){
                             $parent_parent_id = $parent_id;
                         }
-                        $pattern = self::PATTERN[self::PATTERN_SECOND];
+                        $pattern = self::PATTERN[self::PATTERN_THIRD];
                         $parent_contribute_amount_new = bcmul($order_royalty_price,$pattern[0],2);
-                        $best_contribute_amount_new = bcmul($order_royalty_price,$pattern[1],2);
+                        $parent_parent_contribute_amount_new = bcmul($order_royalty_price,$pattern[1],2);
+                        $best_contribute_amount_new = bcmul($order_royalty_price,$pattern[2],2);
                         $asset_data = [
                             ['user_id'=>$parent_parent_id,'royalty_balance'=>$parent_contribute_amount_new,'contribution_id'=>$user_id,'proportion'=>$pattern[0]],
-                            ['user_id'=>$agent_user_id,'royalty_balance'=>$best_contribute_amount_new,'contribution_id'=>$user_id,'proportion'=>$pattern[1],'agent'=>1],
+                            ['user_id'=>$best_id,'royalty_balance'=>$parent_parent_contribute_amount_new,'contribution_id'=>$user_id,'proportion'=>$pattern[1]],
+                            ['user_id'=>$agent_user_id,'royalty_balance'=>$best_contribute_amount_new,'contribution_id'=>$user_id,'proportion'=>$pattern[2],'agent'=>1],
                         ];
                     }else{
                         $pattern = self::PATTERN[self::PATTERN_FOUR];
@@ -212,13 +214,11 @@ class RoyaltyService{
                     break;
                 //处理当时2级用户
                 case 2:
-                    $pattern = self::PATTERN[self::PATTERN_THIRD];
+                    $pattern = self::PATTERN[self::PATTERN_SECOND];
                     $parent_contribute_amount_new = bcmul($order_royalty_price,$pattern[0],2);
-                    $parent_parent_contribute_amount_new = bcmul($order_royalty_price,$pattern[1],2);
                     $best_contribute_amount_new = bcmul($order_royalty_price,$pattern[2],2);
                     $asset_data = [
                         ['user_id'=>$user_id,'royalty_balance'=>$parent_contribute_amount_new,'contribution_id'=>$user_id,'proportion'=>$pattern[0]],
-                        ['user_id'=>$best_id,'royalty_balance'=>$parent_parent_contribute_amount_new,'contribution_id'=>$user_id,'proportion'=>$pattern[0]],
                         ['user_id'=>$agent_user_id,'royalty_balance'=>$best_contribute_amount_new,'contribution_id'=>$user_id,'proportion'=>$pattern[1],'agent'=>1]
                     ];
             }
