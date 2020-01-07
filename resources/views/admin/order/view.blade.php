@@ -47,6 +47,18 @@
                          <p class="">商品图片:<img  src="{{$v['good_image']}}"  name="headimg" id="img1" width="20%"></p><br/>
                  @endforeach
              </div>
+
+             <div class="layui-form-item">
+
+                 @foreach($order->address_detail as $k=>$v)
+                     <p class="">省:{{$v['province']}}</p><br/>
+                     <p class="">市:{{$v['city']}}</p><br/>
+                     <p class="">县:{{$v['area']}}</p><br/>
+                     <p class="">地址:{{$v['address']}}</p><br/>
+                     <p class="">收货人:{{$v['name']}}</p><br/>
+                     <p class="">手机:{{$v['phone']}}</p><br/>
+                 @endforeach
+             </div>
              <div class="layui-form-item">
                  <p class="">订单总价：{{$order->order_total_price}}</p>
              </div>
