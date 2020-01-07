@@ -201,7 +201,6 @@ class AgentController extends Controller
             //用户等级  1 1级代理  2 2级代理  3 3级代理  0 普通用户
 
             if($result){
-
                 foreach($result as $k=>$v){
                     $v->userInfo;
                     $v->status = $status;
