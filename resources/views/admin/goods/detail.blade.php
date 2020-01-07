@@ -61,7 +61,7 @@
              <div class="layui-form-item" style="display: none">
                  <label class="layui-form-label">提成价格</label>
                  <div class="layui-input-block">
-                     <input type="text" name="royalty_price" required  lay-verify="required" value="@if(!empty($label)){{$label->royalty_price}} @endif" placeholder="请输入提成价格" autocomplete="off" class="layui-input">
+                     <input type="text" name="royalty_price"    value="@if(!empty($label)){{$label->royalty_price}} @endif" placeholder="请输入提成价格" autocomplete="off" class="layui-input">
                  </div>
              </div>
 
