@@ -62,7 +62,7 @@ class Order extends Model
 
     public function getAddressDetailAttribute($value)
     {
-        return json_decode($value);
+        return json_decode($value,true);
     }
 
     /**
