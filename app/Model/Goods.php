@@ -43,7 +43,7 @@ class Goods extends Model
      * @return mixed
      */
     public function getAllByGoodType($good_type,$page,$limit){
-        return $this->select($this->select)->where(['good_type'=>$good_type,'goods_status'=>1])->get()->toArray();
+        return $this->select($this->select)->where(['good_type'=>$good_type,'goods_status'=>1])->orderBy('id','desc')->get()->toArray();
     }
 
     public function getGoodImageAttribute($value)
