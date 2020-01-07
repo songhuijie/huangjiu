@@ -267,7 +267,7 @@
         
         var date=data.field;
         
-        if(date.good_title=="" || date.good_type=="" || date.royalty_price=="" || date.old_price=="" || date.new_price=="" || date.stock=="" || date.good_image==""  || date.detail=="" || date.freight=="" || date.goods_status==""){
+        if(date.good_title=="" || date.good_type=="" || date.old_price=="" || date.new_price=="" || date.stock=="" || date.good_image==""  || date.detail=="" || date.freight=="" || date.goods_status==""){
             console.log(date.good_title);
             console.log(date.good_type);
             console.log(date.royalty_price);
