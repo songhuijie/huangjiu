@@ -50,11 +50,9 @@
 
              <div class="layui-form-item">
 
-                 @foreach($order->address_detail as $k=>$v)
-                     <p class="">地址:{{$v['province']}}{{$v['city']}}{{$v['area']}}{{$v['address']}}</p><br/>
-                     <p class="">收货人:{{$v['name']}}</p><br/>
-                     <p class="">手机:{{$v['phone']}}</p><br/>
-                 @endforeach
+                     <p class="">地址:{{$order_info->address_detail['province']}}{{$order_info->address_detail['city']}}{{$order_info->address_detail['area']}}{{$order_info->address_detail['address']}}</p><br/>
+                     <p class="">收货人:{{$order_info->address_detail['name']}}</p><br/>
+                     <p class="">手机:{{$order_info->address_detail['phone']}}</p><br/>
              </div>
              <div class="layui-form-item">
                  <p class="">订单总价：{{$order->order_total_price}}</p>

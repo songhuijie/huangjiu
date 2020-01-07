@@ -251,7 +251,6 @@ class OrderController extends Controller{
                 return view("admin/order/detail",['type'=>$this->type,'order'=>$order_info,'express_type'=>$express_type]);
             }elseif($data['type'] == 'view'){
                 $order_info =$this->order->find($data['id']);
-                dd($order_info->address_detail,$order_info->address_detail);
                 return view("admin/order/view",['type'=>$this->type,'order'=>$order_info]);
             }
 
