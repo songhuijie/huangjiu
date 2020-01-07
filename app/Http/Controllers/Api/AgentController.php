@@ -205,6 +205,7 @@ class AgentController extends Controller
                 foreach($result as $k=>$v){
                     $v->userInfo;
                     $v->status = $status;
+                    $v->created_at = $v->userInfo->created_at;
                     $v->count = $this->friend_ship->LowerCount($v->user_id);
                     $v->contribution_amount = $this->income->getByContribution($user_id,$v->user_id);
                 }
