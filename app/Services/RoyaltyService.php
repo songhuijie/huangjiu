@@ -95,8 +95,6 @@ class RoyaltyService{
             self::AssetIncome($asset_data);
         }
 
-
-
     }
 
 

@@ -89,6 +89,15 @@ class TestController extends Controller{
     public function test(){
 
 
+
+        $a = '';
+        if($a == null){
+            $data = [3];
+        }else{
+            $data = explode(',',$a);
+            array_unshift($data,3);
+        }
+        dd($a,$data,implode(',',$data));
         $key =  Redis::del('access_token');
         $key =  Redis::get('access_token');
 //        $key = Redis::setex('access_token',1800,'1');

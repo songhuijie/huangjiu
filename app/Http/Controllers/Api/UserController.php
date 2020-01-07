@@ -8,6 +8,7 @@ use App\Model\Agent;
 use App\Model\Asset;
 use App\Model\Config;
 use App\Model\Friend;
+use App\Model\FriendShip;
 use App\Services\AccessEntity;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -28,13 +29,15 @@ class UserController extends Controller
     private $order;
     private $income;
     private $friend;
+    private $friend_ship;
     private $asset;
     private $agent;
-    public function __construct(User $user,Config $config,Friend $friend,Asset $asset,Agent $agent)
+    public function __construct(User $user,Config $config,Friend $friend,FriendShip $friend_ship,Asset $asset,Agent $agent)
     {
         $this->user = $user;
         $this->config = $config;
         $this->friend = $friend;
+        $this->friend_ship = $friend_ship;
         $this->asset = $asset;
         $this->agent = $agent;
     }
@@ -65,7 +68,7 @@ class UserController extends Controller
         $secret = $config['secret'];
 
         if($param['code']){
-            if(in_array($param['code'],['123','1234','12345','123456','1234567','12345678','123456789'])){
+            if(in_array($param['code'],['123','1234','12345','123456','1234567','12345678','123456789','234','235'])){
                 $openid = [
                     'openid'=>$param['code'],
                     'access_token'=>'access_token'.$param['code'],
@@ -90,10 +93,32 @@ class UserController extends Controller
                 $id = $request->input('id',0);
                 $user_info =  $this->user->find($id);
                 if($user_info){
-                    $friend = $this->friend->getFriend($user->id);
-                    if(!$friend){
-                        $this->friend->FriendRelationship($user->id,$id);
+                    if(!$this->friend_ship->getByUser($user->id)){
+                        $friend_ship = $this->friend_ship->getByUser($user_info->id);
+                        if($friend_ship){
+                            $ship  = $friend_ship->ship;
+                            if($ship == null){
+                                $ship_data = [$id];
+                            }else{
+                                $ship_data = explode(',',$ship);
+                                array_unshift($ship_data,$id);
+                            }
+                            $handle_ship = implode(',',$ship_data);
+                            $friend_data =[
+                                'user_id'=>$user->id,
+                                'ship'=>$handle_ship,
+                                'best_id'=>$friend_ship->best_id,
+                            ];
+                        }else{
+                            $friend_data =[
+                                'user_id'=>$user->id,
+                                'ship'=>'',
+                                'best_id'=>$id,
+                            ];
+                        }
+                        $this->friend_ship->FriendRelationship($friend_data);
                     }
+
                 }
                 $this->user->where('id',$data['id'])->update(['access_token'=>$data['access_token'],'expires_in'=>$expires_in]);
                 $response_json->status = Lib_const_status::SUCCESS;
@@ -118,8 +143,31 @@ class UserController extends Controller
                 $result = $this->user->insert($data);
                 $id = $request->input('id',0);
                 $user_info =  $this->user->find($id);
+
                 if($user_info){
-                    $this->friend->FriendRelationship($result->id,$id);
+                    $friend_ship = $this->friend_ship->getByUser($id);
+                    if($friend_ship){
+                        $ship  = $friend_ship->ship;
+                        if($ship == null){
+                            $data = [$id];
+                        }else{
+                            $data = explode(',',$ship);
+                            array_unshift($data,$id);
+                        }
+                        $handle_ship = implode(',',$data);
+                        $friend_data =[
+                            'user_id'=>$result->id,
+                            'ship'=>$handle_ship,
+                            'best_id'=>$friend_ship->best_id,
+                        ];
+                    }else{
+                        $friend_data =[
+                            'user_id'=>$result->id,
+                            'ship'=>'',
+                            'best_id'=>$id,
+                        ];
+                    }
+                    $this->friend_ship->FriendRelationship($friend_data);
                 }
                 if (!empty($result)) {
                     $this->asset->insert(['user_id'=>$result->id]);
@@ -175,7 +223,7 @@ class UserController extends Controller
 
 
         //0普通会员 1代理商 2级代理 3级代理
-        $friend = $this->friend->GetFriend($user_id);
+        $friend = $this->friend_ship->getByUser($user_id);
 
         $agent = $this->agent->getByUserID($user_id,1);
         $status = 0;
