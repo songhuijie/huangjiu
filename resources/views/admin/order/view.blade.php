@@ -50,7 +50,7 @@
 
              <div class="layui-form-item">
 
-                 @foreach($order->address_detail as $k=>$v)
+                 @foreach(json_decode($order->address_detail,true) as $k=>$v)
                      <p class="">地址:{{$v['province']}}{{$v['city']}}{{$v['area']}}{{$v['address']}}</p><br/>
                      <p class="">收货人:{{$v['name']}}</p><br/>
                      <p class="">手机:{{$v['phone']}}</p><br/>
