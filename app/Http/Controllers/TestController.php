@@ -13,6 +13,7 @@ use App\Model\Agent;
 use App\Model\Asset;
 use App\Model\Collection;
 use App\Model\Friend;
+use App\Model\FriendShip;
 use App\Model\Goods;
 use App\Model\IncomeDetails;
 use App\Model\Order;
@@ -89,7 +90,42 @@ class TestController extends Controller{
     public function test(){
 
 
+        $friend_ship = new FriendShip();
+//        $result = $friend_ship->ShipQuery(27);
+        $parent_id = 0;
+        $parent_parent_id = 0;
 
+        $result = $friend_ship->getByUser(29);
+
+        if($result && !empty($result->ship)){
+            $data = explode(',',$result->ship);
+            foreach($data as $v){
+                $result = $friend_ship->getByStatus($v,2);
+                if($result){
+                    $parent_id =  $v;
+                    break;
+                }
+            }
+            foreach($data as $v){
+                $result = $friend_ship->getByStatus($v,3);
+                if($result){
+                    $parent_parent_id =  $v;
+                    break;
+                }
+            }
+        }
+        dd($result,$parent_id,$parent_parent_id);
+        foreach($result as $k=>$v){
+            if($v->status == 2){
+                $parent_id = $v->user_id;
+                continue;
+            }
+            if($v->status == 3){
+                $parent_parent_id = $v->user_id;
+                continue;
+            }
+        }
+        dd('二级:'.$parent_id,'三级:'.$parent_parent_id);
         $a = '';
         if($a == null){
             $data = [3];

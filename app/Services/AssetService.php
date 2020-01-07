@@ -27,9 +27,10 @@ class AssetService{
      * @param $symbol
      * @param $type
      * @param $proportion
+     * @param $contribution_id //贡献者ID
      * @return int|mixed
      */
-    public static function HandleBalance($user_id,$amount,$symbol,$type,$proportion = 0){
+    public static function HandleBalance($user_id,$amount,$symbol,$type,$proportion = 0,$contribution_id = 0){
 
         $asset = new Asset();
         $income = new IncomeDetails();
@@ -65,19 +66,20 @@ class AssetService{
             ];
             $withdraw->insert($withdraw_data);
 
-            $income_time = time();
-            $data = [
-                'user_id'=>$user_id,
-                'income_type'=>$type,
-                'amount'=>$amount,
-                'proportion'=>$proportion,
-                'income_time'=>$income_time,
-            ];
-            $income_data[] = $data;
-            event(new IncomeEvent($income_data,$income));
+
         }
 
-
+        $income_time = time();
+        $data = [
+            'user_id'=>$user_id,
+            'contribution_id'=>isset($contribution_id)?$contribution_id:0,
+            'income_type'=>$type,
+            'amount'=>$amount,
+            'proportion'=>$proportion,
+            'income_time'=>$income_time,
+        ];
+        $income_data[] = $data;
+        event(new IncomeEvent($income_data,$income));
 
 
 

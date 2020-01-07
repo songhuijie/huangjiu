@@ -80,13 +80,13 @@ class WePushService{
         $res = json_decode($res,true);
 
         if ($res['errcode']==0){
-            return '发送成功';
+            return True;
         }else{
             if($res['errcode']==40001){
                 Redis::del('access_token');
                 Log::channel('wechat')->info('access_token 问题 删除当前token');
             }
-            return '发送失败';
+            return false;
         }
     }
 

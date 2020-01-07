@@ -24,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\IncomeEvent' => [
             'App\Listeners\IncomeListener',
         ],
+        'App\Events\PushEvent' => [
+            'App\Listeners\PushListener',
+        ],
     ];
 
     /**

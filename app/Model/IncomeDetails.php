@@ -70,5 +70,16 @@ class IncomeDetails extends Model
     }
 
 
+    /**
+     * 根据ContributionID 获取总贡献钱
+     * @param $user_id
+     * @param $contribution_id
+     * @return mixed
+     */
+    public function getByContribution($user_id,$contribution_id){
+        return $this->where(['user_id'=>$user_id,'contribution_id'=>$contribution_id,'income_type'=>1])->sum('amount');
+    }
+
+
 
 }

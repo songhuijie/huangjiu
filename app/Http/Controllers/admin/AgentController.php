@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Events\PushEvent;
 use App\Libraries\Lib_config;
 use App\Model\Agent;
 use App\Model\Friend;
@@ -119,7 +120,7 @@ class AgentController extends Controller
                                 'thing3'=>'总代理',
                             ];
                            $open_id=$user->user_openid;
-                            WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_THIRD,$message_data,$open_id);
+                            event(new PushEvent(Lib_config::WE_PUSH_TEMPLATE_THIRD,$message_data,$open_id));
                         }
                     }
                     $reust=DB::table("agent")->where("id","=",$id)->update($update_data);

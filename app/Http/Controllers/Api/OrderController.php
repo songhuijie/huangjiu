@@ -7,6 +7,7 @@
  */
 namespace App\Http\Controllers\Api;
 
+use App\Events\PushEvent;
 use App\Events\RoyaltyEvent;
 use App\Http\Controllers\Controller;
 use App\Libraries\Lib_config;
@@ -405,7 +406,7 @@ class OrderController extends Controller{
                         'name4'=>$user_name,
                     ];
                     $open_id=$user->user_openid;
-                    WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_SECOND,$message_data,$open_id);
+                    event(new PushEvent(Lib_config::WE_PUSH_TEMPLATE_SECOND,$message_data,$open_id));
                     break;
                 case 4:
                     $response_json->status = Lib_const_status::ORDER_RECEIVED_GOODS;

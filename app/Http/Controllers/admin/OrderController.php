@@ -7,6 +7,7 @@
  */
 namespace App\Http\Controllers\admin;
 
+use App\Events\PushEvent;
 use App\Http\Controllers\Controller;
 use App\Libraries\Lib_config;
 use App\Model\Agent;
@@ -169,7 +170,7 @@ class OrderController extends Controller{
 //                        }
 
 
-                        WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_SECOND,$message_data,$open_id);
+                        event(new PushEvent(Lib_config::WE_PUSH_TEMPLATE_SECOND,$message_data,$open_id));
                     }
 
                     if($data['order_status'] == Lib_config::ORDER_STATUS_THREE){
@@ -233,7 +234,8 @@ class OrderController extends Controller{
 //                        }
                         $user = $this->user->find($order->user_id);
                         $open_id=$user->user_openid;
-                        WePushService::send_notice(Lib_config::WE_PUSH_TEMPLATE_FIRST,$message_data,$open_id);
+                        event(new PushEvent(Lib_config::WE_PUSH_TEMPLATE_FIRST,$message_data,$open_id));
+
 
                     }
 

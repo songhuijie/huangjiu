@@ -68,7 +68,7 @@ class UserController extends Controller
         $secret = $config['secret'];
 
         if($param['code']){
-            if(in_array($param['code'],['123','1234','12345','123456','1234567','12345678','123456789','234','235'])){
+            if(in_array($param['code'],['123','1234','12345','123456','1234567','12345678','123456789','1234567890','234','235'])){
                 $openid = [
                     'openid'=>$param['code'],
                     'access_token'=>'access_token'.$param['code'],
@@ -92,9 +92,11 @@ class UserController extends Controller
                 ];
                 $id = $request->input('id',0);
                 $user_info =  $this->user->find($id);
+
                 if($user_info){
                     if(!$this->friend_ship->getByUser($user->id)){
                         $friend_ship = $this->friend_ship->getByUser($user_info->id);
+
                         if($friend_ship){
                             $ship  = $friend_ship->ship;
                             if($ship == null){
