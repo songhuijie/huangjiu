@@ -34,7 +34,7 @@ class FriendShip extends Model
         ''
     ];
 
-    protected $select = ['user_id','status','is_delivery'];
+    protected $select = ['user_id','ship','status','is_delivery'];
 
 
     //建立关系

@@ -7,6 +7,7 @@ use App\Events\PushEvent;
 use App\Libraries\Lib_config;
 use App\Model\Agent;
 use App\Model\Friend;
+use App\Model\FriendShip;
 use App\Model\Reply;
 use App\Model\User;
 use App\Services\WePushService;
@@ -21,11 +22,13 @@ class AgentController extends Controller
 
     private $agent;
     private $friend;
+    private $friend_ship;
     private $user;
-    public function __construct(Agent $agent,Friend $friend,User $user)
+    public function __construct(Agent $agent,Friend $friend,User $user,FriendShip $friend_ship)
     {
         $this->agent = $agent;
         $this->friend = $friend;
+        $this->friend_ship = $friend_ship;
         $this->user = $user;
     }
 
@@ -204,70 +207,40 @@ class AgentController extends Controller
             if($data['type']=='edit'){
                 $agent = $this->agent->getAgent($data['id']);
 
-                $friend = $this->friend->LowerLevel($agent->user_id);
+                $friend = $this->friend_ship->getByBest($agent->user_id);
+
+
+
 
                 $first = [];
                 $second = [];
-                foreach($friend as $k=>$v){
-                    if($v['user_id'] == 0){
-                        unset($friend[$k]);
+                $data =$friend->toArray();
+                foreach($data as $k=>$v){
+                    if(empty($v['ship'])){
+                        $v['user_name'] = $this->user->where('id',$v['user_id'])->value('user_nickname');
+                        $first[] = $v;
                     }else{
-                        if($v['parent_id'] == $agent->user_id){
-                            $v['info'] = $this->friend->GetFriendByBestOrParent($v['user_id']);
-                            $v['user_name'] = $this->user->where('id',$v['user_id'])->value('user_nickname');
-                            $first[] = $v;
-                        }else{
-                            $v['info'] = $this->friend->GetFriendByBestOrParent($v['user_id']);
-                            $v['user_name'] = $this->user->where('id',$v['user_id'])->value('user_nickname');
-                            $second[] = $v;
-                        }
+                        $v['user_name'] = $this->user->where('id',$v['user_id'])->value('user_nickname');
+                        $second[] = $v;
                     }
                 }
                 return view("admin/agent/info",compact('first','second'));
             }
             if($data['type']=='add'){
 
-                unset($data['type']);
-                unset($data['file']);
-                $friend = $this->friend->GetFriend($data['user_id']);
+                $friend = $this->friend_ship->getByUser($data['user_id']);
+
                 if($friend){
                     if($data['status'] == 0){
-                        $this->friend->updateAgentAdmin($data['user_id'],$data['status']);
+                        $this->friend_ship->where('user_id',$data['user_id'])->update(['status'=>0,'is_delivery'=>0]);
                     }else{
-
-                        if(isset($data['delivery']['delivery']) && $data['delivery']['delivery'] == 'on'){
-                            $delivery = 1;
-
-                            $this->friend->updateAgentAdmin($data['user_id'],$data['status'],$delivery);
+                        if(isset($data['delivery'])){
+                            $this->friend_ship->where('user_id',$data['user_id'])->update(['status'=>$data['status'],'is_delivery'=>1]);
                         }else{
-                            $this->friend->updateAgentAdmin($data['user_id'],$data['status']);
+                            $this->friend_ship->where('user_id',$data['user_id'])->update(['status'=>$data['status']]);
                         }
                     }
-                }else{
-                    if($data['status'] != 0){
-                        $init_friend = $this->friend->GetFriendInit($data['user_id']);
-                        if($init_friend){
-                            $parent_id = $init_friend->parent_id;
-                            $parent_parent_id = $init_friend->parent_parent_id;
-                            if($init_friend->best_id != 0){
-                                $parent_parent_id = $init_friend->best_id;
-                            }
-                            $delivery = 0;
-                            if(isset($data['delivery']['delivery']) && $data['delivery']['delivery'] == 'on'){
-                                $delivery = 1;
-                            }
-                            $friend_data = [
-                                'user_id'=>0,
-                                'parent_id'=>$data['user_id'],
-                                'parent_parent_id'=>$parent_id,
-                                'best_id'=>$parent_parent_id,
-                                'status'=>$data['status'],
-                                'is_delivery'=>$delivery,
-                            ];
 
-                            $this->friend->insert($friend_data);
-                        }
-                    }
                 }
 
 

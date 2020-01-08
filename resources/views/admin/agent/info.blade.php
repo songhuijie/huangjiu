@@ -45,10 +45,10 @@
                                 <label class="layui-form-label">{{$v['user_name']}}</label>
                                 <div class="layui-input-block">
                                     <div class="layui-input-block">
-                                        @if($v['info'])
+                                        @if($v)
                                             <form class="layui-form" >
-                                                <input type="radio" name="status"  value="2" title="设置一级代理" {{$v['info']->status ==2 ?"checked":'' }}>
-                                                <input type="checkbox" name="delivery[delivery]"  title="设置配送人员" {{$v['info']->is_delivery ==1 ?"checked":'' }}>
+                                                <input type="radio" name="status"  value="2" title="设置一级代理" {{$v['status'] ==2 ?"checked":'' }}>
+                                                <input type="checkbox" name="delivery[delivery]"  title="设置配送人员" {{$v['is_delivery'] ==1 ?"checked":'' }}>
                                                 <input type="radio" name="status" data-id="{{$v['user_id']}}" value="0" title="取消">
                                                 <input type="hidden" name="user_id" value="{{$v['user_id']}}">
                                                 <button class="layui-btn" lay-submit="" lay-filter="formDemo">立即提交</button>
@@ -76,12 +76,12 @@
 
                                 <label class="layui-form-label">{{$v['user_name']}}</label>
                                 <div class="layui-input-block">
-                                    @if($v['info'])
+                                    @if($v)
                                         <form class="layui-form" >
                                             <input type="hidden" name="user_id" value="{{$v['user_id']}}">
-                                            <input type="radio" name="status"  value="2" title="设置一级代理" {{$v['info']->status ==2 ?"checked":'' }}>
-                                            <input type="radio" name="status"  value="3" title="设置二级代理" {{$v['info']->status ==3 ?"checked":'' }}>
-                                            <input type="checkbox" name="delivery[delivery]"  title="设置配送人员" {{$v['info']->is_delivery ==1 ?"checked":'' }}>
+                                            <input type="radio" name="status"  value="2" title="设置一级代理" {{$v['status'] ==2 ?"checked":'' }}>
+                                            <input type="radio" name="status"  value="3" title="设置二级代理" {{$v['status'] ==3 ?"checked":'' }}>
+                                            <input type="checkbox" name="delivery[delivery]"  title="设置配送人员" {{$v['is_delivery'] ==1 ?"checked":'' }}>
                                             <input type="radio" name="status" data-id="{{$v['user_id']}}" value="0" title="取消">
                                             <button class="layui-btn" lay-submit="" lay-filter="formDemo">立即提交</button>
                                         </form>
