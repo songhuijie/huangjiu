@@ -445,12 +445,13 @@ class AgentController extends Controller
             $response_json->status = Lib_const_status::SUCCESS;
             $response_json->data = $order;
         }else{
-            $friend = $this->friend->GetFriend($user_id);
+            $friend = $this->friend_ship->getByUser($user_id);
+
 
             if($friend){
 
                 if($friend->is_delivery == 1 || $friend->status != 0){
-                    $agent_user_id = ($friend->best_id == 0) ? ($friend->parent_parent_id==0)?$friend->parent_id:$friend->parent_parent_id:$friend->best_id;
+                    $agent_user_id = $friend->best_id;
 
                     $agent = $this->agent->getByUserID($agent_user_id,1);
                     if($agent){
@@ -459,8 +460,6 @@ class AgentController extends Controller
                         $response_json->data = $order;
                     }else{
                         $response_json->status = Lib_const_status::USER_NOT_AGENT;
-                        $response_json->data = $agent_user_id;
-                        $response_json->data->friend = $friend;
                     }
 
                 }else{
@@ -468,15 +467,10 @@ class AgentController extends Controller
                 }
 
             }else{
-                $agent = $this->agent->getByUserID($user_id,1);
-                if($agent){
-                    $order = $this->order->getWhereByStatus($agent->id,$all['status'],$page,$limit);
-                    $response_json->status = Lib_const_status::SUCCESS;
-                    $response_json->data = $order;
-                }else{
-                    $response_json->status = Lib_const_status::USER_NOT_AGENT;
-                }
+                $response_json->status = Lib_const_status::USER_CAN_NOT_DELIVER;
             }
+
+
         }
 
         return $this->response($response_json);
