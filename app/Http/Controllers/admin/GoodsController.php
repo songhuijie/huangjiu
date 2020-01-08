@@ -30,7 +30,7 @@ class GoodsController extends Controller
 				}
 				$pages=($page-1)*$size;
 				$count=DB::table("goods")->count();
-				$list=DB::table("goods")->offset($pages)->limit($size)->get();
+				$list=DB::table("goods")->offset($pages)->limit($size)->orderBy('id','desc')->get();
 
 				//搜索
 				if(!empty($data["keyword"])){
