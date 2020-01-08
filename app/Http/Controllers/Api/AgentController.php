@@ -195,6 +195,8 @@ class AgentController extends Controller
             }
         }
 
+        //用户等级  1 1级代理  2 2级代理  3 3级代理  0 普通用户
+
 
         if($status != 0){
 
@@ -204,6 +206,7 @@ class AgentController extends Controller
                 foreach($result as $k=>$v){
                     $v->userInfo;
                     $v->status = $status;
+                    $v->user_status = $this->friend_ship->where('user_id',$v->user_id)->value('status');
                     $v->created_at = $v->userInfo->created_at;
                     $v->count = $this->friend_ship->LowerCount($v->user_id);
                     $v->contribution_amount = $this->income->getByContribution($user_id,$v->user_id);
