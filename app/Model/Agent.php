@@ -33,7 +33,7 @@ class Agent extends Model
         ''
     ];
 
-    protected $select = ['id','user_name','iphone','city','address','lng','lat','start_time','end_time','distribution_scope','user_img'];
+    protected $select = ['id','user_name','iphone','city','address','lng','lat','start_time','end_time','distribution_scope'];
 
     /**
      * 添加用户代理
