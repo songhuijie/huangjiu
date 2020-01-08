@@ -499,7 +499,7 @@ class AgentController extends Controller
         $user_id = $access_entity->user_id;
 
         $response_json = $this->initResponse();
-        $friend = $this->friend->GetFriend($user_id);
+        $friend = $this->friend_ship->getByUser($user_id);
         $agent = $this->agent->getByUserID($user_id,1);
         $order = $this->order->find($all['order_id']);
         if($agent){
@@ -646,15 +646,14 @@ class AgentController extends Controller
                 ];
                 $open_id=$user->user_openid;
                 event(new PushEvent(Lib_config::WE_PUSH_TEMPLATE_SECOND,$message_data,$open_id));
-
                 //签收订单后  推送指定用户
             }
             $response_json->status = Lib_const_status::SUCCESS;
         }else{
             if($friend){
 
-                if($friend->is_delivery == 1 || $friend->status != 0){
-                    $agent_user_id = ($friend->best_id == 0) ? ($friend->parent_parent_id==0)?$friend->parent_id:$friend->parent_parent_id:$friend->best_id;
+                if($friend->is_delivery == 1){
+                    $agent_user_id = $friend->best_id;
 
                     $agent = $this->agent->getByUserID($agent_user_id,1);
                     if($agent){
@@ -665,12 +664,59 @@ class AgentController extends Controller
                             'status'=>$all['status'],
                         ];
                         $int = $this->order->updateStatusByAgent($all['order_id'],$agent->id,$all['status']);
+                        if($all['status'] == 3){
+                            //开始配送订单时  推送指定用户
+                            //开始配送订单时  推送指定用户
+                            $thing2 = '';
+                            foreach($order->goods_detail as $v){
+                                $thing2 .= $v['good_title'].'/';
+                            }
+                            $thing2 = substr($thing2, 0, -1);
+                            $express_type = Lib_config::EXPRESS_TYPE;
+
+                            $express = $order->express;
+                            $express_t = isset($express_type[$order->express_type])?$express_type[$order->express_type]:$express_type[1];
+
+                            $message_data = [
+                                'character_string1'=>$order->order_number,
+                                'thing2'=>$thing2,
+                                'thing6'=>$express_t,
+                                'phrase4'=>'已配送',
+                                'character_string7'=>$express,
+                            ];
+
+                            $user = $this->user->find($order->user_id);
+                            $open_id=$user->user_openid;
+
+                            event(new PushEvent(Lib_config::WE_PUSH_TEMPLATE_FIRST,$message_data,$open_id));
+                        }
                         if($all['status'] == 4){
                             //处理商品提成
                             RoyaltyService::HandleRoyalty($order->user_id,$order->order_royalty_price,$order->is_arrive,$order->agent_id);
+
+                            //签收订单后  推送指定用户
+                            $thing2 = '';
+                            foreach($order->goods_detail as $v){
+                                $thing2 .= $v['good_title'].' * '.$v['goods_num'].'/';
+                            }
+                            $thing2 = substr($thing2, 0, -1);
+
+
+
+
+                            $user = $this->user->find($order->user_id);
+                            $user_name = isset($user->user_nickname)?$user->user_nickname:'张三';
+                            $message_data = [
+                                'character_string1'=>$order->order_number,
+                                'thing2'=>$thing2,
+                                'time3'=>date('Y-m-d H:i:s'),
+                                'name4'=>$user_name,
+                            ];
+                            $open_id=$user->user_openid;
+                            event(new PushEvent(Lib_config::WE_PUSH_TEMPLATE_SECOND,$message_data,$open_id));
+                            //签收订单后  推送指定用户
                         }
                         $response_json->status = Lib_const_status::SUCCESS;
-                        $response_json->data = $data;
                     }else{
                         $response_json->status = Lib_const_status::USER_NOT_AGENT;
                     }
@@ -679,6 +725,8 @@ class AgentController extends Controller
                     $response_json->status = Lib_const_status::USER_CAN_NOT_DELIVER;
                 }
 
+            }else{
+                $response_json->status = Lib_const_status::USER_CAN_NOT_DELIVER;
             }
         }
 

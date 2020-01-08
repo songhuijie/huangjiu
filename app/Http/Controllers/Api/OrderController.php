@@ -17,6 +17,7 @@ use App\Model\Agent;
 use App\Model\Cart;
 use App\Model\Config;
 use App\Model\Friend;
+use App\Model\FriendShip;
 use App\Model\Goods;
 use App\Model\Order;
 use App\Model\User;
@@ -39,8 +40,9 @@ class OrderController extends Controller{
     private $user;
     private $cart;
     private $friend;
+    private $friend_ship;
 
-    public function __construct(Order $order,Goods $goods,Address $address,Agent $agent,Config $config,User $user,Cart $cart,Friend $friend)
+    public function __construct(Order $order,Goods $goods,Address $address,Agent $agent,Config $config,User $user,Cart $cart,Friend $friend,FriendShip $friend_ship)
     {
         $this->order = $order;
         $this->goods = $goods;
@@ -50,6 +52,7 @@ class OrderController extends Controller{
         $this->user = $user;
         $this->cart = $cart;
         $this->friend = $friend;
+        $this->friend_ship = $friend_ship;
 
     }
 
@@ -313,28 +316,25 @@ class OrderController extends Controller{
                             AlibabaSms::SendSms($agent->iphone);
 
 
-                            $friend = $this->friend->LowerLevelOne($agent->user_id);
+                            $friend = $this->friend_ship->getByBest($agent->user_id);
 
                             $number = [];
-                            if($friend){
-                                foreach($friend as $k=>$v){
-                                    if($v->is_delivery == 1){
-                                        $user = $this->user->find($v->parent_id);
-                                        if($user && !empty($user->phone_number)){
-                                            $number[] = $user->phone_number;
+                            foreach($friend as $k=>$v){
+                                if($v->is_delivery == 1){
+                                    $user = $this->user->find($v->user_id);
+                                    if($user && !empty($user->phone_number)){
+                                        $number[] = $user->phone_number;
 
-                                        }
                                     }
                                 }
-                                if($number){
-                                    $new_number = array_unique($number);
-                                    foreach($new_number as $v){
-                                        Log::channel('error')->info('给配送员发送短信:'.$v);
-                                        AlibabaSms::SendSms($v);
-                                    }
-                                }
-
                             }
+
+                            foreach($number as $v){
+                                Log::channel('error')->info('给配送员发送短信:'.$v);
+                                AlibabaSms::SendSms($v);
+                            }
+
+
 
                         }else{
                             Log::channel('order')->info('没有代理商结算');

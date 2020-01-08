@@ -58,6 +58,9 @@ class TestController extends Controller{
     }
 
     public function push(Request $request){
+
+
+
         $id = $request->get('id',1);
         $openID = 'oBNBp5L5SrWjJh6yBfc7q8yfwypg';
         if($id == 1){
@@ -91,6 +94,20 @@ class TestController extends Controller{
 
 
         $friend_ship = new FriendShip();
+
+        $friend = $friend_ship->getByBest(159);
+        $number = [];
+        foreach($friend as $k=>$v){
+            if($v->is_delivery == 1){
+                $user = $this->user->find($v->user_id);
+                if($user && !empty($user->phone_number)){
+                    $number[] = $user->phone_number;
+
+                }
+            }
+        }
+        dd($number);
+
 //        $result = $friend_ship->ShipQuery(27);
         $parent_id = 0;
         $parent_parent_id = 0;
