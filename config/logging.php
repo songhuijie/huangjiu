@@ -50,6 +50,7 @@ return [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),
             'level' => 'debug',
+            'permission'=>0777,
             'days' => 14,
         ],
 
@@ -97,6 +98,7 @@ return [
             'path' => storage_path('logs/wechat.log'),
             'level' => 'debug',
             'days' => 14,
+            'permission'=>0777,
         ],
 
         'error' => [
@@ -104,12 +106,14 @@ return [
             'path' => storage_path('logs/error.log'),
             'level' => 'debug',
             'days' => 14,
+            'permission'=>0777,
         ],
         'order' => [
             'driver' => 'daily',
             'path' => storage_path('logs/order.log'),
             'level' => 'debug',
             'days' => 14,
+            'permission'=>0777,
         ],
     ],
 

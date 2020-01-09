@@ -49,7 +49,6 @@ class UserController extends Controller
      */
     public function login(Request $request){
         $param = $request->all();
-        Log::info(json_encode($param));
         $response_json = $this->initResponse();
         $fromErr = $this->validatorFrom([
             'code'=>'required',
