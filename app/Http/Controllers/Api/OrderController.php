@@ -342,7 +342,7 @@ class OrderController extends Controller{
                             $this->order->updateStatusByOrderNumber($order_number,Lib_config::ORDER_STATUS_ONE);
                         }
                     }
-
+                    Log::channel('order')->info('支付成功并更新成功');
                     // @$this->userController->record($money,$uid,$order);
                     return 'SUCCESS';
                 }
