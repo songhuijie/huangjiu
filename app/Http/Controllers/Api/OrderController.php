@@ -189,7 +189,7 @@ class OrderController extends Controller{
                 $over_total_price = $all['over_price']*$over;
             }
 
-            if($agent_id == 0){
+            if($agent_id != 0){
                 $all['freight'] = 0;
             }
             $order_total_price = (float)bcadd($order_total_price,$all['freight'],2);
