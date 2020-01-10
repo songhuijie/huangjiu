@@ -341,7 +341,7 @@ class OrderController extends Controller{
                             $this->order->updateStatusByOrderNumber($order_number,Lib_config::ORDER_STATUS_ONE);
                         }
                     }
-                    Log::info('更新成功');
+                    
                     // @$this->userController->record($money,$uid,$order);
                     return 'SUCCESS';
                 }
