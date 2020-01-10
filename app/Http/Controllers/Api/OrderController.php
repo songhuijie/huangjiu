@@ -292,7 +292,8 @@ class OrderController extends Controller{
 
                 if($arr['result_code'] == 'SUCCESS' && $arr['return_code'] == 'SUCCESS'){
                     $attach = json_decode($arr['attach'], true);
-                    Log::info($arr['attach']);
+
+
                     $money = $arr['total_fee']/100;
                     $uid = $attach['user_id'];
                     $order_number = $arr['out_trade_no'];
@@ -341,7 +342,7 @@ class OrderController extends Controller{
                             $this->order->updateStatusByOrderNumber($order_number,Lib_config::ORDER_STATUS_ONE);
                         }
                     }
-                    
+
                     // @$this->userController->record($money,$uid,$order);
                     return 'SUCCESS';
                 }
