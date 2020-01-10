@@ -744,6 +744,7 @@ class AgentController extends Controller
 
         $all = $request->all();
         $fromErr = $this->validatorFrom([
+            'province'=>'required',
             'city'=>'required',
         ],[
             'required'=>Lib_const_status::ERROR_REQUEST_PARAMETER,
@@ -751,7 +752,7 @@ class AgentController extends Controller
         if($fromErr){//输出表单验证错误信息
             return $this->response($fromErr);
         }
-        $price = CityServices::getCity($all['city']);
+        $price = CityServices::getCity($all['province'],$all['city']);
         if($price === false){
             $price = 0;
             $over_price=0;
