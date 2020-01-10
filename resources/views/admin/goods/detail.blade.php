@@ -144,8 +144,8 @@
              <div class="layui-form-item">
                  <label class="layui-form-label">状态</label>
                  <div class="layui-input-block">
-                     <input type="radio" name="goods_status" value="1" title="出售中" @if(!empty($label)){{$label->goods_status==0 ?'checked':''}} @endif >
-                     <input type="radio" name="goods_status" value="2" title="下架" @if(!empty($label)){{$label->goods_status==1 ?'checked':''}} @endif >
+                     <input type="radio" name="goods_status" value="1" title="出售中" @if(!empty($label)){{$label->goods_status==1 ?'checked':''}} @endif >
+                     <input type="radio" name="goods_status" value="2" title="下架" @if(!empty($label)){{$label->goods_status==2 ?'checked':''}} @endif >
                  </div>
              </div>
 
