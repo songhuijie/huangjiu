@@ -133,7 +133,6 @@ class AlibabaSms{
                     ],
                 ])
                 ->request();
-            Log::info(json_encode($result->toArray()));
             return $result->toArray();
         } catch (ClientException $e) {
             return false;

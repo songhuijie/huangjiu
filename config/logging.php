@@ -50,7 +50,7 @@ return [
             'driver' => 'daily',
             'path' => storage_path('logs/laravel.log'),
             'level' => 'debug',
-            'permission'=>0777,
+            'permission'=>0666,
             'days' => 14,
         ],
 
