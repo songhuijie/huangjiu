@@ -207,7 +207,7 @@ class AgentController extends Controller
                     $v->userInfo;
                     $v->status = $status;
                     $v->user_status = $this->friend_ship->where('user_id',$v->user_id)->value('status');
-                    $v->created_at = $v->userInfo->created_at;
+                    $v->created_at = isset($v->userInfo->created_at)?$v->userInfo->created_at:'';
                     $v->count = $this->friend_ship->LowerCount($v->user_id);
                     $v->contribution_amount = $this->income->getByContribution($user_id,$v->user_id);
                 }
